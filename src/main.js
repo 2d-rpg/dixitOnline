@@ -1,6 +1,6 @@
 // サーバーサイド：必要なモジュールを読み込む
 var http = require('http');
-var socketio = require('/app/node_modules/socket.io');
+var socketio = require('socket.io');
 var fs = require('fs');
 // サーバーサイド：HTTPサーバを生成する
 // サーバー生成時にfunction以下のリクエストリスナーが登録されるため
