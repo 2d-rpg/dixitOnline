@@ -59,6 +59,7 @@ io.on('connection', function(socket) {
             socketId: socket.id,
         });
         players[player.id] = player;
+        console.log('追加')
     });
     // プレイヤーの移動コマンド
     socket.on('movement', function(movement) {
@@ -92,7 +93,7 @@ setInterval(function() {
     io.sockets.emit('state', players);
 }, 1000/30);
 
-app.use('/src', express.static(__dirname + '/src'));
+app.use('/', express.static(__dirname + '/src'));
 
 app.get('/', (request, response) => {
   response.sendFile(path.join(__dirname, '/src/index.html'));

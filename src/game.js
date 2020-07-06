@@ -2,7 +2,7 @@
 
 // Socket.IOを利用してサーバに接続
 const socket = io();
-const canvas = $('#canvas-2d')[0];
+const canvas = document.getElementById('canvas-2d');
 const context = canvas.getContext('2d');
 const playerImage = $('#player-image')[0];
 // プレイヤーの動きを保存
@@ -11,6 +11,7 @@ let movement = {};
 
 function gameStart(){
     socket.emit('game-start');
+    console.log('ゲームスタート')
 }
 
 $(document).on('keydown keyup', (event) => {
@@ -28,10 +29,11 @@ $(document).on('keydown keyup', (event) => {
             movement[command] = false;
         }
         socket.emit('movement', movement);
+        console.log('動いたお')
     }
 });
 
-socket.on('static', (players, bullets, walls) => {
+socket.on('state', (players) => {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     context.lineWidth = 10;
