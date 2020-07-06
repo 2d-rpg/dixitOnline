@@ -1,5 +1,9 @@
 {
     "scripts": {
-        "start": "node src/main.js"
+        "start": "npm i socket.io;node src/main.js"
+    },
+    "dependencies": {
+        "express": "^4.17.1",
+        "socket.io": "^2.3.0"
     }
 }
