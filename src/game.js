@@ -1,4 +1,5 @@
 'use strict';
+// クライアント側
 
 // Socket.IOを利用してサーバに接続
 const socket = io();
@@ -43,9 +44,22 @@ socket.on('state', (players) => {
 
     Object.values(players).forEach((player) => {
         context.drawImage(playerImage, player.x, player.y);
-        context.font = '30px Bold Arial';
-        context.fillText('Player', player.x, player.y - 20);
+        context.font = '20px Bold Arial';
+        let id = player.id.toString()
+        context.fillText('Player' + id, player.x, player.y - 20);
     });
 });
 
 socket.on('connect', gameStart);
+socket.on("server_to_client", function(data){appendMsg(data.value)});
+
+function appendMsg(text) {
+    $("#chatLogs").append("<div>" + text + "</div>");
+}
+
+$("form").submit(function(e){
+    var message = $("#msgForm").val();
+    $("#msgForm").val('');
+    socket.emit("client_to_server", {value : message});
+    e.preventDefault();
+});
