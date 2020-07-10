@@ -41,6 +41,7 @@ io.on('connection', function(socket) {
         });
         players[player.id] = player;
         console.log('追加')
+        io.sockets.emit('server_to_client', {value : "現在の人数:" + Object.keys(players).length + "人"});
     });
     // プレイヤーの移動コマンド
     socket.on('movement', function(movement) {
@@ -52,6 +53,8 @@ io.on('connection', function(socket) {
         if(!player){return;}
         delete players[player.id];
         player = null;
+        console.log('削除')
+        io.sockets.emit('server_to_client', {value : "現在の人数:" + Object.keys(players).length + "人"});
     });
     // メッセージ用
     socket.on('client_to_server', function(data) {
