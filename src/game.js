@@ -90,7 +90,7 @@ startButton.onclick = function() {
 }
 
 function masterHandSelection() {
-    
+    clearDisplay();
 }
 
 // ゲーム画面クリア
