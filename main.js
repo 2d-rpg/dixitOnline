@@ -42,6 +42,14 @@ io.on('connection', function(socket) {
         }
     });
     // クライアントからwaitingがemitされた時の処理
+    socket.on('push_start', () => {
+        let player = players[socket.id];
+        player.done();
+    });
+
+
+
+
     socket.on('master_hand_selection', () => {
         if(!player) {return;}
         // 処理

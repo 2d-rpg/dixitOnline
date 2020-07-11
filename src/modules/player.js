@@ -16,7 +16,8 @@ let layout = new Layout();
 const status = [
     'entry',
     'waiting',
-    'master_hand_select'
+    'master_hand_select',
+    'story_selection'
     // ここに遷移状態を追加
 ];
 

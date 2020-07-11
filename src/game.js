@@ -47,6 +47,8 @@ socket.on('cannot_play', cannotPlay);
 // 'entry_done'がemitされた時の動作
 socket.on('waiting', waiting)
 
+socket.on('master_hand_selection',masterHandSelection)
+
 
 
 // init画面
@@ -82,12 +84,13 @@ function waiting() {
 
 // スタートボタンを押した時の動作
 startButton.onclick = function() {
-    startButton.style.display = none;
-    socket.emit('master_hand_selection');
+    startButton.style.display = "none"
+    //socket.emit('master_hand_selection');
+    socket.emit('push_start');
 }
 
 function masterHandSelection() {
-
+    
 }
 
 // ゲーム画面クリア
