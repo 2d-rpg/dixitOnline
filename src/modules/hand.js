@@ -2,10 +2,17 @@
 // 手札クラス
 
 const Card = require('./card');
+const utils = require('./utlis');
 
 class Hand {
     constructor(size) {
-        this._array = new Array(size).fill(new Card('/images/akira_with_Ginkakuji.jpg'));
+        // 初期化(fill部分にnew Card()すると全て同一オブジェクトになるので一旦nullで埋める)
+        this._array = new Array(size).fill(null);
+        // ランダムサンプリング
+        // TODO: このままでは復元抽出になってしまうので非復元抽出にするよう要修正
+        for (var i=0; i < size; i++) { // forEach文だとエラーが出る
+            this._array[i] = new Card(utils.randomSample(18));
+        }
     }
     select(index) {
         return this._array[index];

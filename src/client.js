@@ -6,7 +6,6 @@ const socket = io();
 const canvas = document.getElementById('canvas-2d');
 const context = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
-const playerImage = document.getElementById('playerImage');
 
 // サーバーから'state'がemitされたときの動作
 socket.on('state', (players) => {
@@ -46,7 +45,7 @@ socket.on('cannot_play', cannotPlay);
 // サーバーから'waiting'がemitされた時の動作
 socket.on('waiting', waiting)
 // サーバーから'master_hand_selection'がemitされた時の動作
-socket.on('master_hand_selection', function(player){masterHandSelection(player);});
+socket.on('master_hand_selection', function(data){masterHandSelection(data);});
 
 
 
@@ -64,7 +63,7 @@ $("#entryForm").submit(function(e){
     clearDisplay();
     const fontSize = 20;
     context.font = fontSize + 'px Bold Arial';
-    const message = '参加者が集まるまでお待ちください';
+    const message = '参加者が集まるまでしばらくお待ちください';
     // メッセージをcanvas中央に配置
     context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
     socket.emit('entry', {username : username});
@@ -78,7 +77,7 @@ function cannotPlay() {
     clearDisplay();
     const fontSize = 20;
     context.font = fontSize + 'px Bold Arial';
-    const message = '現在プレイ中です もう少しお待ちください';
+    const message = '現在プレイ中です しばらくお待ちください';
     // メッセージをcanvas中央に配置
     context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
 }
@@ -103,17 +102,29 @@ startButton.onclick = function() {
 }
 
 // master_hand_selection画面
-function masterHandSelection(player) {
+function masterHandSelection(data) {
     clearDisplay();
     // TODO: srcを変更しているのに，drawImageでの表示が変更されない
-    player.hand._array.forEach((card, index) => {
+    // TODO: 応急処置としてhtmlにサーバーにある画像を追加し，そこから持ってくることにしているがダサい
+    const y = 600;
+    data.player.hand._array.forEach((card, index) => {
         var x = 400.0 / 3.0 + index * (100 + 400.0 / (3.0 * 5.0));
-        var y = 600;
-        playerImage.src = card.filename;
-        console.log(playerImage.width);
-        context.drawImage(playerImage, 0, 0, playerImage.width, playerImage.height, x, y, 100, 100);
+        var image = document.getElementById(card.filename);
+        context.drawImage(image, 0, 0, image.width, image.height, x, y, 100, 150);
     });
-    console.log(playerImage.src);
+    // プレイヤー名/スコアの表示
+    // 自分
+    const fontSize = 20;
+    context.font = fontSize + 'px Bold Arial';
+    context.fillText(data.player.name, 20, y);
+    context.fillText('スコア: ' + data.player.score, 30, y + 40);
+    // 他の人
+    console.log(data.others);
+    data.others.forEach((player, index) => {
+        console.log(player);
+        context.fillText(player.name, index * 400 + 200, 200);
+        context.fillText('スコア: ' + player.score, index * 400 + 200, 200 + 40);
+    });
 }
 
 // ゲーム画面クリア

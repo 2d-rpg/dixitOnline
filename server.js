@@ -54,7 +54,7 @@ io.on('connection', function(socket) {
     // TODO: つまりリロードすると復帰不可
     socket.on('disconnect', () => {
         delete players[socket.id];
-        utils.log('delete' + socket.id);
+        utils.log('Delete [' + socket.id + ']');
         io.sockets.emit('update_number_of_player', {num : Object.keys(players).length});
     });
     // メッセージ用
@@ -68,10 +68,21 @@ setInterval(function() {
     var isAllDone = Object.values(players).filter(player => player.isDone()).length === 3;
     if (isAllDone) { // 全てのプレイヤーが次のステージにいける状態
         let nextStage = null;
-        Object.values(players).forEach(player => {
+        Object.values(players).forEach(player => { // 全プレイヤーの状態更新
             nextStage = player.nextStage(); // 次のステージ取得
             player.reset(); // 状態リセット
-            io.to(player.socketId).emit(nextStage, player); // ステージ移行
+        });
+        Object.values(players).forEach(player => { // ステージ移行
+            // ディープコピー (何段階もコピーするのでObject.createは不可)
+            // TODO: もっといい方法あるかも
+            var others = [];
+            Object.values(players).forEach(other => {
+                if (player != other) {
+                    others.push(other);
+                }
+            });
+            // delete others[player.socketId]; // 自分を削除
+            io.to(player.socketId).emit(nextStage, {others : others, player : player}); // ステージ移行
         });
         utils.log('Move to stage [' + nextStage + ']');
     }

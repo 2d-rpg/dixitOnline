@@ -2,12 +2,7 @@
 // カードクラス
 
 // 静的プロパティ
-const statusList = [
-    'stack',
-    'hand',
-    'layout',
-    'discard'
-];
+const statusList = ['stack','hand','layout','discard'];
 // ゲーム画面の範囲
 const FIELD_WIDTH = 1000, FIELD_HEIGHT = 800;
 
