@@ -6,6 +6,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const Player = require('./src/modules/player');
+const utils = require('./src/modules/utlis');
 // const fs = require('fs');
 const socketIO = require('socket.io');
 const app = express();
@@ -19,52 +20,46 @@ io.on('connection', function(socket) {
     let player = null;
     // ゲーム開始時の処理
     socket.on('init', (config) => {
-        if (Object.keys(players).length <= 3) { // 接続人数が3人以下のとき
-            console.log('[debug] socket id: ' + socket.id + 'was added')
+        io.sockets.emit('update_number_of_player', {num : Object.keys(players).length});
+        if (Object.keys(players).length < 3) { // プレイヤー人数が3人未満のとき
+            utils.logWithStage('init', 'socket id: [' + socket.id + '] was added');
         } else { // 3人より多い場合
             io.to(socket.id).emit('cannot_play');
-            return;
+            utils.logWithStage('cannot_play', 'socket ID: [' + socket.id + '] cannot play game.');
         }
     });
     // クライアントからentryがemitされた時の処理
     socket.on('entry', function(data) {
-        if (Object.keys(players).length <= 3) { // プレイヤー人数が3人以下の時
+        if (Object.keys(players).length < 3) { // プレイヤー人数が3人未満の時
             let player = new Player({socketId: socket.id, username: data.username});
             players[player.socketId] = player;
             io.sockets.emit('update_number_of_player', {num : Object.keys(players).length});
-            player.done();
+            player.done(); // done状態にする
             // emitしてきたクライアントだけに投げる
-            io.to(socket.id).emit('entry_done', {});
-            console.log('[debug] ユーザー名: ' + player.name + 'さんが参加しました');
-            console.log('[debug] ユーザー名: ' + player.name + 'さんのsocketIdは' + player.socketId + 'です');
+            // io.to(socket.id).emit('entry_done', player);
+            utils.logWithStage('entry', 'Player Name: [' + player.name + '] ([' 
+                + player.socketId + ']) joined.');
         } else {
-            return;
+            io.to(socket.id).emit('cannot_play');
         }
     });
-    // クライアントからwaitingがemitされた時の処理
-    socket.on('push_start', () => {
-        let player = players[socket.id];
-        player.done();
-    });
-
-
-
-
-    socket.on('master_hand_selection', () => {
-        if(!player) {return;}
+    // クライアントからentry_doneがemitされた時の処理
+    socket.on('entry_done', () => {
         // 処理
+        let player = players[socket.id]; // socket IDからプレイヤー特定
+        player.done();
+        utils.logWithStage('entry_done', 'socket ID: [' + player.socketId + ']');
     });
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)の処理
+    // TODO: つまりリロードすると復帰不可
     socket.on('disconnect', () => {
-        if(!player){return;}
-        delete players[player.id];
-        console.log('[debug] delete' + socket.id);
-        player = null;
+        delete players[socket.id];
+        utils.log('delete' + socket.id);
         io.sockets.emit('update_number_of_player', {num : Object.keys(players).length});
     });
     // メッセージ用
-    socket.on('client_to_server', function(data) {
-        io.sockets.emit('server_to_client', {value : data.value});
+    socket.on('chat_send_from_client', function(data) {
+        io.sockets.emit('chat_send_from_server', {value : data.value});
     });
 });
 
@@ -76,10 +71,9 @@ setInterval(function() {
         Object.values(players).forEach(player => {
             nextStage = player.nextStage(); // 次のステージ取得
             player.reset(); // 状態リセット
-            // ステージ移行
-            io.to(player.socketId).emit(nextStage);
+            io.to(player.socketId).emit(nextStage, player); // ステージ移行
         });
-        console.log('[debug] ステージ' + nextStage + 'に移行');
+        utils.log('Move to stage [' + nextStage + ']');
     }
     // プレイヤーの状態をemit
     // io.sockets.emit('state', players);
@@ -96,5 +90,5 @@ app.get('/', (request, response) => {
 });
 
 server.listen(3000, function() {
-  console.log('[debug] Starting server on port 3000');
+  utils.log('Starting server on port 3000');
 });

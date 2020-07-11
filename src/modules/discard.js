@@ -1,4 +1,4 @@
-'use struct'
+'use strict';
 // 墓地クラス
 class Discard {
     constructor() {
