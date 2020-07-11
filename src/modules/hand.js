@@ -1,11 +1,11 @@
-'use struct'
+'use strict'
 // 手札クラス
 
-Card = require('./card');
+const Card = require('./card');
 
 class Hand {
     constructor(size) {
-        this._array = new Array(size).fill(new Card('../images/akira_with_Ginkakuji.jpg'));
+        this._array = new Array(size).fill(new Card('/images/akira_with_Ginkakuji.jpg'));
     }
     select(index) {
         return this._array[index];

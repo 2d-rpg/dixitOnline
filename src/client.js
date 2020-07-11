@@ -5,8 +5,8 @@
 const socket = io();
 const canvas = document.getElementById('canvas-2d');
 const context = canvas.getContext('2d');
-const playerImage = $('#playerImage')[0];
 const startButton = document.getElementById('startButton');
+const playerImage = document.getElementById('playerImage');
 
 // サーバーから'state'がemitされたときの動作
 socket.on('state', (players) => {
@@ -20,8 +20,8 @@ socket.on('state', (players) => {
     });
 });
 
-// サーバーから'server_to_client'がemitされた時の動作(チャット用)
-socket.on('server_to_client', function(data){appendMsg(data.value)});
+// サーバーから'chat_send_from_server'がemitされた時の動作(チャット用)
+socket.on('chat_send_from_server', function(data){appendMsg(data.value)});
 
 function appendMsg(text) {
     $("#chatLogs").append("<div>" + text + "</div>");
@@ -43,9 +43,10 @@ function updateNumOfPepole(num) {
 socket.on('connect', init);
 // サーバーから'cannot_play'がemitされた時の動作
 socket.on('cannot_play', cannotPlay);
-// socket.on('entry_done', );
-// 'entry_done'がemitされた時の動作
+// サーバーから'waiting'がemitされた時の動作
 socket.on('waiting', waiting)
+// サーバーから'master_hand_selection'がemitされた時の動作
+socket.on('master_hand_selection', function(player){masterHandSelection(player);});
 
 
 
@@ -58,23 +59,32 @@ function init(){
 // エントリーフォームにsubmitされたときの動作
 $("#entryForm").submit(function(e){
     var username = $("#userName").val();
-    // $("#entryForm").style.display = none;
+    // 名前入力フォーム非表示
+    document.getElementById("entryForm").style.display = 'none';
+    clearDisplay();
+    const fontSize = 20;
+    context.font = fontSize + 'px Bold Arial';
+    const message = '参加者が集まるまでお待ちください';
+    // メッセージをcanvas中央に配置
+    context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
     socket.emit('entry', {username : username});
     e.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
 });
 
 // cannot_play画面
 function cannotPlay() {
+    // 名前入力フォーム表示
+    document.getElementById("entryForm").style.display = 'block';
     clearDisplay();
-    context.font = '20px Bold Arial';
-    // let id = player.id.toString()
-    context.fillText('現在プレイ中です もう少しお待ちください', canvas.width / 2, canvas.height / 2);
+    const fontSize = 20;
+    context.font = fontSize + 'px Bold Arial';
+    const message = '現在プレイ中です もう少しお待ちください';
+    // メッセージをcanvas中央に配置
+    context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
 }
 
 // waiting画面
 function waiting() {
-    // socket.emit('waiting');
-    document.getElementById("entryForm").style.display = 'none';
     clearDisplay();
     startButton.style.display = 'block';
     console.log('[debug] waiting状態');
@@ -82,12 +92,28 @@ function waiting() {
 
 // スタートボタンを押した時の動作
 startButton.onclick = function() {
-    startButton.style.display = none;
-    socket.emit('master_hand_selection');
+    startButton.style.display = 'none';
+    clearDisplay();
+    const fontSize = 20;
+    context.font = fontSize + 'px Bold Arial';
+    const message = '他の参加者がスタートするのを待っています...';
+    // メッセージをcanvas中央に配置
+    context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
+    socket.emit('entry_done');
 }
 
-function masterHandSelection() {
-
+// master_hand_selection画面
+function masterHandSelection(player) {
+    clearDisplay();
+    // TODO: srcを変更しているのに，drawImageでの表示が変更されない
+    player.hand._array.forEach((card, index) => {
+        var x = 400.0 / 3.0 + index * (100 + 400.0 / (3.0 * 5.0));
+        var y = 600;
+        playerImage.src = card.filename;
+        console.log(playerImage.width);
+        context.drawImage(playerImage, 0, 0, playerImage.width, playerImage.height, x, y, 100, 100);
+    });
+    console.log(playerImage.src);
 }
 
 // ゲーム画面クリア
@@ -96,7 +122,7 @@ function clearDisplay() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     // 枠線の太さ
     context.lineWidth = 10;
-    // ???
+    // 現在のパスをリセット
     context.beginPath();
     context.rect(0, 0, canvas.width, canvas.height);
     context.stroke();
@@ -106,6 +132,6 @@ function clearDisplay() {
 $("#chatForm").submit(function(e){
     var message = $("#msgForm").val();
     $("#msgForm").val('');
-    socket.emit("client_to_server", {value : message});
+    socket.emit("chat_send_from_client", {value : message});
     e.preventDefault(); // フォームによる/?への接続を止める
 });

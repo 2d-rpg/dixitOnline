@@ -4,26 +4,37 @@ const Stack = require('./stack');
 const Hand = require('./hand');
 const Discard = require('./discard');
 const Layout = require('./layout');
-// 静的プロパティ
-// 山札(stock)
-let stock = new Stack();
-// 墓地(discard)
-let discard = new Discard();
-// 場札(layout)
-let layout = new Layout();
 
+// private static property
+// 外からのアクセス不可
 // プレイヤーの状態
+// ここに遷移状態を追加
 const status = [
-    'entry',
-    'waiting',
-    'master_hand_select'
-    // ここに遷移状態を追加
+    'entry',                 // 0
+    'waiting',               // 1
+    'master_hand_selection', // 2
+    'story_selection',       // 3
+    'others_hand_selection', // 4
+    'field_selection',       // 5
+    'show_answer',           // 6
+    'calc_score',            // 7
+    'result'                 // 8
 ];
 
 // プレイヤークラス
 class Player {
+    // 静的プロパティ(外からのアクセス可)
+    // 山札(stock)
+    static stock = new Stack();
+    // 墓地(discard)
+    static discard = new Discard();
+    // 場札(layout)
+    static layout = new Layout();
+    // 最大スコア(終了条件に用いる)
+    static MAX_SCORE = 30;
+
     constructor(obj){
-        // this.id = Math.floor(Math.random()*100);
+        // 初期化
         this.socketId = obj.socketId;
         this.hand = new Hand(6);
         this.isMaster = false;
@@ -32,6 +43,10 @@ class Player {
         this.state = 'undone';
         this.stage = status[0];
         this.stageIndex = 0;
+        // カードの状態をstackからhandに変更
+        this.hand._array.forEach(card => {
+            card.nextStatus();
+        });
     }
     // 山札からドロー
     draw(){
@@ -56,7 +71,11 @@ class Player {
     }
     // ステージ移行
     nextStage() {
-        this.stageIndex += 1;
+        if (this.stageIndex != 7) {
+            this.stageIndex += 1;
+        } else { // 語り部更新
+            this.stageIndex = 2;
+        }
         this.stage = status[this.stageIndex];
         return this.stage;
     }
@@ -64,9 +83,9 @@ class Player {
     isDone() {
         return this.state === 'done';
     }
-    // 描画
-    showHand() {
-        this.hand.show();
+    // 終了条件
+    hasMaxScore() {
+        return this.score >= MAX_SCORE;
     }
 }
 
