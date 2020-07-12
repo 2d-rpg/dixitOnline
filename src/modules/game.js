@@ -1,4 +1,7 @@
 const Player = require("./player");
+const Stock = require('./stock');
+const Discard = require('./discard');
+const Layout = require('./layout');
 const utils = require('./utils');
 
 // private static property
@@ -28,7 +31,7 @@ class Game {
         this.players = new Array(3).fill(null);
         this.currentNum = 0;
         // 山札(stock)
-        this.stock = new Stack();
+        this.stock = new Stock();
         // 墓地(discard)
         this.discard = new Discard();
         // 場札(layout)

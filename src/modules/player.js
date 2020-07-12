@@ -1,9 +1,6 @@
 'use strict';
 // import modules
-const Stack = require('./stack');
 const Hand = require('./hand');
-const Discard = require('./discard');
-const Layout = require('./layout');
 
 // プレイヤークラス
 class Player {
