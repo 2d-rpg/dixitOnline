@@ -91,7 +91,7 @@ class Game {
 
     /** 語り部の更新 */
     updateMaster() {
-        this.master += 1;
+        this.master = (this.master + 1) % 3; // 0 ~ 2 でループ
         this.players.forEach((player, index) => {
             player.isMaster = this.master === index;
         });
@@ -130,7 +130,7 @@ class Game {
 
     /** IDによるプレイヤー削除 */
     deletePlayer(id) {
-        this.players.forEach(player => {
+        this.players.filter(player => player != null).forEach(player => {
             if (player.socketId == id) {
                 var index = this.players.indexOf(player);
                 this.players.splice(index,1)
