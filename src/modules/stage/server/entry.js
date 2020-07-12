@@ -8,7 +8,7 @@ class Entry {
     constructor() {}
 
     static do(data, io, socket, game) {
-        if (players.length < 3) { // プレイヤー人数が3人未満の時
+        if (game.players.length < 3) { // プレイヤー人数が3人未満の時
             let player = game.addPlayer(data, socket);
             io.sockets.emit('update_number_of_player', {num : game.players.length});
             // emitしてきたクライアントだけに投げる

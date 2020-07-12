@@ -43,7 +43,7 @@ function updateNumOfPepole(num) {
  ****************************/
 
 // 接続完了('connect')時の動作(最初の接続完了時に'connect'がサーバーからemitされる)
-socket.on('connect', function(socket){Init.do(socket);});
+socket.on('connect', function(){Init.do(socket);});
 // サーバーから'cannot_play'がemitされた時の動作
 socket.on('cannot_play', cannotPlay);
 // サーバーから'waiting'がemitされた時の動作

@@ -28,7 +28,7 @@ class Game {
     static STAGE_NUM = 7;
 
     constructor() {
-        this.players = new Array(3).fill(null);
+        this.players = new Array();
         this.currentNum = 0;
         // 山札(stock)
         this.stock = new Stock();
@@ -43,7 +43,8 @@ class Game {
 
     /** プレイヤーの追加 */
     addPlayer(data, socket) {
-        this.players[this.currentNum] = new Player({socketId: socket.id, username: data.username});
+        this.players.push(new Player({socketId: socket.id, username: data.username}));
+        console.log(this.players[this.currentNum]);
         this.players[this.currentNum].done();
         this.currentNum += 1;
         return this.players[this.currentNum-1];
