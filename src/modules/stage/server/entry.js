@@ -1,7 +1,7 @@
 // entry
 
 const Player = require('../../player');
-const utils = require('../../utlis');
+const utils = require('../../utils');
 
 class Entry {
 

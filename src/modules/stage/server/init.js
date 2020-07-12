@@ -1,6 +1,6 @@
 // init
 
-const utils = require('../../utlis');
+const utils = require('../../utils');
 
 class Init {
 

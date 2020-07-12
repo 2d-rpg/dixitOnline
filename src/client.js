@@ -1,7 +1,10 @@
-// 'use strict';
+'use strict';
 // クライアント側
 // import modules
-// import {Init} from './modules/stage/client/init.js'
+import {Waiting} from './modules/stage/client/waiting.js'
+import {Utils} from './modules/stage/client/utils.js'
+const waiting = new Waiting();
+// const init = require('./modules/stage/client/init');
 // Socket.IOを利用してサーバに接続
 const socket = io();
 const canvas = document.getElementById('canvas-2d');
@@ -40,21 +43,27 @@ function updateNumOfPepole(num) {
  ****************************/
 
 // 接続完了('connect')時の動作(最初の接続完了時に'connect'がサーバーからemitされる)
-socket.on('connect', Init.do(socket));
+socket.on('connect', init);
 // サーバーから'cannot_play'がemitされた時の動作
 socket.on('cannot_play', cannotPlay);
 // サーバーから'waiting'がemitされた時の動作
-socket.on('waiting', waiting)
+socket.on('waiting', waiting.do());
 // サーバーから'master_hand_selection'がemitされた時の動作
 socket.on('master_hand_selection', function(data){masterHandSelection(data);});
 
+
+// init画面
+function init() {
+    socket.emit('init');
+    console.log('[debug] init状態');
+}
 
 // エントリーフォームにsubmitされたときの動作
 $("#entryForm").submit(function(e){
     var username = $("#userName").val();
     // 名前入力フォーム非表示
     document.getElementById("entryForm").style.display = 'none';
-    clearDisplay();
+    Utils.clearDisplay();
     const fontSize = 20;
     context.font = fontSize + 'px Bold Arial';
     const message = '参加者が集まるまでしばらくお待ちください';
@@ -68,7 +77,7 @@ $("#entryForm").submit(function(e){
 function cannotPlay() {
     // 名前入力フォーム表示
     document.getElementById("entryForm").style.display = 'block';
-    clearDisplay();
+    Utils.clearDisplay();
     const fontSize = 20;
     context.font = fontSize + 'px Bold Arial';
     const message = '現在プレイ中です しばらくお待ちください';
@@ -76,17 +85,10 @@ function cannotPlay() {
     context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
 }
 
-// waiting画面
-function waiting() {
-    clearDisplay();
-    startButton.style.display = 'block';
-    console.log('[debug] waiting状態');
-}
-
 // スタートボタンを押した時の動作
 startButton.onclick = function() {
     startButton.style.display = 'none';
-    clearDisplay();
+    Utils.clearDisplay();
     const fontSize = 20;
     context.font = fontSize + 'px Bold Arial';
     const message = '他の参加者がスタートするのを待っています...';
@@ -97,7 +99,7 @@ startButton.onclick = function() {
 
 // master_hand_selection画面
 function masterHandSelection(data) {
-    clearDisplay();
+    Utils.clearDisplay();
     // TODO: srcを変更しているのに，drawImageでの表示が変更されない
     // TODO: 応急処置としてhtmlにサーバーにある画像を追加し，そこから持ってくることにしているがダサい
     const y = 600;
@@ -119,18 +121,6 @@ function masterHandSelection(data) {
         context.fillText(player.name, index * 400 + 200, 200);
         context.fillText('スコア: ' + player.score, index * 400 + 200, 200 + 40);
     });
-}
-
-// ゲーム画面クリア
-function clearDisplay() {
-    // 指定範囲をクリア
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    // 枠線の太さ
-    context.lineWidth = 10;
-    // 現在のパスをリセット
-    context.beginPath();
-    context.rect(0, 0, canvas.width, canvas.height);
-    context.stroke();
 }
 
 // チャットフォームにsubmitされた時の動作

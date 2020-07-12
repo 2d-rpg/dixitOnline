@@ -5,7 +5,7 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
-const utils = require('./src/modules/utlis');
+const utils = require('./src/modules/utils');
 const Player = require('./src/modules/player');
 // ステージごとのファイル読み込み
 const init = require('./src/modules/stage/server/init');

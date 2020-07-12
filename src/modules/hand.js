@@ -2,7 +2,7 @@
 // 手札クラス
 
 const Card = require('./card');
-const utils = require('./utlis');
+const utils = require('./utils');
 
 class Hand {
     constructor(size) {
