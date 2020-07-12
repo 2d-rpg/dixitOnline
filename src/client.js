@@ -1,9 +1,9 @@
 'use strict';
 // クライアント側
 // import modules
+import {Init} from './modules/stage/client/init.js'
 import {Waiting} from './modules/stage/client/waiting.js'
 import {Utils} from './modules/stage/client/utils.js'
-const waiting = new Waiting();
 // const init = require('./modules/stage/client/init');
 // Socket.IOを利用してサーバに接続
 const socket = io();
@@ -43,20 +43,14 @@ function updateNumOfPepole(num) {
  ****************************/
 
 // 接続完了('connect')時の動作(最初の接続完了時に'connect'がサーバーからemitされる)
-socket.on('connect', init);
+socket.on('connect', function(socket){Init.do(socket);});
 // サーバーから'cannot_play'がemitされた時の動作
 socket.on('cannot_play', cannotPlay);
 // サーバーから'waiting'がemitされた時の動作
-socket.on('waiting', waiting.do());
+socket.on('waiting', Waiting.do);
 // サーバーから'master_hand_selection'がemitされた時の動作
 socket.on('master_hand_selection', function(data){masterHandSelection(data);});
 
-
-// init画面
-function init() {
-    socket.emit('init');
-    console.log('[debug] init状態');
-}
 
 // エントリーフォームにsubmitされたときの動作
 $("#entryForm").submit(function(e){

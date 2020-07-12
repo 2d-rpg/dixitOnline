@@ -6,6 +6,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const utils = require('./src/modules/utils');
+const Game = require('./src/modules/game');
 const Player = require('./src/modules/player');
 // ステージごとのファイル読み込み
 const init = require('./src/modules/stage/server/init');
@@ -19,6 +20,7 @@ const io = socketIO(server);
 
 // プレイヤーリスト
 let players = {};
+let game = Game();
 // 接続が完了したときに呼び出す関数
 io.on('connection', function(socket) {
     let player = null;
@@ -39,33 +41,9 @@ io.on('connection', function(socket) {
 });
 
 setInterval(function() {
-    // 全てのプレイヤーの状態を確認
-    var isAllDone = Object.values(players).filter(player => player.isDone()).length === 3;
-    if (isAllDone) { // 全てのプレイヤーが次のステージにいける状態
-        let nextStage = null;
-        Object.values(players).forEach(player => { // 全プレイヤーの状態更新
-            nextStage = player.nextStage(); // 次のステージ取得
-            player.reset(); // 状態リセット
-            if (nextStage == 'master_hand_selection') {
-                player.setMaster();
-            }
-        });
-        if (nextStage == 'master_hand_selection') {
-            Player.nowMaster += 1;
-        }
-        Object.values(players).forEach(player => { // ステージ移行
-            // ディープコピー (何段階もコピーするのでObject.createは不可)
-            // TODO: もっといい方法あるかも
-            var others = [];
-            Object.values(players).forEach(other => {
-                if (player != other) {
-                    others.push(other);
-                }
-            });
-            // delete others[player.socketId]; // 自分を削除
-            io.to(player.socketId).emit(nextStage, {others : others, player : player}); // ステージ移行
-        });
-        utils.log('Move to stage [' + nextStage + ']');
+    // 全プレイヤーがステージ移行可能ならば移行する
+    if (this.isAllDone()) { // 全てのプレイヤーが次のステージにいける状態
+        game.nextSatage();
     }
     // プレイヤーの状態をemit
     // io.sockets.emit('state', players);

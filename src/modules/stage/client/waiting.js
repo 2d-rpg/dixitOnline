@@ -4,7 +4,7 @@ const startButton = document.getElementById('startButton');
 
 export class Waiting {
 
-    do() {
+    static do() {
         Utils.clearDisplay();
         startButton.style.display = 'block';
         console.log('[debug] waiting状態');

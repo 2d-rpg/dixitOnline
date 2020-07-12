@@ -8,8 +8,8 @@ class Entry {
     constructor() {}
 
     static do(data, io, socket, players) {
-        if (Object.keys(players).length < 3) { // プレイヤー人数が3人未満の時
-            let player = new Player({socketId: socket.id, username: data.username});
+        if (game.players.length < 3) { // プレイヤー人数が3人未満の時
+            game.addPlayer();
             players[player.socketId] = player;
             io.sockets.emit('update_number_of_player', {num : Object.keys(players).length});
             player.done(); // done状態にする

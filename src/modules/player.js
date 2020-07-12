@@ -24,12 +24,6 @@ const status = [
 // プレイヤークラス
 class Player {
     // 静的プロパティ(外からのアクセス可)
-    // 山札(stock)
-    static stock = new Stack();
-    // 墓地(discard)
-    static discard = new Discard();
-    // 場札(layout)
-    static layout = new Layout();
     // 最大スコア(終了条件に用いる)
     static MAX_SCORE = 30;
 
