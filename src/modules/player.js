@@ -24,14 +24,12 @@ const status = [
 // プレイヤークラス
 class Player {
     // 静的プロパティ(外からのアクセス可)
-    // 山札(stock)
-    static stock = new Stack();
-    // 墓地(discard)
-    static discard = new Discard();
-    // 場札(layout)
-    static layout = new Layout();
     // 最大スコア(終了条件に用いる)
     static MAX_SCORE = 30;
+
+    static count = 0;
+    
+    static nowMaster = 0;
 
     constructor(obj){
         // 初期化
@@ -43,6 +41,8 @@ class Player {
         this.state = 'undone';
         this.stage = status[0];
         this.stageIndex = 0;
+        this.order = Player.count;
+        Player.count += 1;
         // カードの状態をstackからhandに変更
         this.hand._array.forEach(card => {
             card.nextStatus();
@@ -86,6 +86,9 @@ class Player {
     // 終了条件
     hasMaxScore() {
         return this.score >= MAX_SCORE;
+    }
+    setMaster() {
+        this.isMaster = Player.nowMaster === this.order;
     }
 }
 
