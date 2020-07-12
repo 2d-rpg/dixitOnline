@@ -25,10 +25,10 @@ class Game {
     // ゲーム終了基準点(MAX_SCORE)
     static MAX_SCORE = 30;
     // １ラウンドごとのフェイズの数(STAGE_NUM)
-    static STAGE_NUM = 8;
+    static STAGE_NUM = 7;
 
     constructor() {
-        this.players = new Array().fill(null);
+        this.players = new Array(3).fill(null);
         this.currentNum = 0;
         // 山札(stock)
         this.stock = new Stock();
