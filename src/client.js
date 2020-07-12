@@ -32,13 +32,13 @@ function updateNumOfPepole(num) {
  ****************************/
 
 // 接続完了('connect')時(最初の接続完了時に'connect'がサーバーからemitされる)
-socket.on('connect', function(){Init.do(socket);});
+socket.on('connect', () => Init.do(socket));
 // サーバーから'cannot_play'がemitされた時
-socket.on('cannot_play', function(){CannotPlay.do(context, canvas);});
+socket.on('cannot_play', () => CannotPlay.do(context, canvas));
 // サーバーから'start'がemitされた時(startステージ移行)
 socket.on('start', Start.do);
 // サーバーから'master_hand_selection'がemitされた時(master_hand_selectionステージ移行)
-socket.on('master_hand_selection', function(data){MasterHandSelection.do(data, context);});
+socket.on('master_hand_selection', (data) => MasterHandSelection.do(data, context));
 
 
 /****************************
@@ -46,7 +46,7 @@ socket.on('master_hand_selection', function(data){MasterHandSelection.do(data, c
  ****************************/
 
 // チャットフォームにsubmitされた時の動作
-$("#chatForm").submit(function(e){
+$("#chatForm").submit((e) => {
     var message = $("#msgForm").val();
     $("#msgForm").val('');
     socket.emit("chat_send_from_client", {value : message});
@@ -54,7 +54,7 @@ $("#chatForm").submit(function(e){
 });
 
 // エントリーフォームにsubmitされたときの動作
-$("#entryForm").submit(function(event){Init.entry(event, socket, context, canvas)});
+$("#entryForm").submit((event) => Init.entry(event, socket, context, canvas));
 
 // スタートボタンを押した時の動作
 startButton.onclick = function() {Start.push(socket,context, canvas)};
