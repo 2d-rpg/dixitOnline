@@ -33,6 +33,10 @@ class Player {
     // 最大スコア(終了条件に用いる)
     static MAX_SCORE = 30;
 
+    static count = 0;
+    
+    static nowMaster = 0;
+
     constructor(obj){
         // 初期化
         this.socketId = obj.socketId;
@@ -43,6 +47,8 @@ class Player {
         this.state = 'undone';
         this.stage = status[0];
         this.stageIndex = 0;
+        this.order = Player.count;
+        Player.count += 1;
         // カードの状態をstackからhandに変更
         this.hand._array.forEach(card => {
             card.nextStatus();
@@ -86,6 +92,9 @@ class Player {
     // 終了条件
     hasMaxScore() {
         return this.score >= MAX_SCORE;
+    }
+    setMaster() {
+        this.isMaster = Player.nowMaster === this.order;
     }
 }
 
