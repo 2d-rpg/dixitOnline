@@ -19,21 +19,19 @@ const server = http.Server(app);
 const io = socketIO(server);
 
 // プレイヤーリスト
-let players = {};
-let game = Game();
+let game = new Game();
 // 接続が完了したときに呼び出す関数
 io.on('connection', function(socket) {
-    let player = null;
     // ゲーム開始時の処理
-    socket.on('init', (config) => init.do(config, io, socket, players));
+    socket.on('init', (config) => init.do(config, io, socket, game.players));
     // クライアントからentryがemitされた時の処理
-    socket.on('entry', (data) =>  entry.do(data, io, socket, players));
+    socket.on('entry', (data) =>  entry.do(data, io, socket, game));
     // クライアントからentry_doneがemitされた時の処理
-    socket.on('entry_done', () => entry.done(socket, players));
+    socket.on('entry_done', () => entry.done(socket, game));
     // TODO: ここに追加していく
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)の処理
     // TODO: つまりリロードすると復帰不可
-    socket.on('disconnect', () => disconnect.do(io, socket, players));
+    socket.on('disconnect', () => disconnect.do(io, socket, game));
     // メッセージ用
     socket.on('chat_send_from_client', function(data) {
         io.sockets.emit('chat_send_from_server', {value : data.value});
