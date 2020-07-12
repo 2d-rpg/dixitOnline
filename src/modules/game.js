@@ -43,17 +43,18 @@ class Game {
 
     /** プレイヤーの追加 */
     addPlayer(data, socket) {
-        this.players.push(new Player({socketId: socket.id, username: data.username}));
+        let player = new Player({socketId: socket.id, username: data.username});
+        this.players.push(player);
         console.log(this.players[this.currentNum]);
         this.players[this.currentNum].done();
         this.currentNum += 1;
-        return this.players[this.currentNum-1];
+        return player;
     }
 
     /** 次のステージへ移行 */
-    nextStage() {
+    nextStage(io) {
         // ステージ移行
-        if (this.stageIndex != this.STAGE_NUM) {
+        if (this.stageIndex != Game.STAGE_NUM) {
             this.stageIndex += 1;
         } else { // 語り部更新
             this.stageIndex = 2;
@@ -122,7 +123,7 @@ class Game {
     deletePlayer(id) {
         this.players.forEach(player => {
             if (player.socketId == id) {
-                index = this.players.indexOf(player);
+                var index = this.players.indexOf(player);
                 this.players.splice(index,1)
             }    
         });

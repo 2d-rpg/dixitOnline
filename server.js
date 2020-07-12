@@ -41,7 +41,7 @@ io.on('connection', function(socket) {
 setInterval(function() {
     // 全プレイヤーがステージ移行可能ならば移行する
     if (game.isAllDone()) { // 全てのプレイヤーが次のステージにいける状態
-        game.nextStage();
+        game.nextStage(io);
     }
     // プレイヤーの状態をemit
     // io.sockets.emit('state', players);
