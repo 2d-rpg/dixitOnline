@@ -2,11 +2,11 @@
 import {Utils} from './utils.js'
 const startButton = document.getElementById('startButton');
 
-export class Waiting {
+export class Start {
 
     static do() {
         Utils.clearDisplay();
         startButton.style.display = 'block';
-        console.log('[debug] waiting状態');
+        console.log('[debug] スタート待機状態');
     }
 }

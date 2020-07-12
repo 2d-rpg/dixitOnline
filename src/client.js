@@ -2,7 +2,7 @@
 // クライアント側
 // import modules
 import {Init} from './modules/stage/client/init.js'
-import {Waiting} from './modules/stage/client/waiting.js'
+import {Start} from './modules/stage/client/start.js'
 import {Utils} from './modules/stage/client/utils.js'
 // const init = require('./modules/stage/client/init');
 // Socket.IOを利用してサーバに接続
@@ -42,13 +42,13 @@ function updateNumOfPepole(num) {
  *    各ステージの処理一覧
  ****************************/
 
-// 接続完了('connect')時の動作(最初の接続完了時に'connect'がサーバーからemitされる)
+// 接続完了('connect')時(最初の接続完了時に'connect'がサーバーからemitされる)
 socket.on('connect', function(){Init.do(socket);});
-// サーバーから'cannot_play'がemitされた時の動作
+// サーバーから'cannot_play'がemitされた時
 socket.on('cannot_play', cannotPlay);
-// サーバーから'waiting'がemitされた時の動作
-socket.on('waiting', Waiting.do);
-// サーバーから'master_hand_selection'がemitされた時の動作
+// サーバーから'start'がemitされた時(startステージ移行)
+socket.on('start', Start.do);
+// サーバーから'master_hand_selection'がemitされた時(master_hand_selectionステージ移行)
 socket.on('master_hand_selection', function(data){masterHandSelection(data);});
 
 
@@ -63,6 +63,7 @@ $("#entryForm").submit(function(e){
     const message = '参加者が集まるまでしばらくお待ちください';
     // メッセージをcanvas中央に配置
     context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
+    // サーバーに'entry'を送信
     socket.emit('entry', {username : username});
     e.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
 });
@@ -88,7 +89,7 @@ startButton.onclick = function() {
     const message = '他の参加者がスタートするのを待っています...';
     // メッセージをcanvas中央に配置
     context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
-    socket.emit('entry_done');
+    socket.emit('start');
 }
 
 // master_hand_selection画面

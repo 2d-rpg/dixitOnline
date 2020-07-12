@@ -1,6 +1,5 @@
-// entry
+// エントリー完了時
 
-const Player = require('../../player');
 const utils = require('../../utils');
 
 class Entry {
@@ -8,24 +7,19 @@ class Entry {
     constructor() {}
 
     static do(data, io, socket, game) {
-        if (game.players.length < 3) { // プレイヤー人数が3人未満の時
+        if (game.getLength() < 3) { // プレイヤー人数が3人未満の時
+            // プレイヤー追加
             let player = game.addPlayer(data, socket);
-            io.sockets.emit('update_number_of_player', {num : game.players.length});
-            // emitしてきたクライアントだけに投げる
-            // io.to(socket.id).emit('entry_done', player);
+            // 全クライアントのプレイヤー人数表示更新
+            io.sockets.emit('update_number_of_player', {num : game.getLength()});
             utils.logWithStage('entry', 'Player Name: [' + player.name + '] ([' 
                 + player.socketId + ']) joined.');
         } else {
+            // プレイできない
             io.to(socket.id).emit('cannot_play');
         }
     }
 
-    static done(socket, game) {
-        // 処理
-        let player = game.findPlayer(socket.id); // socket IDからプレイヤー特定
-        player.done();
-        utils.logWithStage('entry_done', 'socket ID: [' + player.socketId + ']');
-    }
 }
 
 module.exports = Entry;

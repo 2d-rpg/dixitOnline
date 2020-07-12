@@ -9,8 +9,6 @@ class Player {
 
     static count = 0;
     
-    static nowMaster = 0;
-
     constructor(obj){
         // 初期化
         this.socketId = obj.socketId;
@@ -19,7 +17,6 @@ class Player {
         this.score = 0;
         this.name = obj.username;
         this.state = 'undone';
-        this.order = Player.count;
         Player.count += 1;
         // カードの状態をstackからhandに変更
         this.hand._array.forEach(card => {
@@ -50,9 +47,6 @@ class Player {
     // 行動が終わっているか
     isDone() {
         return this.state === 'done';
-    }
-    setMaster() {
-        this.isMaster = Player.nowMaster === this.order;
     }
 }
 

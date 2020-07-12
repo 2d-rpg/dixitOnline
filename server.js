@@ -11,6 +11,7 @@ const Player = require('./src/modules/player');
 // ステージごとのファイル読み込み
 const init = require('./src/modules/stage/server/init');
 const entry = require('./src/modules/stage/server/entry');
+const start = require('./src/modules/stage/server/start');
 const disconnect = require('./src/modules/stage/server/disconnect');
 // const fs = require('fs');
 const socketIO = require('socket.io');
@@ -22,14 +23,14 @@ const io = socketIO(server);
 let game = new Game();
 // 接続が完了したときに呼び出す関数
 io.on('connection', function(socket) {
-    // ゲーム開始時の処理
-    socket.on('init', (config) => init.do(config, io, socket, game.players));
-    // クライアントからentryがemitされた時の処理
+    // クライアント接続時
+    socket.on('init', (config) => init.do(config, io, socket, game));
+    // クライアントからentryがemitされた時
     socket.on('entry', (data) =>  entry.do(data, io, socket, game));
-    // クライアントからentry_doneがemitされた時の処理
-    socket.on('entry_done', () => entry.done(socket, game));
+    // クライアントからstartがemitされた時
+    socket.on('start', () => start.do(socket, game));
     // TODO: ここに追加していく
-    // 通信終了時(ブラウザを閉じる/リロード/ページ移動)の処理
+    // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
     // TODO: つまりリロードすると復帰不可
     socket.on('disconnect', () => disconnect.do(io, socket, game));
     // メッセージ用
