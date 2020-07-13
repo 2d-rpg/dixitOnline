@@ -39,7 +39,7 @@ socket.on('cannot_play', () => CannotPlay.do(context, canvas));
 // サーバーから'start'がemitされた時(startステージ移行)
 socket.on('start', Start.do);
 // サーバーから'master_hand_selection'がemitされた時(master_hand_selectionステージ移行)
-socket.on('master_hand_selection', (data) => MasterHandSelection.do(data, context));
+socket.on('master_hand_selection', (data) => MasterHandSelection.do(data, socket, context));
 
 
 /****************************

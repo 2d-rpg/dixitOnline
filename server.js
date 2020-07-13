@@ -11,6 +11,7 @@ const Game = require('./src/modules/game');
 const init = require('./src/modules/stage/server/init');
 const entry = require('./src/modules/stage/server/entry');
 const start = require('./src/modules/stage/server/start');
+const master_hand_selection = require('./src/modules/stage/server/master_hand_selection');
 const disconnect = require('./src/modules/stage/server/disconnect');
 // const fs = require('fs');
 const socketIO = require('socket.io');
@@ -28,6 +29,8 @@ io.on('connection', function(socket) {
     socket.on('entry', (data) =>  entry.do(data, io, socket, game));
     // クライアントからstartがemitされた時
     socket.on('start', () => start.do(socket, game));
+    // クライアントからmaster_selectionがemitされた時
+    socket.on('master_selection', (index) => master_hand_selection.do(socket, io, index, game));
     // TODO: ここに追加していく
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)

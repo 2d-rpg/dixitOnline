@@ -40,7 +40,7 @@ class Game {
         this.stage = status[0];
         this.stageIndex = 0;
         // 語り部は最初に入ってきた人から
-        this.master = 0;
+        this.master = -1;
     }
 
     /** プレイヤーの追加 */
@@ -61,8 +61,10 @@ class Game {
         if (this.stageIndex != Game.STAGE_NUM) {
             this.stageIndex += 1;
         } else { // 語り部更新
-            this.updateMaster();
             this.stageIndex = 2;
+        }
+        if(this.stageIndex == 2){
+            this.updateMaster();
         }
         this.stage = status[this.stageIndex]; // 'master_hand_selection'
         this.players.forEach(player => { // 全プレイヤーの状態更新
