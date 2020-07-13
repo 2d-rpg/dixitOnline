@@ -8,6 +8,7 @@ export class MasterHandSelection {
         // TODO: srcを変更しているのに，drawImageでの表示が変更されない
         // TODO: 応急処置としてhtmlにサーバーにある画像を追加し，そこから持ってくることにしているがダサい
         const y = 600;
+        console.log(player.isMaster);
         data.player.hand._array.forEach((card, index) => {
             var x = 400.0 / 3.0 + index * (100 + 400.0 / (3.0 * 5.0));
             var image = document.getElementById(card.filename);
