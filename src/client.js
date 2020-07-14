@@ -75,3 +75,8 @@ $("#entryForm").submit((event) => Init.entry(event, socket, context, canvas));
 
 // スタートボタンを押した時の動作
 startButton.onclick = function() {Start.push(socket,context, canvas)};
+
+// 親がお題をsubmitしたときの動作
+$("#claimForm").submit((e) => {
+    var message = $("#msgForm").val();
+});
