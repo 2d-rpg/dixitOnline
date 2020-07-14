@@ -3,12 +3,11 @@
 import {Utils} from './utils.js'
 
 export class MasterHandSelection {
-    static do(data, socket, context) {
-        Utils.clearDisplay();
+    static do(data, socket) {
         const y = 600;
         let message;
         if(data.player.isMaster){ //語り部の場合
-            message = 'あなたは語り部です。カードを選択してください';
+            message = 'あなたは親です。カードを選択してください';
             data.player.hand._array.forEach((card, index) => {
                 var img = document.createElement("img");
                 img.setAttribute("src", "../images/" + card.filename + ".jpg");
@@ -22,7 +21,7 @@ export class MasterHandSelection {
                 document.getElementById("button"+index).onclick = function(){MasterHandSelection.select(socket,index)};
             });
         }else{ //その他の場合
-            message = 'あなたは聞き手です。待機中...';
+            message = 'あなたは子です。待機中...';
             //data.player.done();
             data.player.hand._array.forEach((card, index) => {
                 var img = document.createElement("img");
@@ -50,6 +49,6 @@ export class MasterHandSelection {
     }
 
     static select(socket,index) {
-        socket.emit('master_selection', {index : index});
+        socket.emit('master_hand_selection', {index : index});
     }
 }

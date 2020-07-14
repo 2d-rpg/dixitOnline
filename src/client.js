@@ -4,6 +4,8 @@
 import {Init} from './modules/stage/client/init.js'
 import {Start} from './modules/stage/client/start.js'
 import {MasterHandSelection} from './modules/stage/client/master_hand_selection.js'
+import {StorySelection} from './modules/stage/client/story_selection.js'
+
 import {CannotPlay} from './modules/stage/client/cannot_play.js';
 // const init = require('./modules/stage/client/init');
 // Socket.IOを利用してサーバに接続
@@ -39,7 +41,9 @@ socket.on('cannot_play', () => CannotPlay.do(context, canvas));
 // サーバーから'start'がemitされた時(startステージ移行)
 socket.on('start', Start.do);
 // サーバーから'master_hand_selection'がemitされた時(master_hand_selectionステージ移行)
-socket.on('master_hand_selection', (data) => MasterHandSelection.do(data, socket, context));
+socket.on('master_hand_selection', (data) => MasterHandSelection.do(data, socket));
+
+socket.on('story_selection', (data) => StorySelection.do(data, socket));
 
 
 /****************************

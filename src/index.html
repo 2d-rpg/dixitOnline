@@ -38,7 +38,18 @@
     <img id="akira_with_Ginkakuji" src="images/akira_with_Ginkakuji.jpg" style="display: none;">
     <img id="akira_with_hood_and_Ginkakuji" src="images/akira_with_hood_and_Ginkakuji.jpg" style="display: none;">
     <div id="progress"></div>
-    <p id="hand">あいうえお</p>
+    <!-- 手札 -->
+    <p id="hand"></p>
+    <!-- 提出したカード -->
+    <img id="master_selected_card" width="200" height="200" style="display: none;">
+    <!-- masterのメッセージ送信-->
+    <form class="form-inline" id="masterClaim" style="display: none;">
+      <div class="form-group">
+        <label for="msgForm">お題を入力してね：</label>
+        <input type="text" class="form-control" id="claimForm">
+      </div>
+        <button type="submit" class="btn btn-primary">送信</button>
+    </form>
   </div>
 
   <script type="module" src="client.js"></script>

@@ -13,9 +13,16 @@ class Hand {
         for (var i=0; i < size; i++) { // forEach文だとエラーが出る
             this._array[i] = new Card(utils.randomSample(18));
         }
+        //最後に選択されたカードのindex
+        this.selectedIndex = 0;
     }
     select(index) {
-        return this._array[index];
+        this.selectedIndex = index;
+        //return this._array[index];
+    }
+
+    selectedCard(){
+        return this._array[selectedIndex["index"]];
     }
     // 描画
     show() {

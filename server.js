@@ -30,7 +30,7 @@ io.on('connection', function(socket) {
     // クライアントからstartがemitされた時
     socket.on('start', () => start.do(socket, game));
     // クライアントからmaster_selectionがemitされた時
-    socket.on('master_selection', (index) => master_hand_selection.do(socket, io, index, game));
+    socket.on('master_hand_selection', (index) => master_hand_selection.do(socket, io, index, game));
     // TODO: ここに追加していく
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
