@@ -4,7 +4,6 @@ import {Utils} from './utils.js'
 
 export class MasterHandSelection {
     static do(data, socket) {
-        const y = 600;
         let message;
         if(data.player.isMaster){ //語り部の場合
             message = 'あなたは親です。カードを選択してください';
@@ -22,7 +21,6 @@ export class MasterHandSelection {
             });
         }else{ //その他の場合
             message = 'あなたは子です。待機中...';
-            //data.player.done();
             data.player.hand._array.forEach((card, index) => {
                 var img = document.createElement("img");
                 img.setAttribute("src", "../images/" + card.filename + ".jpg");
@@ -32,7 +30,9 @@ export class MasterHandSelection {
             });
         }
         document.getElementById('progress').innerHTML = message;
-            
+
+
+        const y = 600;    
         // プレイヤー名/スコアの表示
         // 自分
         const fontSize = 20;

@@ -5,6 +5,8 @@ import {Init} from './modules/stage/client/init.js'
 import {Start} from './modules/stage/client/start.js'
 import {MasterHandSelection} from './modules/stage/client/master_hand_selection.js'
 import {StorySelection} from './modules/stage/client/story_selection.js'
+import {OthersHandSelection} from './modules/stage/client/others_hand_selection.js'
+
 
 import {CannotPlay} from './modules/stage/client/cannot_play.js';
 // const init = require('./modules/stage/client/init');
@@ -42,8 +44,10 @@ socket.on('cannot_play', () => CannotPlay.do(context, canvas));
 socket.on('start', Start.do);
 // サーバーから'master_hand_selection'がemitされた時(master_hand_selectionステージ移行)
 socket.on('master_hand_selection', (data) => MasterHandSelection.do(data, socket));
-
+// サーバーから'story_selection'がemitされた時(story_selectionステージ移行)
 socket.on('story_selection', (data) => StorySelection.do(data, socket));
+// サーバーから'others_hand_selection'がemitされた時(others_hand_selectionステージ移行)
+socket.on('others_hand_selection', (data) => OthersHandSelection.do(data, socket));
 
 
 /****************************
@@ -77,6 +81,8 @@ $("#entryForm").submit((event) => Init.entry(event, socket, context, canvas));
 startButton.onclick = function() {Start.push(socket,context, canvas)};
 
 // 親がお題をsubmitしたときの動作
-$("#claimForm").submit((e) => {
+$("#masterForm").submit((e) => {
     var message = $("#msgForm").val();
+    socket.emit("story_selection", {message : message});
+    e.preventDefault();
 });

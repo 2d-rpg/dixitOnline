@@ -41,6 +41,8 @@ class Game {
         this.stageIndex = 0;
         // 語り部は最初に入ってきた人から
         this.master = -1;
+
+        this.masterClaim = "";
     }
 
     /** プレイヤーの追加 */
@@ -97,6 +99,10 @@ class Game {
         this.players.forEach((player, index) => {
             player.isMaster = this.master === index;
         });
+    }
+
+    setMasterClaim(message){
+        this.message = message;
     }
 
     /** スコア計算 */
