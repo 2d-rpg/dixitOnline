@@ -85,7 +85,7 @@ startButton.onclick = function() {Start.push(socket,context, canvas)};
 
 // 親がお題をsubmitしたときの動作
 $("#masterForm").submit((e) => {
-    var message = $("#msgForm").val();
-    socket.emit("story_selection", {message : message});
+    var message = $("#masterClaim").val();
+    socket.emit("story_selection", message);
     e.preventDefault();
 });

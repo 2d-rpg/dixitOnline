@@ -13,12 +13,18 @@ export class Init {
         var username = $("#userName").val();
         // 名前入力フォーム非表示
         document.getElementById("entryForm").style.display = 'none';
-        Utils.clearDisplay();
-        const fontSize = 20;
-        context.font = fontSize + 'px Bold Arial';
+
+        //とりあえずcanvas非表示設定にしてあります
+        // Utils.clearDisplay();
+        // const fontSize = 20;
+        // context.font = fontSize + 'px Bold Arial';
+        // const message = '参加者が集まるまでしばらくお待ちください';
+        // // メッセージをcanvas中央に配置
+        // context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
+
         const message = '参加者が集まるまでしばらくお待ちください';
-        // メッセージをcanvas中央に配置
-        context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
+        document.getElementById('progress').innerHTML = message;
+
         // サーバーに'entry'を送信
         socket.emit('entry', {username : username});
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)

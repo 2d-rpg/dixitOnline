@@ -33,7 +33,7 @@
     <!-- スタートボタン -->
     <button id="startButton" type="button" class="btn btn-warning" style="display: none;">スタート</button>
     <!-- ゲーム画面 -->
-    <canvas id="canvas-2d" width="1000" height="800" style="object-fit:contain;"></canvas>
+    <canvas id="canvas-2d" width="10" height="10" style="object-fit:contain;"></canvas>
     <img id="unko" src="images/unko.gif" style="display: none;">
     <img id="akira_with_Ginkakuji" src="images/akira_with_Ginkakuji.jpg" style="display: none;">
     <img id="akira_with_hood_and_Ginkakuji" src="images/akira_with_hood_and_Ginkakuji.jpg" style="display: none;">
@@ -43,9 +43,12 @@
     <div id="theme"></div>
     <!-- 手札 -->
     <p id="hand"></p>
-    <!-- (今の所は)masterが提出したカード -->
-    <img id="master_selected_card" width="200" height="200" style="display: none;">
-    <!-- masterのメッセージ送信-->
+    <!-- 提出したカード -->
+    <form class="form-inline" id="selected_hand_card_form" style="display: none;">
+      あなたが選んだカード:
+      <img id="selected_hand_card" width="200" height="200">
+    </form>
+    <!-- masterのお題メッセージ送信-->
     <form class="form-inline" id="masterForm" style="display: none;">
       <label for="claim">お題を入力してね：</label>
       <input type="text" class="form-control mb-2 mr-sm-2" id="masterClaim" placeholder="お題">

@@ -18,11 +18,10 @@ class Hand {
     }
     select(index) {
         this.selectedIndex = index;
-        //return this._array[index];
     }
 
     selectedCard(){
-        return this._array[selectedIndex["index"]];
+        return this._array[selectedIndex];
     }
     // 描画
     show() {

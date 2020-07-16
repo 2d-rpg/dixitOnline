@@ -81,7 +81,7 @@ class Game {
                     others.push(other);
                 }
             });
-            io.to(player.socketId).emit(this.stage, {others : others, player : player}); // ステージ移行
+            io.to(player.socketId).emit(this.stage, {others : others, player : player, game : this}); // ステージ移行
         });
         utils.log('Move to stage [' + this.stage + ']');
     }
@@ -102,7 +102,7 @@ class Game {
     }
 
     setMasterClaim(message){
-        this.message = message;
+        this.masterClaim = message;
     }
 
     /** スコア計算 */
