@@ -6,7 +6,7 @@ import {Start} from './modules/stage/client/start.js'
 import {MasterHandSelection} from './modules/stage/client/master_hand_selection.js'
 import {StorySelection} from './modules/stage/client/story_selection.js'
 import {OthersHandSelection} from './modules/stage/client/others_hand_selection.js'
-
+import {FieldSelection} from './modules/stage/client/field_selection.js'
 
 import {CannotPlay} from './modules/stage/client/cannot_play.js';
 // const init = require('./modules/stage/client/init');
@@ -48,6 +48,9 @@ socket.on('master_hand_selection', (data) => MasterHandSelection.do(data, socket
 socket.on('story_selection', (data) => StorySelection.do(data, socket));
 // サーバーから'others_hand_selection'がemitされた時(others_hand_selectionステージ移行)
 socket.on('others_hand_selection', (data) => OthersHandSelection.do(data, socket));
+// サーバーから'others_hand_selection'がemitされた時(others_hand_selectionステージ移行)
+socket.on('field_selection', (data) => FieldSelection.do(data, socket));
+
 
 
 /****************************

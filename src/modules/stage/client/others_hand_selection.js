@@ -29,6 +29,9 @@ export class OthersHandSelection {
             });
         }
         document.getElementById('progress').innerHTML = message;
+        if(data.player.isMaster){
+            //socket.emit('wait', {});
+        }
     }
 
     static select(socket,index) {
