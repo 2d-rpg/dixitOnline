@@ -9,6 +9,8 @@ import {OthersHandSelection} from './modules/stage/client/others_hand_selection.
 import {FieldSelection} from './modules/stage/client/field_selection.js'
 
 import {CannotPlay} from './modules/stage/client/cannot_play.js';
+import React from 'react'
+import ReactDom from 'react-dom'
 // const init = require('./modules/stage/client/init');
 // Socket.IOを利用してサーバに接続
 const socket = io();
