@@ -33,8 +33,8 @@ class Player {
         this.hand.select(index);
     }
     // 場札からカードを選択
-    selectFromLayout(index){
-        layout.select(index);
+    selectFromField(index){
+        field.select(index);
     }
     // 行動終了
     done() {
