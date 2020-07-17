@@ -15,7 +15,9 @@ class FieldSelection {
         });
 
         // プレイヤーはカードを選ぶ
-        io.sockets.emit('player_card_selection');
+        io.sockets.emit('field_selection');
+
+        io.sockets.on();
 
         // 答え(親のカード)と結果(それぞれが選んだカード)を表示
 
