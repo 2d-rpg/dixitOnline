@@ -11,13 +11,11 @@ const utils = require('./utils');
 const status = [
     'entry',                 // 0
     'start',                 // 1
-    'master_hand_selection', // 2
-    'story_selection',       // 3
-    'others_hand_selection', // 4
-    'field_selection',       // 5
-    'show_answer',           // 6
-    'calc_score',            // 7
-    'result'                 // 8
+    'hand_selection',        // 2
+    'field_selection',       // 3
+    'show_answer',           // 4
+    'calc_score',            // 5
+    'result'                 // 6
 ];
 
 class Game {

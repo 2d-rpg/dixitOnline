@@ -5,9 +5,10 @@ const startButton = document.getElementById('startButton');
 export class Start {
 
     static do() {
-        Utils.clearDisplay();
         startButton.style.display = 'block';
         console.log('[debug] スタート待機状態');
+        const message = '参加登録しましょう';
+        document.getElementById('progress').innerHTML = message;
     }
 
     static push(socket, context, canvas) {
