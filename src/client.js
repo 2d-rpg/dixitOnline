@@ -16,6 +16,8 @@ const canvas = document.getElementById('canvas-2d');
 const context = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
 
+let masterIndex;
+
 // サーバーから'chat_send_from_server'がemitされた時の動作(チャット用)
 socket.on('chat_send_from_server', function(data){appendMsg(data.value)});
 
@@ -43,7 +45,7 @@ socket.on('cannot_play', () => CannotPlay.do(context, canvas));
 // サーバーから'start'がemitされた時(startステージ移行)
 socket.on('start', Start.do);
 // サーバーから'master_hand_selection'がemitされた時(master_hand_selectionステージ移行)
-socket.on('master_hand_selection', (data) => MasterHandSelection.do(data, socket));
+socket.on('hand_selection', (data) => MasterHandSelection.do(data, socket, masterIndex));
 // サーバーから'story_selection'がemitされた時(story_selectionステージ移行)
 socket.on('story_selection', (data) => StorySelection.do(data, socket));
 // サーバーから'others_hand_selection'がemitされた時(others_hand_selectionステージ移行)
@@ -86,6 +88,6 @@ startButton.onclick = function() {Start.push(socket,context, canvas)};
 // 親がお題をsubmitしたときの動作
 $("#masterForm").submit((e) => {
     var message = $("#masterClaim").val();
-    socket.emit("story_selection", message);
+    socket.emit("story_selection", {message : message, masterIndex : masterIndex});
     e.preventDefault();
 });

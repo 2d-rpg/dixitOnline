@@ -1,9 +1,10 @@
 // master_hand_selectionステージ
 
 import {Utils} from './utils.js'
+import {StorySelection} from './story_selection.js';
 
 export class MasterHandSelection {
-    static do(data, socket) {
+    static do(data, socket, masterIndex) {
         let message;
         if(data.player.isMaster){ //語り部の場合
             message = 'あなたは親です。カードを選択してください';
@@ -17,7 +18,7 @@ export class MasterHandSelection {
                 btn.setAttribute("type","button");
                 btn.appendChild(img)
                 document.getElementById("hand").appendChild(btn);
-                document.getElementById("button"+index).onclick = function(){MasterHandSelection.select(socket,index)};
+                document.getElementById("button"+index).onclick = function(){MasterHandSelection.select(socket,data,index,masterIndex)};
             });
         }else{ //その他の場合
             message = 'あなたは子です。待機中...';
@@ -48,7 +49,8 @@ export class MasterHandSelection {
         // });
     }
 
-    static select(socket,index) {
-        socket.emit('master_hand_selection', index);
+    static select(socket,data,index,masterIndex) {
+        masterIndex = index;
+        StorySelection.do(data, index, socket);
     }
 }
