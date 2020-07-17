@@ -33,10 +33,27 @@
     <!-- スタートボタン -->
     <button id="startButton" type="button" class="btn btn-warning" style="display: none;">スタート</button>
     <!-- ゲーム画面 -->
-    <canvas id="canvas-2d" width="1000" height="800" style="object-fit:contain;"></canvas>
+    <canvas id="canvas-2d" width="10" height="10" style="object-fit:contain;"></canvas>
     <img id="unko" src="images/unko.gif" style="display: none;">
     <img id="akira_with_Ginkakuji" src="images/akira_with_Ginkakuji.jpg" style="display: none;">
     <img id="akira_with_hood_and_Ginkakuji" src="images/akira_with_hood_and_Ginkakuji.jpg" style="display: none;">
+    <!-- 案内メッセージ -->
+    <div id="progress"></div>
+    <!-- お題 -->
+    <div id="theme"></div>
+    <!-- 手札 -->
+    <p id="hand"></p>
+    <!-- 提出したカード -->
+    <form class="form-inline" id="selected_hand_card_form" style="display: none;">
+      あなたが選んだカード:
+      <img id="selected_hand_card" width="200" height="200">
+    </form>
+    <!-- masterのお題メッセージ送信-->
+    <form class="form-inline" id="masterForm" style="display: none;">
+      <label for="claim">お題を入力してね：</label>
+      <input type="text" class="form-control mb-2 mr-sm-2" id="masterClaim" placeholder="お題">
+      <button type="submit" class="btn btn-primary mb-2">送信</button>
+    </form>
   </div>
 
   <script type="module" src="client.js"></script>

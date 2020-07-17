@@ -8,9 +8,14 @@ const path = require('path');
 const utils = require('./src/modules/utils');
 const Game = require('./src/modules/game');
 // ステージごとのファイル読み込み
+const wait = require('./src/modules/stage/server/wait');
 const init = require('./src/modules/stage/server/init');
 const entry = require('./src/modules/stage/server/entry');
 const start = require('./src/modules/stage/server/start');
+const master_hand_selection = require('./src/modules/stage/server/master_hand_selection');
+const story_selection = require('./src/modules/stage/server/story_selection');
+const others_hand_selection = require('./src/modules/stage/server/others_hand_selection');
+
 const disconnect = require('./src/modules/stage/server/disconnect');
 // const fs = require('fs');
 const socketIO = require('socket.io');
@@ -22,12 +27,20 @@ const io = socketIO(server);
 let game = new Game();
 // 接続が完了したときに呼び出す関数
 io.on('connection', function(socket) {
+    //行動する必要がない時
+    socket.on('wait', () => wait.do(socket, io, game));
     // クライアント接続時
     socket.on('init', (config) => init.do(config, io, socket, game));
     // クライアントからentryがemitされた時
     socket.on('entry', (data) =>  entry.do(data, io, socket, game));
     // クライアントからstartがemitされた時
     socket.on('start', () => start.do(socket, game));
+    // クライアントからmaster_selectionがemitされた時
+    socket.on('master_hand_selection', (index) => master_hand_selection.do(socket, io, index, game));
+    //クライアントからstory_selectionがemitされた時
+    socket.on('story_selection', (message) => story_selection.do(socket, io, message, game));
+    //クライアントからstory_selectionがemitされた時
+    socket.on('others_hand_selection', (index) => others_hand_selection.do(socket, io, index, game));
     // TODO: ここに追加していく
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)

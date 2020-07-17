@@ -32,6 +32,12 @@ class Player {
     selectFromHand(index){
         this.hand.select(index);
     }
+
+    // 手札から選択されたカード
+    selectedCard(){
+        return this.hand.selectedCard();
+    }
+
     // 場札からカードを選択
     selectFromLayout(index){
         layout.select(index);

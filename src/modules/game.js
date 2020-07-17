@@ -40,7 +40,9 @@ class Game {
         this.stage = status[0];
         this.stageIndex = 0;
         // 語り部は最初に入ってきた人から
-        this.master = 0;
+        this.master = -1;
+
+        this.masterClaim = "";
     }
 
     /** プレイヤーの追加 */
@@ -61,8 +63,10 @@ class Game {
         if (this.stageIndex != Game.STAGE_NUM) {
             this.stageIndex += 1;
         } else { // 語り部更新
-            this.updateMaster();
             this.stageIndex = 2;
+        }
+        if(this.stageIndex == 2){
+            this.updateMaster();
         }
         this.stage = status[this.stageIndex]; // 'master_hand_selection'
         this.players.forEach(player => { // 全プレイヤーの状態更新
@@ -77,7 +81,7 @@ class Game {
                     others.push(other);
                 }
             });
-            io.to(player.socketId).emit(this.stage, {others : others, player : player}); // ステージ移行
+            io.to(player.socketId).emit(this.stage, {others : others, player : player, game : this}); // ステージ移行
         });
         utils.log('Move to stage [' + this.stage + ']');
     }
@@ -95,6 +99,10 @@ class Game {
         this.players.forEach((player, index) => {
             player.isMaster = this.master === index;
         });
+    }
+
+    setMasterClaim(message){
+        this.masterClaim = message;
     }
 
     /** スコア計算 */
