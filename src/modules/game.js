@@ -1,7 +1,7 @@
 const Player = require("./player");
 const Stock = require('./stock');
 const Discard = require('./discard');
-const Layout = require('./layout');
+const Field = require('./field');
 const utils = require('./utils');
 
 // private static property
@@ -34,8 +34,8 @@ class Game {
         this.stock = new Stock();
         // 墓地(discard)
         this.discard = new Discard();
-        // 場札(layout)
-        this.layout = new Layout();
+        // 場札(field)
+        this.field = new Field();
         // フェイズ(stage)
         this.stage = status[0];
         this.stageIndex = 0;

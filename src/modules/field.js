@@ -1,6 +1,6 @@
 'use strict';
 
-class Layout {
+class Field {
     constructor(size) {
         this._array = new Array();
     }
@@ -12,4 +12,4 @@ class Layout {
     }
 }
 
-module.exports = Layout;
+module.exports = Field;

@@ -2,7 +2,7 @@
 // カードクラス
 
 // 静的プロパティ
-const statusList = ['stack','hand','layout','discard'];
+const statusList = ['stack','hand','field','discard'];
 // ゲーム画面の範囲
 const FIELD_WIDTH = 1000, FIELD_HEIGHT = 800;
 
@@ -13,10 +13,11 @@ class Card {
 
     constructor(filename) {
         // デバッグ用
-        this.status = statusList[0];
+        this.status = statusList[0]; // どこにあるか
         this.statusIndex = 0;
         // image file name
         this.filename = filename;
+        this.head = false; // 表かどうか
     }
     /** ステータス移行 */
     nextStatus() {

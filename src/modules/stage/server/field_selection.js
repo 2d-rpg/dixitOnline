@@ -7,10 +7,15 @@ class FieldSelection {
 
     constructor() {}
 
+
     static do(data, io, socket, players, game) {
         // 場札を全て表にする
+        game.field.forEach(card => { // フィールドのカード全て
+            card.head = true; // カードを表にする
+        });
 
         // プレイヤーはカードを選ぶ
+        io.sockets.emit('player_card_selection');
 
         // 答え(親のカード)と結果(それぞれが選んだカード)を表示
 
