@@ -17,6 +17,7 @@ export class FieldSelection {
             //カードの選択
 
             // プレイヤー、カードの組み合わせの情報を送る
+            
 
         }
         document.getElementById('progress').innerHTML = message;
