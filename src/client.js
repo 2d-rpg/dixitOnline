@@ -59,18 +59,6 @@ socket.on('field_selection', (data) => FieldSelection.do(data, socket));
  *  イベントハンドラの登録一覧
  ****************************/
 
-// ゲーム画面クリア
-function clearDisplay() {
-    // 指定範囲をクリア
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    // 枠線の太さ
-    context.lineWidth = 10;
-    // 現在のパスをリセット
-    context.beginPath();
-    context.rect(0, 0, canvas.width, canvas.height);
-    context.stroke();
-}
-
 // チャットフォームにsubmitされた時の動作
 $("#chatForm").submit((e) => {
     var message = $("#msgForm").val();
@@ -88,6 +76,7 @@ startButton.onclick = function() {Start.push(socket,context, canvas)};
 // 親がお題をsubmitしたときの動作
 $("#masterForm").submit((e) => {
     var message = $("#masterClaim").val();
+    StorySelection.forward(message);
     socket.emit("story_selection", {message : message, masterIndex : masterIndex});
     e.preventDefault();
 });

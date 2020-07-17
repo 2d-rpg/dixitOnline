@@ -13,4 +13,11 @@ export class StorySelection {
         document.getElementById('masterForm').style.display = 'block';
         document.getElementById('progress').innerHTML = message;
     }
+
+    static forward(message){
+        let theme = "あなたが選んだお題:" + message;
+        document.getElementById('theme').innerHTML = theme;
+        document.getElementById('progress').innerHTML = "あなたは親です。子の選択を待ちましょう。";
+        document.getElementById('masterForm').style.display = 'none';
+    }
 }
