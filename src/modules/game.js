@@ -1,4 +1,7 @@
 const Player = require("./player");
+const Stock = require('./stock');
+const Discard = require('./discard');
+const Layout = require('./layout');
 const utils = require('./utils');
 
 // private static property
@@ -7,7 +10,7 @@ const utils = require('./utils');
 // ここに遷移状態を追加
 const status = [
     'entry',                 // 0
-    'waiting',               // 1
+    'start',                 // 1
     'master_hand_selection', // 2
     'story_selection',       // 3
     'others_hand_selection', // 4
@@ -28,7 +31,7 @@ class Game {
         this.players = new Array(3).fill(null);
         this.currentNum = 0;
         // 山札(stock)
-        this.stock = new Stack();
+        this.stock = new Stock();
         // 墓地(discard)
         this.discard = new Discard();
         // 場札(layout)
@@ -36,34 +39,35 @@ class Game {
         // フェイズ(stage)
         this.stage = status[0];
         this.stageIndex = 0;
+        // 語り部は最初に入ってきた人から
+        this.master = 0;
     }
 
     /** プレイヤーの追加 */
     addPlayer(data, socket) {
         this.players[this.currentNum] = new Player({socketId: socket.id, username: data.username});
-        this.players[this.currentNum].done();
+        this.players[this.currentNum].done(); //エントリー完了
         this.currentNum += 1;
         return this.players[this.currentNum-1];
     }
 
+    getLength() {
+        return this.players.filter(player => player != null).length;
+    }
+
     /** 次のステージへ移行 */
-    nextStage() {
+    nextStage(io) {
         // ステージ移行
-        if (this.stageIndex != this.STAGE_NUM) {
+        if (this.stageIndex != Game.STAGE_NUM) {
             this.stageIndex += 1;
         } else { // 語り部更新
+            this.updateMaster();
             this.stageIndex = 2;
-            this.stage = status[this.stageIndex];
-            this.players.forEach(player => { // 全プレイヤーの状態更新
-                player.reset(); // 状態リセット
-                if (this.stage == 'master_hand_selection') {
-                    player.setMaster();
-                }
-            });
         }
-        if (this.stage == 'master_hand_selection') {
-            Player.nowMaster += 1;
-        }
+        this.stage = status[this.stageIndex]; // 'master_hand_selection'
+        this.players.forEach(player => { // 全プレイヤーの状態更新
+            player.reset(); // 状態リセット
+        });
         this.players.forEach(player => { // ステージ移行
             // ディープコピー (何段階もコピーするのでObject.createは不可)
             // TODO: もっといい方法あるかも
@@ -80,7 +84,17 @@ class Game {
 
     /** 全員done状態かどうか */
     isAllDone() {
-        return this.players.filter(player => player.isDone()).length === 3;
+        return this.players
+            .filter(player => player != null)
+            .filter(player => player.isDone()).length === 3;
+    }
+
+    /** 語り部の更新 */
+    updateMaster() {
+        this.master = (this.master + 1) % 3; // 0 ~ 2 でループ
+        this.players.forEach((player, index) => {
+            player.isMaster = this.master === index;
+        });
     }
 
     /** スコア計算 */
@@ -90,7 +104,7 @@ class Game {
 
     /** 終了条件 */
     isEndGame() {
-        flag = false
+        let flag = false
         this.players.forEach(player => {
             if (player.score >= 30) {
                 flag = true
@@ -105,7 +119,7 @@ class Game {
 
     /** IDによるプレイヤー検索 */
     findPlayer(id) {
-        target = null;
+        let target = null;
         this.players.forEach(player => {
             if (player.socketId == id) {
                 target = player;
@@ -116,13 +130,12 @@ class Game {
 
     /** IDによるプレイヤー削除 */
     deletePlayer(id) {
-        this.players.forEach(player => {
+        this.players.filter(player => player != null).forEach(player => {
             if (player.socketId == id) {
-                index = this.players.indexOf(player);
+                var index = this.players.indexOf(player);
                 this.players.splice(index,1)
             }    
         });
-        this.currentNum -= 1;
     }
 }
 

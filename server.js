@@ -7,10 +7,10 @@ const http = require('http');
 const path = require('path');
 const utils = require('./src/modules/utils');
 const Game = require('./src/modules/game');
-const Player = require('./src/modules/player');
 // ステージごとのファイル読み込み
 const init = require('./src/modules/stage/server/init');
 const entry = require('./src/modules/stage/server/entry');
+const start = require('./src/modules/stage/server/start');
 const disconnect = require('./src/modules/stage/server/disconnect');
 // const fs = require('fs');
 const socketIO = require('socket.io');
@@ -18,18 +18,19 @@ const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
 
-// プレイヤーリスト
+// ゲームオブジェクト作成
 let game = new Game();
 // 接続が完了したときに呼び出す関数
 io.on('connection', function(socket) {
-    // ゲーム開始時の処理
-    socket.on('init', (config) => init.do(config, io, socket, game.players));
-    // クライアントからentryがemitされた時の処理
+    // クライアント接続時
+    socket.on('init', (config) => init.do(config, io, socket, game));
+    // クライアントからentryがemitされた時
     socket.on('entry', (data) =>  entry.do(data, io, socket, game));
-    // クライアントからentry_doneがemitされた時の処理
-    socket.on('entry_done', () => entry.done(socket, game));
+    // クライアントからstartがemitされた時
+    socket.on('start', () => start.do(socket, game));
     // TODO: ここに追加していく
-    // 通信終了時(ブラウザを閉じる/リロード/ページ移動)の処理
+
+    // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
     // TODO: つまりリロードすると復帰不可
     socket.on('disconnect', () => disconnect.do(io, socket, game));
     // メッセージ用
@@ -40,8 +41,8 @@ io.on('connection', function(socket) {
 
 setInterval(function() {
     // 全プレイヤーがステージ移行可能ならば移行する
-    if (this.isAllDone()) { // 全てのプレイヤーが次のステージにいける状態
-        game.nextSatage();
+    if (game.isAllDone()) { // 全てのプレイヤーが次のステージにいける状態
+        game.nextStage(io);
     }
     // プレイヤーの状態をemit
     // io.sockets.emit('state', players);

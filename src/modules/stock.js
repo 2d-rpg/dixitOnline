@@ -1,7 +1,7 @@
 'use strict';
 // 山場のクラス
 
-class Stack {
+class Stock {
     constructor() {
         this._array = new Array();
     }
@@ -16,4 +16,4 @@ class Stack {
     }
 }
 
-module.exports = Stack;
+module.exports = Stock;
