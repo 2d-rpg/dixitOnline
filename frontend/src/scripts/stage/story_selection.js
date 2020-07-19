@@ -23,7 +23,7 @@ import React from 'react';
 //     }
 // }
 
-export default function StorySelection() {
+export default function StorySelection(props) {
 
     return (
         <div>

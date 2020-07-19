@@ -1,7 +1,5 @@
 
 import {Utils} from './utils.js'
-import io, { Socket } from 'socket.io-client'
-import socketIOClient from "socket.io-client";
 
 // export class Init {
 
@@ -34,15 +32,12 @@ import socketIOClient from "socket.io-client";
 // }
 
 import React, {useState, useEffect} from 'react'
-const ENDPOINT = "http://127.0.0.1:4001";
 
-function Init() {
+function Init(props) {
     // ここにプロパティ(変数)に該当するものを列挙
 
     useEffect(() => {
-        console.log('effectがきたお')
-        const socket = socketIOClient(ENDPOINT);
-        socket.on('connect', () => init(socket));
+        props.socket.on('connect', () => init(props.socket));
     }, []);
 
     const init = (socket) => {
