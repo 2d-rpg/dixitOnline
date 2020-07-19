@@ -16,6 +16,9 @@ class ShowAnswer {
         if(answers.every(value => value === answers[0])) {
             if(!player.master.isMaster) {
                 plyer.score += 2;
+            } else {
+            // 間違させた分点を追加　未記入
+
             }
         } else {
             if(player.master.isMaster) {
@@ -27,8 +30,9 @@ class ShowAnswer {
                 if(dict['answer'] == game.answerIndex) {
                     player.score += 3;
                 }
-            }
             // 間違させた分点を追加　未記入
+
+            }
         }
         //答えを表示
     }
