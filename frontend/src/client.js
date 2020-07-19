@@ -52,6 +52,8 @@ socket.on('story_selection', (data) => StorySelection.do(data, socket));
 socket.on('others_hand_selection', (data) => OthersHandSelection.do(data, socket));
 // サーバーから'others_hand_selection'がemitされた時(others_hand_selectionステージ移行)
 socket.on('field_selection', (data) => FieldSelection.do(data, socket));
+// サーバーから'field_selection'がemitされた時(field_selectionステージ移行)
+socket.on('show_answer', ShowAnswer.do);
 
 
 

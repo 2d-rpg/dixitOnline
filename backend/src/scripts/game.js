@@ -41,6 +41,8 @@ class Game {
         this.master = -1;
 
         this.masterClaim = "";
+        // 投票の結果
+        this.answers = []
     }
 
     /** プレイヤーの追加 */

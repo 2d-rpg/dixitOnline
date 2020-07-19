@@ -26,6 +26,7 @@ class Player {
     // 山札からドロー
     draw(){
         drawCard = stock.pop(); // 山場からpop
+        drawCard.player = this;
         this.hand.add(drawCard); // 手札にadd
     }
     // 手札からカードを選択

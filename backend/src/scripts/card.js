@@ -18,21 +18,12 @@ class Card {
         // image file name
         this.filename = filename;
         this.head = false; // 表かどうか
+        this.player = null; // カードの持ち主が誰か
     }
     /** ステータス移行 */
     nextStatus() {
         this.statusIndex += 1;
         this.status = statusList[this.statusIndex];
-    }
-    /** 
-     * カードの表示
-     * @param x 位置x (横方向, 左原点)
-     * @param y 位置y (縦方向, 上原点)
-     **/
-    draw(x, y) {
-        let cv = document.createElement('canvas');
-        let ct = cv.getContext('2d');
-        ct.drawImage(this.filename, x, y);
     }
 }
 

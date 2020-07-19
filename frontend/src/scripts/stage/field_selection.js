@@ -2,24 +2,41 @@
 
 import {Utils} from './utils.js'
 
-export class FieldSelection {
-    static do(data, socket) {
-        //TODO:ここに追加していく
-        document.getElementById("selected_hand_card_form").style.display = 'none';
+export function FieldSelection(props) {
 
-        // fieldに選べれたカードを並べる
-        let message;
-        if(data.player.isMaster){ //語り部の場合
-            message = 'あなたは親です。子の選択を待ちましょう。';
+    const { register, handleSubmit } = useForm();
+    const [show, setShow] = useState(true);
 
-        }else{ //その他の場合
-            message = "お題に合ったカードを選ぼう!"
-            //カードの選択
-
-            // プレイヤー、カードの組み合わせの情報を送る
-            
-
-        }
-        document.getElementById('progress').innerHTML = message;
+    const onSubmit = (data, event) => {
+        setShow(false);
+        //サーバーの'field_selection'
+        props.socket.emit('field_selection', {answer : data.answer});
+        event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
     }
+
+    //親の場合
+    // return (
+    //     <div>
+    //         // fieldのカードを並べる
+    //         //　他のユーザー待ち
+    //     </div>
+    // );
+
+    // 子の場合
+
+
+    return (
+        <div>
+            {/* // fieldのカードを並べる
+            // form
+            // カードの番号
+            // プレイヤーの情報の送信 */}
+            <form className="form-inline" id="answerForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: show ? 'block' : 'none' } }>
+                <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>
+                <input type="number" className="form-control mb-2 mr-sm-2" name="answer" ref={ register } placeholder="親が出したと思うカードの番号を入力してください" max=MAX/>
+                <button type="submit" className="btn btn-primary mb-2">さんとしてゲームに参加</button>
+            </form>
+            {/* //　送信後は待ち */}
+        </div>
+    );
 }
