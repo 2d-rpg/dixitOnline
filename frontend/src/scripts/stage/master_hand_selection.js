@@ -56,7 +56,7 @@ import React from 'react';
 //     }
 // }
 
-export default function MasterHandSelection() {
+export default function MasterHandSelection(props) {
 
     return (
         <div>

@@ -1,14 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { useForm } from 'react-hook-form';
-import socketIOClient from "socket.io-client";
 import { $ } from 'jquery';
-const ENDPOINT = "http://127.0.0.1:4001";
 
-export default function Chat() {
+export default function Chat(props) {
     // const socket = io();
     const { register, handleSubmit, watch, errors } = useForm();
     const onSubmit = (data, event) => {
-        // const socket = socketIOClient(ENDPOINT);
         // socket.emit('chat_send_from_client', {value : data});
         event.preventDefault();
     }
@@ -20,10 +17,9 @@ export default function Chat() {
     //     $("#chatLogs").append("<div>" + text + "</div>");
     // }
 
-    useEffect(() => {
-        const socket = socketIOClient(ENDPOINT);
-        socket.on('chat_send_from_server', (data) => appendMsg(data.value));
-    }, []);
+    // useEffect(() => {
+    //     socket.on('chat_send_from_server', (data) => appendMsg(data.value));
+    // }, []);
 
     return (
         <div id='chat-form-wrapper'>
