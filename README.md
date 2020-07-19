@@ -29,8 +29,18 @@
 - [google drawings](https://docs.google.com/drawings/d/1RziwR98sGqgaBaB3Q2iUu9hP-BSzAivgzpFYMBZ3xn8/edit)
 - [コード解説(wiki)](https://github.com/2d-rpg/dixitOnline/wiki/%E3%82%B3%E3%83%BC%E3%83%89%E8%A7%A3%E8%AA%AC)
 
+- 7/19(Sun) :
+    - Reactの概要・使い方の共有
+    - 各自の担当の主にフロントエンド側の作成
+
+- 7/17(Fri) :
+    - master_hand_selection ~ others_hand_selectionの統合([RR #9](/pull/9))
+    - canvasの廃止
+    - それに伴うReactの採用によるバックエンドとフロントエンドの分離とフロントエンドのコード改変
+
 - 7/12(Sun) :
     - 設計したクラスとモジュール化の共有
+    - Gameクラスによるオブジェクト化([PR #6](/pull/6))
 
 - 7/10(Fri) :
     - Akiraのnodo.js等のセットアップ
