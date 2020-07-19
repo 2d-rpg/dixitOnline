@@ -14,6 +14,8 @@ const ENDPOINT = "http://127.0.0.1:4001";
 const socket = socketIOClient(ENDPOINT);
 
 function App() {
+  let masterIndex;
+
   return (
     <div className="container">
       <h1>Dixit Online</h1>
@@ -26,8 +28,7 @@ function App() {
       {/* <img id="unko" src="images/unko.gif" style="display: none;"/>
       <img id="akira_with_Ginkakuji" src="images/akira_with_Ginkakuji.jpg" style="display: none;"/>
       <img id="akira_with_hood_and_Ginkakuji" src="images/akira_with_hood_and_Ginkakuji.jpg" style="display: none;"/> */}
-      <MasterHandSelection socket={ socket }/>
-      <StorySelection socket={ socket }/>
+      <MasterHandSelection socket={ socket } masterIndex={ masterIndex }/>
     </div>
   );
 }
