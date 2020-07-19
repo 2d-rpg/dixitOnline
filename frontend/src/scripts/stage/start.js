@@ -1,6 +1,6 @@
 
 import {Utils} from './utils.js'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 // const startButton = document.getElementById('startButton');
 
 // export class Start {
@@ -32,9 +32,18 @@ import React from 'react';
 
 export default function Start(props) {
 
-    const notDisplay = {display: "none"};
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        props.socket.on('start', start);
+    }, []);
+
+    const start = () => {
+        setShow(true);
+        console.log('スタート待機状態');
+    };
 
     return (
-        <button id="startButton" type="button" className="btn btn-warning" style={ notDisplay }>スタート</button>
+        <button id="startButton" onClick={() => {setShow(false); props.socket.emit('start');}} type="button" className="btn btn-warning" style={ {display: show ? 'inline' : 'none'} }>スタート</button>
     );
 }
