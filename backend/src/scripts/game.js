@@ -26,10 +26,11 @@ class Game {
     static STAGE_NUM = 7;
 
     constructor() {
+        // 山札(stock)
+        this.stock = new Stock(40);
+        // プレイヤー
         this.players = new Array(3).fill(null);
         this.currentNum = 0;
-        // 山札(stock)
-        this.stock = new Stock();
         // 墓地(discard)
         this.discard = new Discard();
         // 場札(field)
@@ -39,7 +40,7 @@ class Game {
         this.stageIndex = 0;
         // 語り部は最初に入ってきた人から
         this.master = -1;
-
+        // お題
         this.masterClaim = "";
         // 投票の結果
         this.answers = []
@@ -47,7 +48,7 @@ class Game {
 
     /** プレイヤーの追加 */
     addPlayer(data, socket) {
-        this.players[this.currentNum] = new Player({socketId: socket.id, username: data.username});
+        this.players[this.currentNum] = new Player({socketId: socket.id, username: data.username, stock:this.stock});
         this.players[this.currentNum].done(); //エントリー完了
         this.currentNum += 1;
         return this.players[this.currentNum-1];
@@ -66,8 +67,14 @@ class Game {
             this.stageIndex = 2;
         }
         if(this.stageIndex == 2){
+            console.log("ffff");
             this.updateMaster();
+        } 
+        if(this.stageIndex == 3){// field の更新
+            this.handToField();
         }
+        
+
         this.stage = status[this.stageIndex]; // 'master_hand_selection'
         this.players.forEach(player => { // 全プレイヤーの状態更新
             player.reset(); // 状態リセット
@@ -141,9 +148,17 @@ class Game {
         this.players.filter(player => player != null).forEach(player => {
             if (player.socketId == id) {
                 var index = this.players.indexOf(player);
-                this.players.splice(index,1)
+                this.players.splice(index,1);
             }    
         });
+    }
+
+    handToField() {
+        this.players.forEach(player => {
+            console.log(player);
+            let card = player.hand.pop();
+            this.field.add(card);
+        })
     }
 }
 

@@ -1,25 +1,16 @@
-const game = require('../game');
+
 
 class FieldSelection {
 
-    constructor() {
-        answers = []
-    }
-
-    static do(socket, io, data) {
+    static do(socket, index, game) {
         // 答えを集計
-        id = game.findPlayer(socket.id).socketId;
-        answer = data.answer;
+        id = socket.id;
+        answer = index;
         dict = {}
         dict['id'] = id;
         dict['answer'] = answer
-        answers.push(dict);
-        while(true){
-            if(answers.size === game.players.size-1){
-                game.answers = this.answers
-                break;
-            }
-        }
+        game.answers.push(dict);
+        game.findPlayer(id).done();
     }
 }
 

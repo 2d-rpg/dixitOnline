@@ -6,7 +6,7 @@ class Wait {
 
     constructor() {}
 
-    static do(socket, io, index, game) {
+    static do(socket, game) {
         let player = game.findPlayer(socket.id);
         player.done();
     }

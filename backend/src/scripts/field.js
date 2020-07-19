@@ -6,6 +6,7 @@ class Field {
         this.masterCard = null;
     }
     add(card) {
+        card.nextStatus();
         if(card.player.isMaster){
             this.masterCard = card;
         }

@@ -8,11 +8,13 @@ const path = require('path');
 const utils = require('./src/scripts/utils');
 const Game = require('./src/scripts/game');
 // ステージごとのファイル読み込み
+const wait = require('./src/scripts/stage/wait');
 const init = require('./src/scripts/stage/init');
 const entry = require('./src/scripts/stage/entry');
 const start = require('./src/scripts/stage/start');
 const story_selection = require('./src/scripts/stage/story_selection');
 const others_hand_selection = require('./src/scripts/stage/others_hand_selection');
+const field_selection = require('./src/scripts/stage/field_selection');
 
 const disconnect = require('./src/scripts/stage/disconnect');
 // const fs = require('fs');
@@ -26,7 +28,7 @@ let game = new Game();
 // 接続が完了したときに呼び出す関数
 io.on('connection', function(socket) {
     //行動する必要がない時
-    //socket.on('wait', () => wait.do(socket, io, game));
+    socket.on('wait', () => wait.do(socket, game));
     // クライアント接続時
     socket.on('init', (config) => init.do(config, io, socket, game));
     // クライアントからentryがemitされた時
@@ -37,6 +39,8 @@ io.on('connection', function(socket) {
     socket.on('story_selection', (data) => story_selection.do(socket, io, data.message,data.masterIndex, game));
     //クライアントからstory_selectionがemitされた時
     socket.on('others_hand_selection', (index) => others_hand_selection.do(socket, io, index, game));
+    //クライアントからfield_selecitonがemitされた時
+    socket.on('field_selection', (index) => field_selection.do(socket, index, game));
     // TODO: ここに追加していく
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
