@@ -43,7 +43,9 @@ export default function Start(props) {
         console.log('スタート待機状態');
     };
 
+    const handleclick = () => {setShow(false); props.socket.emit('start');}
+
     return (
-        <button id="startButton" onClick={() => {setShow(false); props.socket.emit('start');}} type="button" className="btn btn-warning" style={ {display: show ? 'inline' : 'none'} }>スタート</button>
+        <button id="startButton" onClick={handleclick} type="button" className="btn btn-warning" style={ {display: show ? 'inline' : 'none'} }>スタート</button>
     );
 }

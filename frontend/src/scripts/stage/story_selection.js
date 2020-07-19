@@ -1,7 +1,7 @@
 // master_hand_selectionステージ
 
 import {Utils} from './utils.js'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // export class StorySelection {
 //     static do(data, index, socket) {
@@ -25,9 +25,21 @@ import React from 'react';
 
 export default function StorySelection(props) {
 
+    useEffect(() => {
+        console.log("aaa");
+    }, []);
+
+    const doit = (data, index, socket) => {
+        console.log("doit");
+    }
+
     return (
         <div>
             <div id="theme"></div>
+            <form className="form-inline" id="selected_hand_card_form" style={{display: "none"}}>
+                あなたが選んだカード:
+                {/* <img id="selected_hand_card" width="200" height="200"/> */}
+            </form> 
             <form className="form-inline" id="masterForm" style={{display: "none"}}>
                 <label htmlFor="claim">お題を入力してね：</label>
                 <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" placeholder="お題"/>
