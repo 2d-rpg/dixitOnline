@@ -13,8 +13,6 @@ class Stock {
         for (var i=0; i < size; i++) { // forEach文だとエラーが出る
             this._array[i] = new Card(utils.randomSample(size));
         }
-        //最後に選択されたカードのindex
-        this.selectedIndex = null;
     }
     push(card) {
         this._array.push(card);

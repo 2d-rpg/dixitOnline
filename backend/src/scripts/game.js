@@ -43,7 +43,7 @@ class Game {
         // お題
         this.masterClaim = "";
         // 投票の結果
-        this.answers = []
+        this.answers = [];
     }
 
     /** プレイヤーの追加 */
@@ -74,15 +74,14 @@ class Game {
             this.handToField();
         }
         
-
-        this.stage = status[this.stageIndex]; // 'master_hand_selection'
-        this.players.forEach(player => { // 全プレイヤーの状態更新
+        this.stage = status[this.stageIndex];
+        this.players.forEach(player => { // 全プレイヤーの状態リセット
             player.reset(); // 状態リセット
         });
         this.players.forEach(player => { // ステージ移行
             // ディープコピー (何段階もコピーするのでObject.createは不可)
             // TODO: もっといい方法あるかも
-            var others = [];
+            var others = new Array();
             this.players.forEach(other => {
                 if (player != other) {
                     others.push(other);
@@ -149,6 +148,7 @@ class Game {
             if (player.socketId == id) {
                 var index = this.players.indexOf(player);
                 this.players.splice(index,1);
+                this.currentNum -= 1;
             }    
         });
     }
@@ -157,8 +157,8 @@ class Game {
         this.players.forEach(player => {
             console.log(player);
             let card = player.hand.pop();
-            this.field.add(card);
-        })
+            this.field.add(card, this);
+        });
     }
 }
 

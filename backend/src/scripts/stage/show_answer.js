@@ -6,12 +6,12 @@ class ShowAnswer {
 
     static do(socket, io) {
         //スコア計算
-        answerIndex = game.field.masterCardIndex()
+        answerIndex = game.field.masterCardIndex();
         player = game.findPlayer(socket.id);
-        answers = game.answers
-        tmp = []
+        answers = game.answers;
+        tmp = [];
         Object.keys(answers).forEach(answer => {
-            tmp.push(answer)
+            tmp.push(answer);
         });
         if(answers.every(value => value === answers[0])) {
             if(!player.master.isMaster) {
@@ -25,7 +25,7 @@ class ShowAnswer {
                 player.score += 3;
             } else {
                 dict = game.answers.filter(item => {
-                    item.id === player.socketId
+                    item.id === player.socketId;
                 })
                 if(dict['answer'] == game.answerIndex) {
                     player.score += 3;
