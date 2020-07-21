@@ -1,14 +1,25 @@
 'use strict';
 
+const utils = require('./utils');
+
 class Field {
     constructor(size) {
-        this._array = new Array();
+        this.cards = new Array();
+        this.masterCard = null;
     }
-    add(card) {
-        this._array.push(card);
+    add(card, game) {
+        card.nextStatus();
+        if(game.findPlayer(card.player).isMaster){
+            this.masterCard = card;
+        }
+        this.cards.push(card);
+        utils.shuffle(this.cards);
     }
-    select(index) {
-        this._array[index];
+    new(){
+        this.cards.splice(0);
+    }
+    masterCardIndex(){
+        return this.cards[this.masterCard];
     }
 }
 

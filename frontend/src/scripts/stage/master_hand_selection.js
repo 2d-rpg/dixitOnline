@@ -59,6 +59,8 @@ import { useForm } from 'react-hook-form';
 export default function HandSelection(props) {
     const [showhand,setShowHand] = useState(false);
     const [showstory,setShowStory] = useState(false);
+    const [masterIndex, setMasterIndex] = useState(null);
+    
 
     const { register, handleSubmit } = useForm();
 
@@ -83,7 +85,7 @@ export default function HandSelection(props) {
                 btn.setAttribute("type","button");
                 btn.appendChild(img)
                 document.getElementById("hand").appendChild(btn);
-                document.getElementById("button"+index).onclick = () => master_select(props.socket,data,index,props.masterIndex);
+                document.getElementById("button"+index).onclick = () => master_select(props.socket,data,index);
             });
         }else{ //その他の場合
             message = 'あなたは子です。待機中...';
@@ -97,9 +99,11 @@ export default function HandSelection(props) {
         }
     };
 
-    const master_select = (socket,data,index,masterIndex) => {
-        masterIndex = index;
+    const master_select = (socket,data,index) => {
+        console.log('index'+index);
+        setMasterIndex(index);
         story_selection(data,index,socket);
+        console.log('masterindex '+masterIndex);
     }
 
     const story_selection = (data,index,socket) => {
@@ -120,7 +124,8 @@ export default function HandSelection(props) {
         let theme = "お題:" + data.story;
         document.getElementById('theme').innerHTML = theme;
 
-        props.socket.emit('story_selection', {message : data.story, masterIndex : props.masterIndex});
+        props.socket.emit('story_selection', {message : data.story, masterIndex : masterIndex});
+        console.log('onsubmit'+masterIndex);
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
     }
 

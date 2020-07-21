@@ -12,24 +12,27 @@ class Player {
     constructor(obj){
         // 初期化
         this.socketId = obj.socketId;
-        this.hand = new Hand(6);
+
+        this.hand = new Hand();
+        for (var i=0; i < 6; i++) { 
+            this.draw(obj.stock);
+        }
         this.isMaster = false;
         this.score = 0;
         this.name = obj.username;
         this.state = 'undone';
         Player.count += 1;
-        // カードの状態をstackからhandに変更
-        this.hand._array.forEach(card => {
-            card.nextStatus();
-        });
     }
     // 山札からドロー
-    draw(){
-        drawCard = stock.pop(); // 山場からpop
+    draw(stock){
+        let drawCard = stock.pop(); // 山場からpop
+        drawCard.player = this.socketId;
+        drawCard.nextStatus();
         this.hand.add(drawCard); // 手札にadd
     }
     // 手札からカードを選択
     selectFromHand(index){
+        console.log(index);
         this.hand.select(index);
     }
 
