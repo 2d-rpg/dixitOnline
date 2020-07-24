@@ -12,11 +12,7 @@ class Player {
     constructor(obj){
         // 初期化
         this.socketId = obj.socketId;
-
         this.hand = new Hand();
-        for (var i=0; i < 6; i++) { 
-            this.draw(obj.stock);
-        }
         this.isMaster = false;
         this.score = 0;
         this.name = obj.username;

@@ -1,7 +1,7 @@
 'use strict';
 
 class Field {
-    constructor(size) {
+    constructor() {
         this.cards = new Array();
         this.masterCard = null;
     }
