@@ -46,7 +46,7 @@ export function FieldSelection(props) {
                 img.setAttribute("src", "../images/" + card.filename + ".jpg");
                 img.setAttribute("width",100);
                 img.setAttribute("height",100);
-                document.getElementById("filed").appendChild(img);
+                document.getElementById("field").appendChild(img);
                 props.socket.emit('wait');
             });
         }
@@ -61,7 +61,7 @@ export function FieldSelection(props) {
         document.getElementById("hand").setAttribute('style','display:none');
         //document.getElementById('masterForm').setAttribute('style','display:block');
         //document.getElementById('progress').innerHTML = message;
-        socket.emit('field_selection', {index:index});
+        socket.emit('field_selection', {index : index});
     }
 
     //親の場合

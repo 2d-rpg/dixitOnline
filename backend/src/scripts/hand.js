@@ -15,6 +15,7 @@ class Hand {
 
     pop() {
         let card = this._array[this.selectedIndex];
+        console.log('hand pop');
         console.log(this.selectedIndex)
         this._array.splice(this.selectedIndex, 1);
         return card

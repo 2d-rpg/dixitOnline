@@ -22,7 +22,11 @@ class Player {
     // 山札からドロー
     draw(stock){
         let drawCard = stock.pop(); // 山場からpop
-        drawCard.player = this;
+        if (drawCard == null) {
+            this.discard.returnStock();
+            drawCard = stock.pop(); // 山場からpop
+        }
+        drawCard.player = this.socketId;
         drawCard.nextStatus();
         this.hand.add(drawCard); // 手札にadd
     }
@@ -41,6 +45,7 @@ class Player {
     selectFromField(index){
         field.select(index);
     }
+
     // 行動終了
     done() {
         this.state = 'done';

@@ -25,11 +25,10 @@ class Stock {
             let card = this._array.pop();
             return card;
         } 
-        // else {
-        // // 墓地回収
-        //     ;
-
-        // }
+        else {
+        // 墓地回収
+            return null;
+        }
         return null;
     }
 }

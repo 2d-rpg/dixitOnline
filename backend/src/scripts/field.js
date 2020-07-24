@@ -1,17 +1,19 @@
 'use strict';
 
+const utils = require('./utils');
+
 class Field {
     constructor() {
         this.cards = new Array();
         this.masterCard = null;
     }
-    add(card) {
+    add(card, game) {
         card.nextStatus();
-        if(card.player.isMaster){
+        if(game.findPlayer(card.player).isMaster){
             this.masterCard = card;
         }
         this.cards.push(card);
-        shuffle(this.cards);
+        utils.shuffle(this.cards);
     }
     new(){
         this.cards.splice(0);

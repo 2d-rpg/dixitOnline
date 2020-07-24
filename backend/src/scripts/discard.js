@@ -9,4 +9,8 @@ class Discard {
     }
 }
 
+returnStock() {
+    
+}
+
 module.exports = Discard;

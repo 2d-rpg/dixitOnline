@@ -8,7 +8,7 @@ class FieldSelection {
         answer = index;
         dict = {}
         dict['id'] = id;
-        dict['answer'] = answer
+        dict['answer'] = answer;
         game.answers.push(dict);
         game.findPlayer(id).done();
     }

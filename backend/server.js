@@ -38,9 +38,9 @@ io.on('connection', function(socket) {
     //クライアントからstory_selectionがemitされた時
     socket.on('story_selection', (data) => story_selection.do(socket, io, data.message,data.masterIndex, game));
     //クライアントからstory_selectionがemitされた時
-    socket.on('others_hand_selection', (index) => others_hand_selection.do(socket, io, index, game));
+    socket.on('others_hand_selection', (data) => others_hand_selection.do(socket, io, data.index, game));
     //クライアントからfield_selecitonがemitされた時
-    socket.on('field_selection', (index) => field_selection.do(socket, index, game));
+    socket.on('field_selection', (data) => field_selection.do(socket, data.index, game));
     // TODO: ここに追加していく
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
