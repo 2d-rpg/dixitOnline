@@ -24,7 +24,7 @@ class Game {
     // ゲーム終了基準点(MAX_SCORE)
     static MAX_SCORE = 30;
     // １ラウンドごとのフェイズの数(STAGE_NUM)
-    static STAGE_NUM = 7;
+    static STAGE_NUM = 5;
 
     constructor() {
         // 山札(stock)
@@ -69,7 +69,7 @@ class Game {
     /** 次のステージへ移行 */
     nextStage(io) {
         // ステージ移行
-        if (this.stageIndex != Game.STAGE_NUM) {
+        if (this.stageIndex != Game.STAGE_NUM) { // resu
             this.stageIndex += 1;
         } else { // 語り部更新
             this.stageIndex = 2;

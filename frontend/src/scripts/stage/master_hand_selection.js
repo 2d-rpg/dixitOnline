@@ -60,6 +60,7 @@ export default function HandSelection(props) {
     const [showhand,setShowHand] = useState(false);
     const [showstory,setShowStory] = useState(false);
     const [masterIndex, setMasterIndex] = useState(null);
+    const [selectedcard, setSelectedCard] = useState(null);
     
 
     const { register, handleSubmit } = useForm();
@@ -73,6 +74,8 @@ export default function HandSelection(props) {
         setShowHand(true);
         console.log('master_hand_selection');
         let message;
+        document.getElementById("hand").innerHTML = "";
+        setSelectedCard(false);
         if(data.player.isMaster){ //語り部の場合
             message = 'あなたは親です。カードを選択してください';
             data.player.hand._array.forEach((card, index) => {
@@ -111,8 +114,8 @@ export default function HandSelection(props) {
         message = "あなたは親です。カードの「タイトル」を入力して下さい";
         let selected_card = document.getElementById('selected_hand_card');
         selected_card.setAttribute("src","../images/" + data.player.hand._array[index].filename + ".jpg");
-        document.getElementById("selected_hand_card_form").setAttribute('style','display:inline');
-        document.getElementById("hand").setAttribute('style','display:none');
+        setSelectedCard(true);
+        setShowHand(false);
         //document.getElementById('masterForm').setAttribute('style','display:block');
         setShowStory(true);
         //document.getElementById('progress').innerHTML = message;
@@ -160,7 +163,7 @@ export default function HandSelection(props) {
 
         let selected_card = document.getElementById('selected_hand_card');
         selected_card.setAttribute("src","../images/" + data.player.hand._array[index].filename + ".jpg");
-        document.getElementById("selected_hand_card_form").setAttribute('style','display:inline');
+        setSelectedCard(true);
         socket.emit('others_hand_selection', {index : index});
     }
 
@@ -173,7 +176,7 @@ export default function HandSelection(props) {
             <p id="hand" style={ {display: showhand ? 'inline' : 'none'} }></p>
 
             <div id="theme"></div>
-            <form className="form-inline" id="selected_hand_card_form" style={{display: "none"}}>
+            <form className="form-inline" id="selected_hand_card_form" style={{display: selectedcard ? 'inline' : 'none'}}>
                 あなたが選んだカード:
                 <img id="selected_hand_card" width="200" height="200"/> 
             </form> 
