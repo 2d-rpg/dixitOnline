@@ -7,10 +7,12 @@ class Discard {
     push(cards) {
         this._array.push(cards);
     }
+
+    returnStock() {
+        ;
+    }
 }
 
-returnStock() {
-    
-}
+
 
 module.exports = Discard;

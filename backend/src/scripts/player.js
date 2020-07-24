@@ -1,6 +1,7 @@
 'use strict';
 // import modules
 const Hand = require('./hand');
+const Card = require('./card');
 
 // プレイヤークラス
 class Player {
@@ -23,12 +24,13 @@ class Player {
     draw(stock){
         let drawCard = stock.pop(); // 山場からpop
         if (drawCard == null) {
-            this.discard.returnStock();
-            drawCard = stock.pop(); // 山場からpop
+            return null;
+        } else {
+            drawCard.player = this.socketId;
+            drawCard.nextStatus();
+            this.hand.add(drawCard); // 手札にadd
+            return drawCard;
         }
-        drawCard.player = this.socketId;
-        drawCard.nextStatus();
-        this.hand.add(drawCard); // 手札にadd
     }
     // 手札からカードを選択
     selectFromHand(index){

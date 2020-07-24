@@ -3,7 +3,7 @@
 const utils = require('./utils');
 
 class Field {
-    constructor() {
+    constructor(size) {
         this.cards = new Array();
         this.masterCard = null;
     }
@@ -14,6 +14,8 @@ class Field {
         }
         this.cards.push(card);
         utils.shuffle(this.cards);
+        // this.cards.shuffle();
+
     }
     new(){
         this.cards.splice(0);

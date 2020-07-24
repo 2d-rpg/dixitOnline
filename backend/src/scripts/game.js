@@ -15,7 +15,7 @@ const status = [
     'hand_selection',        // 2
     'field_selection',       // 3
     'show_answer',           // 4
-    'calc_score',            // 5
+    'show_score',            // 5
     'result'                 // 6
 ];
 
