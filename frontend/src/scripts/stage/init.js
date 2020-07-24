@@ -1,5 +1,4 @@
 
-import {Utils} from './utils.js'
 
 // export class Init {
 
@@ -31,18 +30,17 @@ import {Utils} from './utils.js'
 //     }
 // }
 
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 
 function Init(props) {
     // ここにプロパティ(変数)に該当するものを列挙
 
     useEffect(() => {
         props.socket.on('connect', () => init(props.socket));
-    }, []);
+    });
 
     const init = (socket) => {
         socket.emit('init');
-        console.log('init状態')
     };
 
     return(<div></div>);

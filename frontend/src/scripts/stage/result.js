@@ -1,20 +1,19 @@
-import {Utils} from './utils.js'
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 
 export default function Result(props) {
     useEffect(() => {
         props.socket.on('result' ,(data) => show_result(data));
-    }, []);
+    });
 
     const [showresult,setShowResult] = useState(false);
+    const [result, setResult] = useState(null);
 
     const show_result = (data) => {
-        let result = "";
+        let result_str = "";
         data.game.players.forEach(player => {
-            result += player.score + "点";
+            result_str += player.name + ": " + player.score + "点 ";
         });
-        document.getElementById('result').innerHTML = result;
+        setResult(result_str);
         setShowResult(true);
     }
 
@@ -24,7 +23,7 @@ export default function Result(props) {
 
     return(
         <div id="result" style={ {display: showresult ? 'inline' : 'none'} }>
-            
+            { result }
         </div>
     );
 }

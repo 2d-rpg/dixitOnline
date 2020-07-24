@@ -150,7 +150,7 @@ class Game {
     /** IDによるプレイヤー検索 */
     findPlayer(id) {
         let target = null;
-        this.players.forEach(player => {
+        this.players.filter(player => player != null).forEach(player => {
             if (player.socketId == id) {
                 target = player;
             }    

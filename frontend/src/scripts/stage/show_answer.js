@@ -1,18 +1,18 @@
-import {Utils} from './utils.js'
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 
 export default function ShowAnswer(props) {
     useEffect(() => {
         props.socket.on('show_answer' ,(data) => show_answer(data));
         props.socket.on('hand_selection' ,() => reset_answer());
-    }, []);
+        props.socket.on('result' ,() => reset_answer());
+    });
 
     const [showanswer,setShowAnswer] = useState(false);
+    const [src, setSrc] = useState('');
 
     const show_answer = (data) => {
         let filename = data.game.field.masterCard.filename;
-        document.getElementById('answer_card').setAttribute('src', "../images/" + filename + ".jpg");
+        setSrc("../images/" + filename + ".jpg");
         setShowAnswer(true);
         props.socket.emit('calc_score');
     }
@@ -24,7 +24,7 @@ export default function ShowAnswer(props) {
     return(
         <div id="answer" style={ {display: showanswer ? 'inline' : 'none'} }>
             答えがこれ
-            <img id="answer_card" width="200" height="200"/>
+            <img id="answer_card" src={ src } width="200" height="200" alt="語り部のカード"/>
         </div>
     );
 }

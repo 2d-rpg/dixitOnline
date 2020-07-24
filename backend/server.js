@@ -48,15 +48,17 @@ io.on('connection', function(socket) {
     //クライアントからfield_selecitonがemitされた時
     socket.on('round_end', () => round_end.do(socket, game));
 
-
-    // TODO: ここに追加していく
-
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
     // TODO: つまりリロードすると復帰不可
     socket.on('disconnect', () => disconnect.do(io, socket, game));
     // メッセージ用
     socket.on('chat_send_from_client', function(data) {
-        io.sockets.emit('chat_send_from_server', {value : data.value});
+        let name = '空白さん';
+        const player = game.findPlayer(socket.id)
+        if (player != null) {
+            name = player.name;
+        }
+        io.sockets.emit('chat_send_from_server', {name: name, value : data.value});
     });
 });
 

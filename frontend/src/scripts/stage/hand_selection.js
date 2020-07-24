@@ -1,7 +1,5 @@
 // master_hand_selectionステージ
 
-import {Utils} from './utils.js'
-import StorySelection from './story_selection.js';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 // export class MasterHandSelection {
@@ -61,25 +59,25 @@ export default function HandSelection(props) {
     const [showstoryform,setShowStoryForm] = useState(false);
     const [masterIndex, setMasterIndex] = useState(null);
     const [selectedcard, setSelectedCard] = useState(null);
+    const [story, setStory] = useState('');
+    const [src, setSrc] = useState(null);
     
 
     const { register, handleSubmit } = useForm();
 
     useEffect(() => {
-        props.socket.on('hand_selection' ,(data) => master_hand_selection(data));
+        props.socket.on('hand_selection' ,(data) => hand_selection(data));
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
-    }, []);
+        props.socket.on('result',(data) => reset_selected());
+    });
 
-    const master_hand_selection = (data) => {
+    const hand_selection = (data) => {
         setShowHand(true);
-        console.log('master_hand_selection');
-        let message;
         // リセット
         document.getElementById("hand").innerHTML = "";
-        document.getElementById("theme").innerHTML = "";
+        setStory('');
         setSelectedCard(false);
         if(data.player.isMaster){ //語り部の場合
-            message = 'あなたは親です。カードを選択してください';
             data.player.hand._array.forEach((card, index) => {
                 var img = document.createElement("img");
                 img.setAttribute("src", "../images/" + card.filename + ".jpg");
@@ -93,7 +91,6 @@ export default function HandSelection(props) {
                 document.getElementById("button"+index).onclick = () => master_select(props.socket,data,index);
             });
         }else{ //その他の場合
-            message = 'あなたは子です。待機中...';
             data.player.hand._array.forEach((card, index) => {
                 var img = document.createElement("img");
                 img.setAttribute("src", "../images/" + card.filename + ".jpg");
@@ -105,39 +102,27 @@ export default function HandSelection(props) {
     };
 
     const master_select = (socket,data,index) => {
-        console.log('index'+index);
         setMasterIndex(index);
         story_selection(data,index,socket);
-        console.log('masterindex '+masterIndex);
     }
 
     const story_selection = (data,index,socket) => {
-        let message;
-        message = "あなたは親です。カードの「タイトル」を入力して下さい";
-        let selected_card = document.getElementById('selected_hand_card');
-        selected_card.setAttribute("src","../images/" + data.player.hand._array[index].filename + ".jpg");
+        setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
         setSelectedCard(true);
         setShowHand(false);
-        //document.getElementById('masterForm').setAttribute('style','display:block');
         setShowStoryForm(true);
-        //document.getElementById('progress').innerHTML = message;
     }
 
     const onSubmit = (data, event) => {
         setShowStoryForm(false);
-        let theme = "お題:" + data.story;
-        document.getElementById('theme').innerHTML = theme;
-        // サーバーに'entry'を送信
+        setStory("お題:" + data.story);
+        // サーバーに'story_selection'を送信
         props.socket.emit('story_selection', {message : data.story, masterIndex : masterIndex});
-        console.log('onsubmit: '+masterIndex);
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
     }
 
     const others_hand_selection = (data) => {
-        let theme = "お題:" + data.game.masterClaim;
-        document.getElementById('theme').innerHTML = theme;
-        let message;
-        message = "あなたは子です。お題に沿ったカードを選択してください。"
+        setStory("お題:" + data.game.masterClaim);
         let hand = document.getElementById("hand");
         while(hand.hasChildNodes()){
             hand.removeChild(hand.firstChild);
@@ -154,18 +139,19 @@ export default function HandSelection(props) {
             hand.appendChild(btn);
             document.getElementById("button"+index).onclick = () => others_select(props.socket,data,index);
         });
-        //document.getElementById('progress').innerHTML = message;
     }
 
     const others_select = (socket,data,index) => {
-        let message = "他のユーザーのカード選択を待っています"
-        //document.getElementById('progress').innerHTML = message;
         setShowHand(false);
-
-        let selected_card = document.getElementById('selected_hand_card');
-        selected_card.setAttribute("src","../images/" + data.player.hand._array[index].filename + ".jpg");
+        setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
         setSelectedCard(true);
         socket.emit('others_hand_selection', {index : index});
+    }
+    
+    const reset_selected = () => {
+        setShowStoryForm(false);
+        setSelectedCard(false);
+        setStory('');
     }
 
 
@@ -173,13 +159,12 @@ export default function HandSelection(props) {
     
     return (
         <div>
-            <div id="progress"></div>
             <p id="hand" style={ {display: showhand ? 'inline' : 'none'} }></p>
 
-            <div id="theme"></div>
+            <div id="story">{ story }</div>
             <form className="form-inline" id="selected_hand_card_form" style={{display: selectedcard ? 'inline' : 'none'}}>
                 あなたが選んだカード:
-                <img id="selected_hand_card" width="200" height="200"/> 
+                <img id="selected_hand_card" width="200" height="200" src={ src } alt="あなたが選んだカード"/> 
             </form> 
 
             <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>

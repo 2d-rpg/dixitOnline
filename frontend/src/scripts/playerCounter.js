@@ -1,21 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import { io } from 'socket.io-client';
 
-export default function PlayerCounter() {
-    // const socket = io();
+export default function PlayerCounter(prop) {
+
+    const [player_num, setPlayerNum] = useState(0);
 
     useEffect(() => {
         // 人数表示更新
-        // const socket = io();
-        // socket.on('update_number_of_player', (data) => updateNumOfPepole(data.num));
+        prop.socket.on('update_number_of_player', (data) => setPlayerNum(data.num));
     });
 
-    const updateNumOfPepole = (num) => {
-        let message = '現在のプレイヤー人数：' + num + '人'
-        document.getElementById('numOfPeople').innerHTML = message;
-    }
-
     return (
-        <div id="numOfPeople">現在のプレイヤー人数：0人</div>
+        <div id="numOfPeople">現在のプレイヤー人数：{ player_num }人</div>
     );
 }
