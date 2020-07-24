@@ -8,8 +8,8 @@ class Discard {
         this._array.push(cards);
     }
 
-    returnStock() {
-        ;
+    pop() {//todo
+        return this._array.pop();
     }
 }
 
