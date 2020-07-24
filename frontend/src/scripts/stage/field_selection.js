@@ -7,6 +7,9 @@ export default function FieldSelection(props) {
 
     // const { register, handleSubmit } = useForm();
     const [showfield,setShowField] = useState(false);
+    const [showselected, setShowSelected] = useState(false);
+    const [src, setSrc] = useState(null);
+
 
     // const onSubmit = (data, event) => {
     //     setShow(false);
@@ -17,14 +20,15 @@ export default function FieldSelection(props) {
 
     useEffect(() => {
         props.socket.on('field_selection' ,(data) => field_selection(data));
+        props.socket.on('hand_selection' ,() => field_reset());
     }, []);
 
     const field_selection = (data) => {
         setShowField(true);
         console.log('field_selection');
         let message;
+        document.getElementById('field').innerHTML = '';
         // fieldの表示
-
         if(!data.player.isMaster){ //子の場合
             message = 'あなたは子です。カードを選択して下さい';
             data.game.field.cards.forEach((card, index) => {
@@ -57,12 +61,18 @@ export default function FieldSelection(props) {
         // message = "あなたは親です。カードの「タイトル」を入力して下さい";
         setShowField(false);
         let selected_card = document.getElementById('selected_field_card');
-        selected_card.setAttribute("src","../images/" + data.game.field.cards[index].filename + ".jpg");
-        document.getElementById("selected_field_card_form").setAttribute('style','display:inline');
+        // selected_card.setAttribute("src","../images/" + data.game.field.cards[index].filename + ".jpg");
+        setSrc("../images/" + data.game.field.cards[index].filename + ".jpg");
+        setShowSelected(true);
         // document.getElementById("field").setAttribute('style','display:none');
         //document.getElementById('masterForm').setAttribute('style','display:block');
         //document.getElementById('progress').innerHTML = message;
         socket.emit('field_selection', {index : index});
+    }
+
+    const field_reset = () => {
+        setShowSelected(false);
+        setShowField(false);
     }
 
     //親の場合
@@ -80,9 +90,9 @@ export default function FieldSelection(props) {
     return (
         <div>
             <p id="field" style={ {display: showfield ? 'inline' : 'none'} }></p>
-            <div className="form-inline" id="selected_field_card_form" style={{display: "none"}}>
+            <div className="form-inline" id="selected_field_card" style={{display: showselected ? 'inline' : 'none'}}>
                 あなたが選んだカード:
-                <img id="selected_field_card" width="200" height="200"/> 
+                <img id="selected_field_card" width="200" height="200" src={src}/>
             </div> 
 
             {/* <form className="form-inline" id="answerForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: show ? 'block' : 'none' } }>

@@ -22,14 +22,16 @@ const status = [
 class Game {
 
     // ゲーム終了基準点(MAX_SCORE)
-    static MAX_SCORE = 30;
+    static MAX_SCORE = 5;
     // １ラウンドごとのフェイズの数(STAGE_NUM)
-    static STAGE_NUM = 7;
+    static STAGE_NUM = 5;
+    // カード枚数
+    static CARD_NUM = 20;
 
     constructor() {
         // 山札(stock)
         this.stock = new Stock();
-        for (var i=0; i < 40; i++) { 
+        for (var i=0; i < Game.CARD_NUM; i++) { 
             this.stock.push(new Card(utils.randomSample(18)));
         }
         // プレイヤー
@@ -69,14 +71,20 @@ class Game {
     /** 次のステージへ移行 */
     nextStage(io) {
         // ステージ移行
-        if (this.stageIndex != Game.STAGE_NUM) {
+        if (this.stageIndex != Game.STAGE_NUM) { // resu
             this.stageIndex += 1;
         } else { // 語り部更新
             this.stageIndex = 2;
+            if(this.checkScore()) {
+                this.stageIndex = 6;
+            }
         }
         if(this.stageIndex == 2){
-            console.log("ffff");
             this.updateMaster();
+            this.fieldToDiscard();
+            if(this.stock._array.length < this.players.length) {
+                this.discardToStock();
+            }
         } 
         if(this.stageIndex == 3){// field の更新
             this.handToField();
@@ -163,10 +171,28 @@ class Game {
 
     handToField() {
         this.players.forEach(player => {
-            console.log(player);
             let card = player.hand.pop();
             this.field.add(card, this);
         });
+    }
+
+    fieldToDiscard() {
+        const len = this.field.cards.length
+        for (let i = 0; i < len; i++) {
+            this.discard.push(this.field.pop());
+        }
+    }
+
+    discardToStock() {
+        const len = this.discard._array.length;
+        for (let i = 0; i < len; i++) {
+            this.stock.push(this.discard.pop());
+        }
+        utils.shuffle(this.stock._array);
+    }
+
+    checkScore() {
+        return !this.players.every(player => player.score < Game.MAX_SCORE);
     }
 }
 

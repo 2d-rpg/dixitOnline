@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 export default function ShowAnswer(props) {
     useEffect(() => {
         props.socket.on('show_answer' ,(data) => show_answer(data));
+        props.socket.on('hand_selection' ,() => reset_answer());
     }, []);
 
     const [showanswer,setShowAnswer] = useState(false);
@@ -14,6 +15,10 @@ export default function ShowAnswer(props) {
         document.getElementById('answer_card').setAttribute('src', "../images/" + filename + ".jpg");
         setShowAnswer(true);
         props.socket.emit('calc_score');
+    }
+
+    const reset_answer = () => {
+        setShowAnswer(false);
     }
 
     return(
