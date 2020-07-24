@@ -58,7 +58,7 @@ import { useForm } from 'react-hook-form';
 
 export default function HandSelection(props) {
     const [showhand,setShowHand] = useState(false);
-    const [showstory,setShowStory] = useState(false);
+    const [showstoryform,setShowStoryForm] = useState(false);
     const [masterIndex, setMasterIndex] = useState(null);
     const [selectedcard, setSelectedCard] = useState(null);
     
@@ -74,7 +74,9 @@ export default function HandSelection(props) {
         setShowHand(true);
         console.log('master_hand_selection');
         let message;
+        // リセット
         document.getElementById("hand").innerHTML = "";
+        document.getElementById("theme").innerHTML = "";
         setSelectedCard(false);
         if(data.player.isMaster){ //語り部の場合
             message = 'あなたは親です。カードを選択してください';
@@ -117,18 +119,17 @@ export default function HandSelection(props) {
         setSelectedCard(true);
         setShowHand(false);
         //document.getElementById('masterForm').setAttribute('style','display:block');
-        setShowStory(true);
+        setShowStoryForm(true);
         //document.getElementById('progress').innerHTML = message;
     }
 
     const onSubmit = (data, event) => {
-        // サーバーに'entry'を送信
-        setShowStory(false);
+        setShowStoryForm(false);
         let theme = "お題:" + data.story;
         document.getElementById('theme').innerHTML = theme;
-
+        // サーバーに'entry'を送信
         props.socket.emit('story_selection', {message : data.story, masterIndex : masterIndex});
-        console.log('onsubmit'+masterIndex);
+        console.log('onsubmit: '+masterIndex);
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
     }
 
@@ -181,7 +182,7 @@ export default function HandSelection(props) {
                 <img id="selected_hand_card" width="200" height="200"/> 
             </form> 
 
-            <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstory ? 'inline' : 'none'} }>
+            <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>
                 <label htmlFor="claim">お題を入力してね：</label>
                 <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register } placeholder="お題"/>
                 <button type="submit" className="btn btn-primary mb-2">送信</button>

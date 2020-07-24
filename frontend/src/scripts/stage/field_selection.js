@@ -27,8 +27,8 @@ export default function FieldSelection(props) {
         setShowField(true);
         console.log('field_selection');
         let message;
+        document.getElementById('field').innerHTML = '';
         // fieldの表示
-
         if(!data.player.isMaster){ //子の場合
             message = 'あなたは子です。カードを選択して下さい';
             data.game.field.cards.forEach((card, index) => {
@@ -72,6 +72,7 @@ export default function FieldSelection(props) {
 
     const field_reset = () => {
         setShowSelected(false);
+        setShowField(false);
     }
 
     //親の場合
