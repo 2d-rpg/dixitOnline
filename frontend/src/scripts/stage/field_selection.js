@@ -26,21 +26,21 @@ export function FieldSelection(props) {
         // fieldの表示
 
         if(!data.player.isMaster){ //子の場合
-            message = 'あなたは親です。待っててください';
+            message = 'あなたは子です。カードを選択して下さい';
             data.game.field.cards.forEach((card, index) => {
                 var img = document.createElement("img");
                 img.setAttribute("src", "../images/" + card.filename + ".jpg");
                 img.setAttribute("width",100);
                 img.setAttribute("height",100);
                 var btn = document.createElement("button");
-                btn.setAttribute("id","button"+index);
+                btn.setAttribute("id","fieldbutton"+index);
                 btn.setAttribute("type","button");
                 btn.appendChild(img)
                 document.getElementById("field").appendChild(btn);
-                document.getElementById("button"+index).onclick = () => others_field_select(props.socket,data,index);
+                document.getElementById("fieldbutton"+index).onclick = () => others_field_select(props.socket,data,index);
             });
         }else{ //親の場合
-            message = 'あなたは子です。待機中...';
+            message = 'あなたは親です。待機中...';
             data.game.field.cards.forEach((card) => {
                 var img = document.createElement("img");
                 img.setAttribute("src", "../images/" + card.filename + ".jpg");
@@ -53,12 +53,13 @@ export function FieldSelection(props) {
     };
 
     const others_field_select = (socket,data,index) => {
-        let message;
-        message = "あなたは親です。カードの「タイトル」を入力して下さい";
-        let selected_card = document.getElementById('selected_hand_card');
+        // let message;
+        // message = "あなたは親です。カードの「タイトル」を入力して下さい";
+        setShowField(false);
+        let selected_card = document.getElementById('selected_field_card');
         selected_card.setAttribute("src","../images/" + data.game.field.cards[index].filename + ".jpg");
-        document.getElementById("selected_hand_card_form").setAttribute('style','display:inline');
-        document.getElementById("hand").setAttribute('style','display:none');
+        document.getElementById("selected_field_card_form").setAttribute('style','display:inline');
+        // document.getElementById("field").setAttribute('style','display:none');
         //document.getElementById('masterForm').setAttribute('style','display:block');
         //document.getElementById('progress').innerHTML = message;
         socket.emit('field_selection', {index : index});
@@ -79,6 +80,10 @@ export function FieldSelection(props) {
     return (
         <div>
             <p id="field" style={ {display: showfield ? 'inline' : 'none'} }></p>
+            <form className="form-inline" id="selected_field_card_form" style={{display: "none"}}>
+                あなたが選んだカード:
+                <img id="selected_field_card" width="200" height="200"/> 
+            </form> 
 
             {/* <form className="form-inline" id="answerForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: show ? 'block' : 'none' } }>
                 <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>
