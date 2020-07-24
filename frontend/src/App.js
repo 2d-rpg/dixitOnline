@@ -10,8 +10,10 @@ import Start from './scripts/stage/start';
 import StorySelection from './scripts/stage/story_selection';
 import MasterHandSelection from './scripts/stage/master_hand_selection';
 import socketIOClient from "socket.io-client";
-import { FieldSelection } from './scripts/stage/field_selection';
-const ENDPOINT = "http://127.0.0.1:4001";
+import FieldSelection from './scripts/stage/field_selection';
+import ShowAnswer from './scripts/stage/show_answer';
+import ShowScore from './scripts/stage/show_score';
+const ENDPOINT = "http://127.0.0.1:4001/";
 const socket = socketIOClient(ENDPOINT);
 
 function App() {
@@ -24,16 +26,16 @@ function App() {
       <PlayerCounter socket={ socket }/>
       <Entry socket={ socket }/>
       <Start socket={ socket }/>
-      {/* <canvas id="canvas-2d" width="10" height="10" style="object-fit:contain;"></canvas> */}
-      {/* <img id="unko" src="images/unko.gif" style="display: none;"/>
+      {/* <canvas id="canvas-2d" width="10" height="10" style="object-fit:contain;"></canvas> /}
+      {/ <img id="unko" src="images/unko.gif" style="display: none;"/>
       <img id="akira_with_Ginkakuji" src="images/akira_with_Ginkakuji.jpg" style="display: none;"/>
       <img id="akira_with_hood_and_Ginkakuji" src="images/akira_with_hood_and_Ginkakuji.jpg" style="display: none;"/> */}
       <MasterHandSelection socket={ socket } />
       <FieldSelection socket={ socket }/>
+      <ShowAnswer socket={ socket }/>
+      <ShowScore socket={ socket }/>
     </div>
   );
 }
 
 export default App;
-
-

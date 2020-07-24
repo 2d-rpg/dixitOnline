@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-export function FieldSelection(props) {
+export default function FieldSelection(props) {
 
     // const { register, handleSubmit } = useForm();
     const [showfield,setShowField] = useState(false);
@@ -80,10 +80,10 @@ export function FieldSelection(props) {
     return (
         <div>
             <p id="field" style={ {display: showfield ? 'inline' : 'none'} }></p>
-            <form className="form-inline" id="selected_field_card_form" style={{display: "none"}}>
+            <div className="form-inline" id="selected_field_card_form" style={{display: "none"}}>
                 あなたが選んだカード:
                 <img id="selected_field_card" width="200" height="200"/> 
-            </form> 
+            </div> 
 
             {/* <form className="form-inline" id="answerForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: show ? 'block' : 'none' } }>
                 <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>

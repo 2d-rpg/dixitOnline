@@ -14,6 +14,8 @@ class Field {
         }
         this.cards.push(card);
         utils.shuffle(this.cards);
+        // this.cards.shuffle();
+
     }
     new(){
         this.cards.splice(0);

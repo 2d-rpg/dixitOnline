@@ -15,6 +15,7 @@ const start = require('./src/scripts/stage/start');
 const story_selection = require('./src/scripts/stage/story_selection');
 const others_hand_selection = require('./src/scripts/stage/others_hand_selection');
 const field_selection = require('./src/scripts/stage/field_selection');
+const calc_score = require('./src/scripts/stage/calc_score');
 
 const disconnect = require('./src/scripts/stage/disconnect');
 // const fs = require('fs');
@@ -41,6 +42,9 @@ io.on('connection', function(socket) {
     socket.on('others_hand_selection', (data) => others_hand_selection.do(socket, io, data.index, game));
     //クライアントからfield_selecitonがemitされた時
     socket.on('field_selection', (data) => field_selection.do(socket, data.index, game));
+    //クライアントからfield_selecitonがemitされた時
+    socket.on('calc_score', () => calc_score.do(socket, game));
+
     // TODO: ここに追加していく
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)

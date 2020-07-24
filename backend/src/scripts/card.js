@@ -23,7 +23,11 @@ class Card {
     /** ステータス移行 */
     nextStatus() {
         this.statusIndex += 1;
+        if(this.statusIndex === 4) {
+            this.statusIndex = 0;
+        }
         this.status = statusList[this.statusIndex];
+
     }
 }
 

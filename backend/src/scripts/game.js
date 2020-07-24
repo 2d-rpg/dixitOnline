@@ -2,6 +2,7 @@ const Player = require("./player");
 const Stock = require('./stock');
 const Discard = require('./discard');
 const Field = require('./field');
+const Card = require('./card');
 const utils = require('./utils');
 
 // private static property
@@ -14,7 +15,7 @@ const status = [
     'hand_selection',        // 2
     'field_selection',       // 3
     'show_answer',           // 4
-    'calc_score',            // 5
+    'show_score',            // 5
     'result'                 // 6
 ];
 
@@ -27,7 +28,10 @@ class Game {
 
     constructor() {
         // 山札(stock)
-        this.stock = new Stock(40);
+        this.stock = new Stock();
+        for (var i=0; i < 40; i++) { 
+            this.stock.push(new Card(utils.randomSample(18)));
+        }
         // プレイヤー
         this.players = new Array(3).fill(null);
         this.currentNum = 0;
@@ -48,7 +52,11 @@ class Game {
 
     /** プレイヤーの追加 */
     addPlayer(data, socket) {
-        this.players[this.currentNum] = new Player({socketId: socket.id, username: data.username, stock:this.stock});
+        let player = new Player({socketId: socket.id, username: data.username});
+        for (var i=0; i < 6; i++) { 
+            player.draw(this.stock);
+        }
+        this.players[this.currentNum] = player;
         this.players[this.currentNum].done(); //エントリー完了
         this.currentNum += 1;
         return this.players[this.currentNum-1];
