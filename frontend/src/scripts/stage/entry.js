@@ -2,9 +2,12 @@ import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function Entry(props) {
+    /** エントリーフォーム */
     const { register, handleSubmit } = useForm();
+    /** エントリーフォームの表示 */
     const [show, setShow] = useState(true);
 
+    /** エントリーフォーム入力時の動作 */
     const onSubmit = (data, event) => {
         // サーバーに'entry'を送信
         setShow(false);

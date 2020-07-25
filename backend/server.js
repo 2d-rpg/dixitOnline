@@ -53,7 +53,7 @@ io.on('connection', function(socket) {
     socket.on('disconnect', () => disconnect.do(io, socket, game));
     // メッセージ用
     socket.on('chat_send_from_client', function(data) {
-        let name = '空白さん';
+        let name = 'ゲスト';
         const player = game.findPlayer(socket.id)
         if (player != null) {
             name = player.name;

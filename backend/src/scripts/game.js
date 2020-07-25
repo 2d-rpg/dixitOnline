@@ -64,6 +64,7 @@ class Game {
         return this.players[this.currentNum-1];
     }
 
+    /** 現在のプレイヤー数を確認 */
     getLength() {
         return this.players.filter(player => player != null).length;
     }
@@ -71,22 +72,23 @@ class Game {
     /** 次のステージへ移行 */
     nextStage(io) {
         // ステージ移行
-        if (this.stageIndex != Game.STAGE_NUM) { // resu
+        if (this.stageIndex != Game.STAGE_NUM) {
             this.stageIndex += 1;
-        } else { // 語り部更新
-            this.stageIndex = 2;
-            if(this.checkScore()) {
-                this.stageIndex = 6;
+        } else {
+            this.stageIndex = 2; // hand_selectionへ
+            if(this.checkScore()) { // 終了条件
+                this.stageIndex = 6; // result画面へ
             }
         }
-        if(this.stageIndex == 2){
-            this.updateMaster();
+        if(this.stageIndex == 2){ // hand_selection
+            this.updateMaster(); // 語り部更新
             this.fieldToDiscard();
             if(this.stock._array.length < this.players.length) {
                 this.discardToStock();
             }
+            this.resetAnswers();
         } 
-        if(this.stageIndex == 3){// field の更新
+        if(this.stageIndex == 3){// fieldの更新
             this.handToField();
         }
         
@@ -123,13 +125,9 @@ class Game {
         });
     }
 
+    /** 語り部によるお題の設定 */
     setMasterClaim(message){
         this.masterClaim = message;
-    }
-
-    /** スコア計算 */
-    calcScore() {
-
     }
 
     /** 終了条件 */
@@ -142,10 +140,6 @@ class Game {
         });
         return flag;
     }
-
-
-    /** 親が誰か判定する */
-
 
     /** IDによるプレイヤー検索 */
     findPlayer(id) {
@@ -169,6 +163,7 @@ class Game {
         });
     }
 
+    /** 手札のカードをフィールドに移動 */
     handToField() {
         this.players.forEach(player => {
             let card = player.hand.pop();
@@ -176,6 +171,7 @@ class Game {
         });
     }
 
+    /** フィールド上のカードを墓地へ移動 */
     fieldToDiscard() {
         const len = this.field.cards.length
         for (let i = 0; i < len; i++) {
@@ -183,6 +179,7 @@ class Game {
         }
     }
 
+    /** 墓地から山札に移動 */
     discardToStock() {
         const len = this.discard._array.length;
         for (let i = 0; i < len; i++) {
@@ -191,8 +188,14 @@ class Game {
         utils.shuffle(this.stock._array);
     }
 
+    /** 最大スコアをチェックし，終了条件確認 */
     checkScore() {
         return !this.players.every(player => player.score < Game.MAX_SCORE);
+    }
+
+    /** answersのリセット */
+    resetAnswers() {
+        this.answers.length = 0;
     }
 }
 

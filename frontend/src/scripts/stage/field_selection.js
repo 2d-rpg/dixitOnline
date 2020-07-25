@@ -4,74 +4,66 @@ import React, { useEffect, useState } from 'react';
 
 export default function FieldSelection(props) {
 
+    /** フィールドを表示するか否か */
     const [showfield,setShowField] = useState(false);
+    /** 語り部以外のプレイヤーがフィールド上から選んだカードを表示するか否か */
     const [showselected, setShowSelected] = useState(false);
+    /** 語り部以外のプレイヤーがフィールド上から選んだカードのソース */
     const [src, setSrc] = useState(null);
+    /** フィールドの表示内容 */
+    const [field_buttons, setFieldButtons] = useState(null);
 
 
     useEffect(() => {
+        /** フィールドの表示 */
+        const field_selection = (data) => {
+            setShowField(true);
+            if(!data.player.isMaster){ // 語り部以外のプレイヤーの場合
+                setFieldButtons(
+                    data.game.field.cards.map((card, index) => {
+                        var id = 'field' + index;
+                        var hand_src = "../images/" + card.filename + ".jpg";
+                        return (
+                        <button id={ id } type='button' onClick={ () => others_field_select(props.socket, data, index)}>
+                            <img width='100' height='100' src={ hand_src } alt={ card.filename }></img>
+                        </button>);
+                    })
+                );
+            }else{ // 語り部の場合
+                setFieldButtons(
+                    data.game.field.cards.map((card) => {
+                        var hand_src = "../images/" + card.filename + ".jpg";
+                        return (<img width='100' height='100' src={ hand_src } alt={ card.filename }></img>);
+                    })
+                );
+                props.socket.emit('wait');
+            }
+        };
+        /** 語り部以外のプレイヤーがフィールド上のカードを選んだときの動作 */
+        const others_field_select = (socket,data,index) => {
+            setShowField(false);
+            setSrc("../images/" + data.game.field.cards[index].filename + ".jpg");
+            setShowSelected(true);
+            socket.emit('field_selection', {index : index});
+        }
+        /** フィールドの表示リセット */
+        const field_reset = () => {
+            setShowSelected(false);
+            setShowField(false);
+        }
+        /** サーバーからのemitを受け取るイベントハンドラ一覧 */
         props.socket.on('field_selection' ,(data) => field_selection(data));
         props.socket.on('hand_selection' ,() => field_reset());
         props.socket.on('result' ,() => field_reset());
-    });
-
-    const field_selection = (data) => {
-        setShowField(true);
-        document.getElementById('field').innerHTML = '';
-        // fieldの表示
-        if(!data.player.isMaster){ //子の場合
-            data.game.field.cards.forEach((card, index) => {
-                var img = document.createElement("img");
-                img.setAttribute("src", "../images/" + card.filename + ".jpg");
-                img.setAttribute("width",100);
-                img.setAttribute("height",100);
-                var btn = document.createElement("button");
-                btn.setAttribute("id","fieldbutton"+index);
-                btn.setAttribute("type","button");
-                btn.appendChild(img)
-                document.getElementById("field").appendChild(btn);
-                document.getElementById("fieldbutton"+index).onclick = () => others_field_select(props.socket,data,index);
-            });
-        }else{ //親の場合
-            data.game.field.cards.forEach((card) => {
-                var img = document.createElement("img");
-                img.setAttribute("src", "../images/" + card.filename + ".jpg");
-                img.setAttribute("width",100);
-                img.setAttribute("height",100);
-                document.getElementById("field").appendChild(img);
-                props.socket.emit('wait');
-            });
-        }
-    };
-
-    const others_field_select = (socket,data,index) => {
-        // let message;
-        // message = "あなたは親です。カードの「タイトル」を入力して下さい";
-        setShowField(false);
-        setSrc("../images/" + data.game.field.cards[index].filename + ".jpg");
-        setShowSelected(true);
-        socket.emit('field_selection', {index : index});
-    }
-
-    const field_reset = () => {
-        setShowSelected(false);
-        setShowField(false);
-    }
+    }, [ props.socket ]);
 
     return (
-        <div>
-            <p id="field" style={ {display: showfield ? 'inline' : 'none'} }></p>
+        <div id='field-wrapper'>
+            <div id="field" style={ {display: showfield ? 'inline' : 'none'} }>{ field_buttons }</div>
             <div className="form-inline" id="selected_field_card" style={{display: showselected ? 'inline' : 'none'}}>
                 あなたが選んだカード:
                 <img id="selected_field_card" width="200" height="200" src={src} alt="フィールドから選んだカード"/>
             </div> 
-
-            {/* <form className="form-inline" id="answerForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: show ? 'block' : 'none' } }>
-                <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>
-                <input type="number" className="form-control mb-2 mr-sm-2" name="answer" ref={ register } placeholder="親が出したと思うカードの番号を入力してください" />
-                <button type="submit" className="btn btn-primary mb-2">さんとしてゲームに参加</button>
-            </form> */}
-            {/* //　送信後は待ち */}
         </div>
     );
 }

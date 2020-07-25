@@ -23,9 +23,9 @@ function App() {
     <div className="container">
       <h1>Dixit Online</h1>
       <Init socket={ socket }/>
-      <Progress socket={ socket }/>
       <Chat socket={ socket }/>
       <PlayerCounter socket={ socket }/>
+      <Progress socket={ socket }/>
       <Entry socket={ socket }/>
       <Start socket={ socket }/>
       <HandSelection socket={ socket } />

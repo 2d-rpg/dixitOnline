@@ -10,9 +10,6 @@ class StorySelection {
         game.setMasterClaim(message);
         let player = game.findPlayer(socket.id);
         player.selectFromHand(masterIndex);
-        console.log('story_selection');
-        console.log(masterIndex);
-        console.log(player);
         player.done();
 
         game.players.forEach(eachPlayer => {

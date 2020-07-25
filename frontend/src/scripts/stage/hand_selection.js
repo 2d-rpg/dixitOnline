@@ -2,168 +2,112 @@
 
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-// export class MasterHandSelection {
-//     static do(data, socket, masterIndex) {
-//         let message;
-//         if(data.player.isMaster){ //語り部の場合
-//             message = 'あなたは親です。カードを選択してください';
-//             data.player.hand._array.forEach((card, index) => {
-//                 var img = document.createElement("img");
-//                 img.setAttribute("src", "../images/" + card.filename + ".jpg");
-//                 img.setAttribute("width",100);
-//                 img.setAttribute("height",100);
-//                 var btn = document.createElement("button");
-//                 btn.setAttribute("id","button"+index);
-//                 btn.setAttribute("type","button");
-//                 btn.appendChild(img)
-//                 document.getElementById("hand").appendChild(btn);
-//                 document.getElementById("button"+index).onclick = function(){MasterHandSelection.select(socket,data,index,masterIndex)};
-//             });
-//         }else{ //その他の場合
-//             message = 'あなたは子です。待機中...';
-//             data.player.hand._array.forEach((card, index) => {
-//                 var img = document.createElement("img");
-//                 img.setAttribute("src", "../images/" + card.filename + ".jpg");
-//                 img.setAttribute("width",100);
-//                 img.setAttribute("height",100);
-//                 document.getElementById("hand").appendChild(img);
-//             });
-//         }
-//         document.getElementById('progress').innerHTML = message;
-
-
-//         // const y = 600;    
-//         // // プレイヤー名/スコアの表示
-//         // // 自分
-//         // const fontSize = 20;
-//         // context.font = fontSize + 'px Bold Arial';
-//         // context.fillText(data.player.name, 20, y);
-//         // context.fillText('スコア: ' + data.player.score, 30, y + 40);
-//         // // 他の人
-//         // console.log(data.others);
-//         // data.others.forEach((player, index) => {
-//         //     console.log(player);
-//         //     context.fillText(player.name, index * 400 + 200, 200);
-//         //     context.fillText('スコア: ' + player.score, index * 400 + 200, 200 + 40);
-//         // });
-//     }
-
-//     static select(socket,data,index,masterIndex) {
-//         masterIndex = index;
-//         StorySelection.do(data, index, socket);
-//     }
-// }
 
 export default function HandSelection(props) {
+    /** 手札を表示するか否か */
     const [showhand,setShowHand] = useState(false);
+    /** お題フォームを表示するか否か */
     const [showstoryform,setShowStoryForm] = useState(false);
+    /** 語り部が選んだカードの手札上のインデックス */
     const [masterIndex, setMasterIndex] = useState(null);
+    /** 手札から選ばれたカードを表示するか否か */
     const [selectedcard, setSelectedCard] = useState(null);
+    /** お題の内容 */
     const [story, setStory] = useState('');
+    /** 手札から選ばれたカードのソース */
     const [src, setSrc] = useState(null);
-    
-
+    /** 手札の内容 */
+    const [hand_buttons, setHandButtons] = useState(null);
+    /** お題フォーム */
     const { register, handleSubmit } = useForm();
 
     useEffect(() => {
+        /** 手札の表示 */
+        const hand_selection = (data) => {
+            setShowHand(true);
+            // リセット
+            setStory('');
+            setSelectedCard(false);
+            if(data.player.isMaster){ //語り部の場合
+                setHandButtons(
+                    data.player.hand._array.map((card, index) => {
+                        var id = 'hand' + index;
+                        var hand_src = "../images/" + card.filename + ".jpg";
+                        return (
+                        <button id={ id } type='button' onClick={ () => master_select(data, index)}>
+                            <img width='100' height='100' src={ hand_src } alt={ card.filename }></img>
+                        </button>);
+                    })
+                );
+            }else{ // 語り部以外のプレイヤーの場合
+                setHandButtons(
+                    data.player.hand._array.map((card) => {
+                        var hand_src = "../images/" + card.filename + ".jpg";
+                        return (<img width='100' height='100' src={ hand_src } alt={ card.filename }></img>);
+                    })
+                );
+            }
+        };
+        /** 語り部が手札からカードを選択したときの動作 */
+        const master_select = (data, index) => {
+            setMasterIndex(index);
+            story_selection(data, index);
+        };
+        /** 語り部が手札から選んだカードの表示と手札の非表示及びお題フォームの表示 */
+        const story_selection = (data, index) => {
+            setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
+            setSelectedCard(true);
+            setShowHand(false);
+            setShowStoryForm(true);
+        };
+        /** 語り部以外のプレイヤーの手札の表示 */
+        const others_hand_selection = (data) => {
+            setStory("お題:" + data.game.masterClaim);
+            setHandButtons(
+                data.player.hand._array.map((card, index) => {
+                    var id = 'hand' + index;
+                    var hand_src = "../images/" + card.filename + ".jpg";
+                    return (
+                    <button id={ id } type='button' onClick={ () => others_select(props.socket,data,index)}>
+                        <img width='100' height='100' src={ hand_src } alt={ card.filename }></img>
+                    </button>);
+                })
+            );
+        };
+        /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
+        const others_select = (socket, data, index) => {
+            setShowHand(false);
+            setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
+            setSelectedCard(true);
+            socket.emit('others_hand_selection', {index : index});
+        };
+        /** 手札の表示とお題のリセット */
+        const reset_selected = () => {
+            setShowStoryForm(false);
+            setSelectedCard(false);
+            setStory('');
+        };
+        /** サーバーからのemitを受け取るイベントハンドラ一覧 */
         props.socket.on('hand_selection' ,(data) => hand_selection(data));
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
         props.socket.on('result',(data) => reset_selected());
-    });
+    }, [ props.socket ]);
 
-    const hand_selection = (data) => {
-        setShowHand(true);
-        // リセット
-        document.getElementById("hand").innerHTML = "";
-        setStory('');
-        setSelectedCard(false);
-        if(data.player.isMaster){ //語り部の場合
-            data.player.hand._array.forEach((card, index) => {
-                var img = document.createElement("img");
-                img.setAttribute("src", "../images/" + card.filename + ".jpg");
-                img.setAttribute("width",100);
-                img.setAttribute("height",100);
-                var btn = document.createElement("button");
-                btn.setAttribute("id","button"+index);
-                btn.setAttribute("type","button");
-                btn.appendChild(img)
-                document.getElementById("hand").appendChild(btn);
-                document.getElementById("button"+index).onclick = () => master_select(props.socket,data,index);
-            });
-        }else{ //その他の場合
-            data.player.hand._array.forEach((card, index) => {
-                var img = document.createElement("img");
-                img.setAttribute("src", "../images/" + card.filename + ".jpg");
-                img.setAttribute("width",100);
-                img.setAttribute("height",100);
-                document.getElementById("hand").appendChild(img);
-            });
-        }
-    };
-
-    const master_select = (socket,data,index) => {
-        setMasterIndex(index);
-        story_selection(data,index,socket);
-    }
-
-    const story_selection = (data,index,socket) => {
-        setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
-        setSelectedCard(true);
-        setShowHand(false);
-        setShowStoryForm(true);
-    }
-
+    /** お題のフォーム送信ボタンを押したときの動作 */
     const onSubmit = (data, event) => {
         setShowStoryForm(false);
         setStory("お題:" + data.story);
         // サーバーに'story_selection'を送信
         props.socket.emit('story_selection', {message : data.story, masterIndex : masterIndex});
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
-    }
+    };
 
-    const others_hand_selection = (data) => {
-        setStory("お題:" + data.game.masterClaim);
-        let hand = document.getElementById("hand");
-        while(hand.hasChildNodes()){
-            hand.removeChild(hand.firstChild);
-        }
-        data.player.hand._array.forEach((card, index) => {
-            var img = document.createElement("img");
-            img.setAttribute("src", "../images/" + card.filename + ".jpg");
-            img.setAttribute("width",100);
-            img.setAttribute("height",100);
-            var btn = document.createElement("button");
-            btn.setAttribute("id","button"+index);
-            btn.setAttribute("type","button");
-            btn.appendChild(img);
-            hand.appendChild(btn);
-            document.getElementById("button"+index).onclick = () => others_select(props.socket,data,index);
-        });
-    }
-
-    const others_select = (socket,data,index) => {
-        setShowHand(false);
-        setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
-        setSelectedCard(true);
-        socket.emit('others_hand_selection', {index : index});
-    }
-    
-    const reset_selected = () => {
-        setShowStoryForm(false);
-        setSelectedCard(false);
-        setStory('');
-    }
-
-
-
-    
     return (
         <div>
-            <p id="hand" style={ {display: showhand ? 'inline' : 'none'} }></p>
-
+            <div id="hand" style={ {display: showhand ? 'inline' : 'none'} }>{ hand_buttons }</div>
             <div id="story">{ story }</div>
             <form className="form-inline" id="selected_hand_card_form" style={{display: selectedcard ? 'inline' : 'none'}}>
-                あなたが選んだカード:
+                あなたがフィールドから選んだカード:
                 <img id="selected_hand_card" width="200" height="200" src={ src } alt="あなたが選んだカード"/> 
             </form> 
 

@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from 'react';
 
 export default function ShowAnswer(props) {
+    /** 答えを表示するかどうか */
+    const [showanswer,setShowAnswer] = useState(false);
+    /** 答えのソース */
+    const [src, setSrc] = useState('');
+
     useEffect(() => {
+        /** 答えの表示 */
+        const show_answer = (data) => {
+            let filename = data.game.field.masterCard.filename;
+            setSrc("../images/" + filename + ".jpg");
+            setShowAnswer(true);
+            props.socket.emit('calc_score');
+        }
+        /** 答えの表示リセット */
+        const reset_answer = () => {
+            setShowAnswer(false);
+        }
+        /** サーバからのemitされたときのイベントハンドラ一覧 */
         props.socket.on('show_answer' ,(data) => show_answer(data));
         props.socket.on('hand_selection' ,() => reset_answer());
         props.socket.on('result' ,() => reset_answer());
-    });
-
-    const [showanswer,setShowAnswer] = useState(false);
-    const [src, setSrc] = useState('');
-
-    const show_answer = (data) => {
-        let filename = data.game.field.masterCard.filename;
-        setSrc("../images/" + filename + ".jpg");
-        setShowAnswer(true);
-        props.socket.emit('calc_score');
-    }
-
-    const reset_answer = () => {
-        setShowAnswer(false);
-    }
+    }, [ props.socket ]);
 
     return(
         <div id="answer" style={ {display: showanswer ? 'inline' : 'none'} }>

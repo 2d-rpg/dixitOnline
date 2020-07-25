@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 export default function PlayerCounter(prop) {
-
+    /** 現在のプレイヤー人数 */
     const [player_num, setPlayerNum] = useState(0);
 
     useEffect(() => {
