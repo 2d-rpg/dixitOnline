@@ -1,18 +1,13 @@
-const { count } = require("../player");
-
 class ShowAnswer {
 
     constructor() {}
 
     static do(socket, game) {
         //スコア計算
-        let answerIndex = game.field.masterCardIndex();
-        let player = game.findPlayer(socket.id);
-        let answers = game.answers;
-        let tmp = [];// {id,cardIndex}
-        Object.keys(answers).forEach(answer => {
-            tmp.push(answer);
-        });
+        const answerIndex = game.field.masterCardIndex();
+        const player = game.findPlayer(socket.id);
+        const answers = game.answers;
+        console.log('[debug] BEFORE ' + player.name + ': ' + player.score);
         if(answers.every(value => value.cardIndex === answerIndex)) {// 全員正解の場合
             if(!player.isMaster) {// 子
                 player.score += 2;
@@ -21,7 +16,7 @@ class ShowAnswer {
             if(!player.isMaster) {// 子
                 player.score += 2;
                 // 間違えさせた分
-                let count = answers.filter(answer => game.field.cards[answer.cardIndex].player === player.socketId).length;
+                const count = answers.filter(answer => game.field.cards[answer.cardIndex].player === player.socketId).length;
                 player.score += count; //
             }
         } else {// 正解したが全員でない場合
@@ -35,11 +30,12 @@ class ShowAnswer {
                     player.score += 3;
                 }
                 // 間違えさせた分
-                let count = answers.filter(answer => game.field.cards[answer.cardIndex].player.socketId === player.socketId).length;
+                const count = answers.filter(answer => game.field.cards[answer.cardIndex].player.socketId === player.socketId).length;
                 player.score += count; //
             }
         }
         player.done();
+        console.log('[debug] AFTER ' + player.name + ': ' + player.score);
     }
 }
 

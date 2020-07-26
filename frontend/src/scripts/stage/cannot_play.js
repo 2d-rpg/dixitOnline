@@ -1,17 +1,16 @@
 // cannot_play画面
+import React, { useEffect } from 'react';
 
-import {Utils} from './utils.js'
+export default function CannotPlay(porps) {
 
-export class CannotPlay {
+    useEffect(() => {
+        const restart = () => {
+            porps.socket.emit('init');
+        };
 
-    static do(context, canvas) {
-        // 名前入力フォーム表示
-        document.getElementById("entryForm").style.display = 'block';
-        Utils.clearDisplay();
-        const fontSize = 20;
-        context.font = fontSize + 'px Bold Arial';
-        const message = '現在プレイ中です しばらくお待ちください';
-        // メッセージをcanvas中央に配置
-        context.fillText(message, canvas.width / 2 - message.length * fontSize / 2, canvas.height / 2 - fontSize / 2);
-    }
+        porps.socket.on('restart', () => restart());
+    }, [ props.socket ]);
+
+    return(<div></div>);
+
 }

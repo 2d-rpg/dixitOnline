@@ -1,24 +1,28 @@
 import React, {useState, useEffect} from 'react';
-import { io } from 'socket.io-client';
 
 export default function Progress(props) {
+
+    const [message, setMassage] = useState('ようこそ！');
     // 文章を集約
-    let htmlText = "";
-    let waiting = "参加プレイヤーが集まるのを待っています...";
+    const cannot_play = '現在プレイ中です しばらくお待ちください';
+    const waiting_entry = '他のプレイヤーが参加するのを待っています...';
+    // const master_hand_selection = 'あなたは語り部です カードを選択してください';
+    // const waiting_master_hand_selection = '現在語り部がカードとお題を考え中です しばらくお待ちください';
+    // const story_selection = '選択したカードのお題を入力して下さい';
+    const others_hand_selection = 'お題に沿ったカードを選択してください';
+    // const waiting_others_selection = "他のユーザーのカード選択を待っています";
+    // const others_filed_selection = 'お題に沿ったカードを手札から選んで下さい';
+    // const waiting_filed_selection = '他のプレイヤーがフィールドから選択中です しばらくお待ちください...';
     
     useEffect(() => {
-        props.socket.on('start' ,(data) => {
-            htmlText = waiting;
-        });
-        props.socket.on('entry' ,(data) => {
-            htmlText = waiting+"fffff";
-        });
-        props.socket.on('hand_selection' ,() => {
-
-        });
-    }, []);
+        props.socket.on('cannot_play' ,(data) => setMassage(cannot_play));
+        props.socket.on('start' ,(data) => setMassage(waiting_entry));
+        // props.socket.on('entry' ,(data) => setMassage());
+        props.socket.on('hand_selection' ,() => setMassage());
+        props.socket.on('others_hand_selection' ,() => setMassage(others_hand_selection));
+    });
 
     return (
-        <div id="progress">{htmlText}</div>
+        <div id="progress">{ message }</div>
     );
 }
