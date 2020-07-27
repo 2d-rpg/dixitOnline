@@ -21,15 +21,15 @@ const round_end = require('./src/scripts/stage/round_end');
 const disconnect = require('./src/scripts/stage/disconnect');
 // const fs = require('fs');
 const socketIO = require('socket.io');
-const app = express();
-const server = http.Server(app);
+// const app = express();
+const server = http.Server();
 const io = socketIO(server);
 
 // ゲームオブジェクト作成
 let game = new Game();
 // 接続が完了したときに呼び出す関数
-io.on('connection', function(socket) {
-    //行動する必要がない時
+io.on('connection', (socket) => {
+    // 行動する必要がない時
     socket.on('wait', () => wait.do(socket, game));
     // クライアント接続時
     socket.on('init', (config) => init.do(config, io, socket, game));
@@ -37,20 +37,20 @@ io.on('connection', function(socket) {
     socket.on('entry', (data) =>  entry.do(data, io, socket, game));
     // クライアントからstartがemitされた時
     socket.on('start', () => start.do(socket, game));
-    //クライアントからstory_selectionがemitされた時
+    // クライアントからstory_selectionがemitされた時
     socket.on('story_selection', (data) => story_selection.do(socket, io, data.message,data.masterIndex, game));
-    //クライアントからstory_selectionがemitされた時
+    // クライアントからstory_selectionがemitされた時
     socket.on('others_hand_selection', (data) => others_hand_selection.do(socket, io, data.index, game));
-    //クライアントからfield_selecitonがemitされた時
+    // クライアントからfield_selecitonがemitされた時
     socket.on('field_selection', (data) => field_selection.do(socket, data.index, game));
-    //クライアントからfield_selecitonがemitされた時
+    // クライアントからfield_selecitonがemitされた時
     socket.on('calc_score', () => calc_score.do(socket, game));
-    //クライアントからfield_selecitonがemitされた時
+    // クライアントからfield_selecitonがemitされた時
     socket.on('round_end', () => round_end.do(socket, game));
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
     // TODO: つまりリロードすると復帰不可
-    socket.on('disconnect', () => disconnect.do(io, socket, game));
+    socket.on('disconnect', (reason) => disconnect.do(io, socket, game, reason));
     // メッセージ用
     socket.on('chat_send_from_client', function(data) {
         let name = 'ゲスト';
@@ -62,25 +62,26 @@ io.on('connection', function(socket) {
     });
 });
 
-setInterval(function() {
+setInterval(() => {
     // 全プレイヤーがステージ移行可能ならば移行する
     if (game.isAllDone()) { // 全てのプレイヤーが次のステージにいける状態
         game.nextStage(io);
     }
-    // プレイヤーの状態をemit
-    // io.sockets.emit('state', players);
 }, 1000/30);
 
-app.use('/', express.static(__dirname + '/src'));
+// app.use('/', express.static(__dirname + '/src'));
+// io.use((socket, next) => {
+    // console.log(socket.request);
+// });
 
 // HTTPサーバを生成する
 // サーバー生成時にfunction以下のリクエストリスナーが登録されるため
 // クライアントからHTTPリクエストが送信されるたびにfunctionが実行される
 // ここではヘッダ出力(writeHead)とindex.htmlの出力(readFileSync)
-app.get('/', (request, response) => {
-  response.sendFile(path.join(__dirname, '/src/index.html'));
-});
+// app.post('/', (request, response) => {
+//     response.sendFile(path.join(__dirname, '/src/index.html'));
+// });
 
-server.listen(4001, function() {
+server.listen(4001, () => {
   utils.log('Starting server on port 4001');
 });

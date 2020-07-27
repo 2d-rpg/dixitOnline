@@ -10,6 +10,7 @@ class Entry {
         if (game.getLength() < 3) { // プレイヤー人数が3人未満の時
             // プレイヤー追加
             let player = game.addPlayer(data, socket);
+            console.log(socket.handshake.quey);
             // 全クライアントのプレイヤー人数表示更新
             io.sockets.emit('update_number_of_player', {num : game.getLength()});
             utils.logWithStage('entry', 'Player Name: [' + player.name + '] ([' 
