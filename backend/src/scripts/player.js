@@ -1,7 +1,6 @@
 'use strict';
 // import modules
 const Hand = require('./hand');
-const Card = require('./card');
 
 // プレイヤークラス
 class Player {

@@ -19,6 +19,7 @@ export default function Start(props) {
         };
         /** サーバから'start'がemitされたときのイベントハンドラ登録 */
         props.socket.on('start', (data) => start(data.player));
+        props.socket.on('reconnect', (data) => props.socket.io.opts.query = { user: data.name });
     }, [ props.socket ]);
 
     /** スタートボタンを押したときの動作 */
