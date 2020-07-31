@@ -1,7 +1,6 @@
 // init
 
 const utils = require('../utils');
-const cookie = require('cookies');
 
 class Init {
 
