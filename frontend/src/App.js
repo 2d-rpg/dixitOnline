@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,7 +6,8 @@ import PlayerCounter from './scripts/playerCounter';
 import Progress from './scripts/progress';
 import Chat from './scripts/chat';
 import Init from './scripts/stage/init';
-import Entry from './scripts/stage/entry'
+import Entry from './scripts/stage/entry';
+import Upload from './scripts/stage/upload';
 import Start from './scripts/stage/start';
 import HandSelection from './scripts/stage/hand_selection';
 // import socketIOClient from "socket.io-client";
@@ -23,6 +24,7 @@ const socket = io(ENDPOINT, {
   transports: ['websocket'],
   upgrade: false
 });
+
 console.log(socket.io.opts.query);
 console.log(document.cookie);
 socket.on('connect_timeout', () => console.log('timeout'));
@@ -34,21 +36,22 @@ socket.on('reconnect_failed', () => console.log('reconnect_failed'));
 socket.on('connect_error', (error) => console.log('connect_error: ' + error));
 
 function App() {
-
+  const [message, setMessage] = useState('ようこそ！');
   return (
     <div className="container">
       <h1>Dixit Online</h1>
       <Init socket={ socket }/>
       <Chat socket={ socket }/>
       <PlayerCounter socket={ socket }/>
-      <Progress socket={ socket }/>
-      <Entry socket={ socket }/>
-      <Start socket={ socket }/>
-      <HandSelection socket={ socket } />
-      <FieldSelection socket={ socket }/>
-      <ShowAnswer socket={ socket }/>
-      <ShowScore socket={ socket }/>
-      <Result socket={ socket }/>
+      <div id="progress">{ message }</div>
+      <Entry socket={ socket } setMessage={ setMessage }/>
+      <Upload socket={ socket }/>
+      <Start socket={ socket } setMessage={ setMessage }/>
+      <HandSelection socket={ socket } setMessage={ setMessage }/>
+      <FieldSelection socket={ socket } setMessage={ setMessage }/>
+      <ShowAnswer socket={ socket } setMessage={ setMessage }/>
+      <ShowScore socket={ socket } setMessage={ setMessage }/>
+      <Result socket={ socket } setMessage={ setMessage }/>
     </div>
   );
 }

@@ -47,6 +47,7 @@ export default function HandSelection(props) {
                     })
                 );
             }
+            props.setMessage('aaa');
         };
         /** 語り部が手札からカードを選択したときの動作 */
         const master_select = (data, index) => {

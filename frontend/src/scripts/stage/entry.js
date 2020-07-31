@@ -26,6 +26,7 @@ export default function Entry(props) {
         setCookie('client-id', data.username, {path: '/'});
         props.socket.emit('entry', {username : data.username});
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
+        props.setMessage('他のプレイヤーが参加するのを待っています( ´ ▽ ` )');
     }
 
     return (
