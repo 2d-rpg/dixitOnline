@@ -19,6 +19,7 @@ export default function FieldSelection(props) {
         const field_selection = (data) => {
             setShowField(true);
             if(!data.player.isMaster){ // 語り部以外のプレイヤーの場合
+                props.setMessage('あなたは子です(ﾟ∀ﾟ)親が出したと思うカードを選択してください(=^▽^)σ');
                 setFieldButtons(
                     data.game.field.cards.map((card, index) => {
                         var id = 'field' + index;
@@ -30,6 +31,7 @@ export default function FieldSelection(props) {
                     })
                 );
             }else{ // 語り部の場合
+                props.setMessage('あなたは親です(ﾟ∀ﾟ)子の選択を待ちましょう( ´Д`)y━･~~');
                 setFieldButtons(
                     data.game.field.cards.map((card) => {
                         var hand_src = "../images/" + card.filename + ".jpg";
@@ -41,6 +43,7 @@ export default function FieldSelection(props) {
         };
         /** 語り部以外のプレイヤーがフィールド上のカードを選んだときの動作 */
         const others_field_select = (socket,data,index) => {
+            props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
             setShowField(false);
             setSrc("../images/" + data.game.field.cards[index].filename + ".jpg");
             setShowSelected(true);

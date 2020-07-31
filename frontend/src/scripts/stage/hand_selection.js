@@ -29,6 +29,7 @@ export default function HandSelection(props) {
             setStory('');
             setSelectedCard(false);
             if(data.player.isMaster){ //語り部の場合
+                props.setMessage('あなたは親です(ﾟ∀ﾟ)カードを選択してください(=^▽^)σ');
                 setHandButtons(
                     data.player.hand._array.map((card, index) => {
                         var id = 'hand' + index;
@@ -40,6 +41,7 @@ export default function HandSelection(props) {
                     })
                 );
             }else{ // 語り部以外のプレイヤーの場合
+                props.setMessage('あなたは子です(ﾟ∀ﾟ)待機中( ´Д`)y━･~~');
                 setHandButtons(
                     data.player.hand._array.map((card) => {
                         var hand_src = "../images/" + card.filename + ".jpg";
@@ -47,7 +49,6 @@ export default function HandSelection(props) {
                     })
                 );
             }
-            props.setMessage('aaa');
         };
         /** 語り部が手札からカードを選択したときの動作 */
         const master_select = (data, index) => {
@@ -56,6 +57,7 @@ export default function HandSelection(props) {
         };
         /** 語り部が手札から選んだカードの表示と手札の非表示及びお題フォームの表示 */
         const story_selection = (data, index) => {
+            props.setMessage('あなたは親です(ﾟ∀ﾟ)カードのお題を入力してください⊂((・x・))⊃');
             setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
             setSelectedCard(true);
             //setShowHand(false);
@@ -64,9 +66,10 @@ export default function HandSelection(props) {
         /** 語り部以外のプレイヤーの手札の表示 */
         const others_hand_selection = (data) => {
             if(data.player.isMaster){
+                props.setMessage('あなたは親です(ﾟ∀ﾟ)待機中( ´Д`)y━･~~');
                 props.socket.emit('wait');
             }else{
-                console.log("others_hand_selectionにきたよ");
+                props.setMessage('あなたは子です(ﾟ∀ﾟ)お題に沿ったカードを選択してください(=^▽^)σ');
                 console.log(data.player.hand);
                 setShowHand(true);
                 setStory("お題:" + data.game.masterClaim);
@@ -84,6 +87,7 @@ export default function HandSelection(props) {
         };
         /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
         const others_select = (socket, data, index) => {
+            props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
             setShowHand(false);
             setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
             setSelectedCard(true);
