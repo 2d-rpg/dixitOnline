@@ -62,8 +62,14 @@ export default function HandSelection(props) {
         };
         /** 語り部以外のプレイヤーの手札の表示 */
         const others_hand_selection = (data) => {
-            setStory("お題:" + data.game.masterClaim);
-            setHandButtons(
+            if(data.player.isMaster){
+                props.socket.emit('wait');
+            }else{
+                console.log("others_hand_selectionにきたよ");
+                console.log(data.player.hand);
+                setShowHand(true);
+                setStory("お題:" + data.game.masterClaim);
+                setHandButtons(
                 data.player.hand._array.map((card, index) => {
                     var id = 'hand' + index;
                     var hand_src = "../images/" + card.filename + ".jpg";
@@ -73,6 +79,7 @@ export default function HandSelection(props) {
                     </button>);
                 })
             );
+            }
         };
         /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
         const others_select = (socket, data, index) => {

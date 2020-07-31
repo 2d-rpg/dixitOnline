@@ -13,10 +13,11 @@ const status = [
     'entry',                 // 0
     'start',                 // 1
     'hand_selection',        // 2
-    'field_selection',       // 3
-    'show_answer',           // 4
-    'show_score',            // 5
-    'result'                 // 6
+    'others_hand_selection', // 3
+    'field_selection',       // 4
+    'show_answer',           // 5
+    'show_score',            // 6
+    'result'                 // 7
 ];
 
 class Game {
@@ -24,7 +25,7 @@ class Game {
     /** ゲーム終了基準点(MAX_SCORE) */
     static MAX_SCORE = 5;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
-    static STAGE_NUM = 5;
+    static STAGE_NUM = 6;
     /** カード枚数 */
     static CARD_NUM = 20;
     /** プレイヤー人数 */
@@ -80,7 +81,7 @@ class Game {
         } else {
             this.stageIndex = 2; // hand_selectionへ
             if(this.checkScore()) { // 終了条件
-                this.stageIndex = 6; // result画面へ
+                this.stageIndex = 7; // result画面へ
             }
         }
         if(this.stageIndex == 2){ // hand_selection
@@ -92,7 +93,7 @@ class Game {
             this.players.forEach(player => player.draw(this.stock));
             this.resetAnswers();
         } 
-        if(this.stageIndex == 3){// fieldの更新
+        if(this.stageIndex == 4){// fieldの更新
             this.handToField();
         }
         
@@ -220,6 +221,7 @@ class Game {
             }
         });
         socket.emit(this.stage, {others : others, player : player, game : this});
+        console.log("復帰" + this.stage);
     }
 }
 

@@ -10,12 +10,11 @@ class StorySelection {
         game.setMasterClaim(message);
         let player = game.findPlayer(socket.id);
         player.selectFromHand(masterIndex);
-        player.done();
+        //player.done();
+
 
         game.players.forEach(eachPlayer => {
-	        if (player != eachPlayer) {
-                io.to(eachPlayer.socketId).emit('others_hand_selection', {game : game, player : eachPlayer});
-            }
+	        eachPlayer.done()
         });
 	}
 }
