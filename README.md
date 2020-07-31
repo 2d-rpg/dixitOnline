@@ -29,9 +29,19 @@
 - [google drawings](https://docs.google.com/drawings/d/1RziwR98sGqgaBaB3Q2iUu9hP-BSzAivgzpFYMBZ3xn8/edit)
 - [コード解説(wiki)](https://github.com/2d-rpg/dixitOnline/wiki/%E3%82%B3%E3%83%BC%E3%83%89%E8%A7%A3%E8%AA%AC)
 
-- 7/26(Sun) :
+- 8/2(Sun) :
     - UIデザイン
-    - progressについて
+    - アニメーション
+
+- 7/31(Fri) :
+    - hand_selection分離([PR #24](https://github.com/2d-rpg/dixitOnline/pull/24))
+    - progress修正([PR #25](https://github.com/2d-rpg/dixitOnline/pull/25), [PR #27](https://github.com/2d-rpg/dixitOnline/pull/27))
+    - ファイルのアップロード実装
+    - 画像の追加
+    - result画面後の遷移([PR #26](https://github.com/2d-rpg/dixitOnline/pull/26))
+
+- 7/26(Sun) :
+    - cookieを用いた復帰実装([PR #23](https://github.com/2d-rpg/dixitOnline/pull/23))
 
 - 7/24(Fri) :
     - show_answer ~ calc_result ~ hand_selection までのループ実装([PR #20](https://github.com/2d-rpg/dixitOnline/pull/20))
