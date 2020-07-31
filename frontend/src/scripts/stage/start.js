@@ -26,6 +26,7 @@ export default function Start(props) {
     const handleclick = () => {
         setShow(false);
         props.socket.emit('start');
+        props.setMessage('他のプレイヤーのスタートを待っています♪〜< (° ε° ) >');
     };
 
     return (
