@@ -2,6 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 
+const WIDTH = '100';
+const HEIGHT = '200';
+
 export default function FieldSelection(props) {
 
     /** フィールドを表示するか否か */
@@ -22,18 +25,18 @@ export default function FieldSelection(props) {
                 setFieldButtons(
                     data.game.field.cards.map((card, index) => {
                         var id = 'field' + index;
-                        var hand_src = "../images/" + card.filename + ".jpg";
+                        var hand_src = "../images/" + card.filename;
                         return (
                         <button id={ id } type='button' onClick={ () => others_field_select(props.socket, data, index)}>
-                            <img width='100' height='100' src={ hand_src } alt={ card.filename }></img>
+                            <img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>
                         </button>);
                     })
                 );
             }else{ // 語り部の場合
                 setFieldButtons(
                     data.game.field.cards.map((card) => {
-                        var hand_src = "../images/" + card.filename + ".jpg";
-                        return (<img width='100' height='100' src={ hand_src } alt={ card.filename }></img>);
+                        var hand_src = "../images/" + card.filename;
+                        return (<img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>);
                     })
                 );
                 props.socket.emit('wait');
@@ -42,7 +45,7 @@ export default function FieldSelection(props) {
         /** 語り部以外のプレイヤーがフィールド上のカードを選んだときの動作 */
         const others_field_select = (socket,data,index) => {
             setShowField(false);
-            setSrc("../images/" + data.game.field.cards[index].filename + ".jpg");
+            setSrc("../images/" + data.game.field.cards[index].filename);
             setShowSelected(true);
             socket.emit('field_selection', {index : index});
         }
@@ -62,7 +65,7 @@ export default function FieldSelection(props) {
             <div id="field" style={ {display: showfield ? 'inline' : 'none'} }>{ field_buttons }</div>
             <div className="form-inline" id="selected_field_card" style={{display: showselected ? 'inline' : 'none'}}>
                 あなたが選んだカード:
-                <img id="selected_field_card" width="200" height="200" src={src} alt="フィールドから選んだカード"/>
+                <img id="selected_field_card" width={ WIDTH } height={ HEIGHT } src={ src } alt="フィールドから選んだカード"/>
             </div> 
         </div>
     );

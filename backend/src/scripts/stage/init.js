@@ -9,7 +9,7 @@ class Init {
     static do(config, io, socket, game) {
         io.sockets.emit('update_number_of_player', { num: game.getLength() });
         console.log(socket.handshake.query);
-        if (game.getLength() < 3) { // プレイヤー人数が3人未満のとき
+        if (game.getLength() < 3 && game.stageIndex === 0) { // プレイヤー人数が3人未満のとき
             utils.logWithStage('init', 'socket id: [' + socket.id + '] was added');
         } else { // 3人以上場合
             // クエリ(cookie)を取得し，ゲームへの復帰を行う

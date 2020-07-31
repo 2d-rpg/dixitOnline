@@ -1,4 +1,6 @@
-// init
+/**
+ * wait
+ */
 
 const utils = require('../utils');
 

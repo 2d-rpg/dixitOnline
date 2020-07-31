@@ -4,6 +4,7 @@ const Discard = require('./discard');
 const Field = require('./field');
 const Card = require('./card');
 const utils = require('./utils');
+const fs = require('fs');
 
 // private static property
 // 外からのアクセス不可
@@ -34,8 +35,10 @@ class Game {
     constructor() {
         /** 山札(stock) */
         this.stock = new Stock();
-        for (var i = 0; i < Game.CARD_NUM; i++) { 
-            this.stock.push(new Card(utils.randomSample(18)));
+        const files = fs.readdirSync('../frontend/public/images/');
+        utils.shuffle(files);
+        for (var i = 0; i < files.length; i++) { 
+            this.stock.push(new Card(files[i]));
         }
         /** このゲームに参加しているプレイヤー */
         this.players = new Array(Game.PLAYER_NUM).fill(null);
@@ -54,6 +57,20 @@ class Game {
         this.masterClaim = "";
         /** 投票の結果 */
         this.answers = [];
+    }
+
+    reset() {
+        this.stock = new Stock();
+        const files = fs.readdirSync('../frontend/public/images/');
+        utils.shuffle(files);
+        for (var i = 0; i < files.length; i++) { 
+            this.stock.push(new Card(files[i]));
+        }
+        this.discard = new Discard();
+        this.field = new Field();
+        this.stage = status[0];
+        this.stageIndex = 0;
+        this.master = -1;
     }
 
     /** プレイヤーの追加 */
@@ -84,34 +101,39 @@ class Game {
                 this.stageIndex = 7; // result画面へ
             }
         }
-        if(this.stageIndex == 2){ // hand_selection
+        // 更新後
+        if (this.stageIndex == 2) { // hand_selection
             this.updateMaster(); // 語り部更新
             this.fieldToDiscard();
-            if(this.stock._array.length < this.players.length) {
+            if(this.stock._array.length < this.getLength()) {
                 this.discardToStock();
             }
             this.players.forEach(player => player.draw(this.stock));
             this.resetAnswers();
         } 
-        if(this.stageIndex == 4){// fieldの更新
+        if (this.stageIndex === 4) {// fieldの更新
             this.handToField();
         }
-        
+        this.stageIndex = this.stageIndex % 8;
         this.stage = status[this.stageIndex];
-        this.players.forEach(player => { // 全プレイヤーの状態リセット
-            player.reset(); // 状態リセット
-        });
-        this.players.forEach(player => { // ステージ移行
-            // ディープコピー (何段階もコピーするのでObject.createは不可)
-            // TODO: もっといい方法あるかも
-            var others = new Array();
-            this.players.forEach(other => {
-                if (player != other) {
-                    others.push(other);
-                }
+        if (this.stageIndex !== 0) {
+            this.players.forEach(player => { // 全プレイヤーの状態リセット
+                player.reset(); // 状態リセット
             });
-            io.to(player.socketId).emit(this.stage, {others : others, player : player, game : this}); // ステージ移行
-        });
+            this.players.forEach(player => { // ステージ移行
+                // ディープコピー (何段階もコピーするのでObject.createは不可)
+                // TODO: もっといい方法あるかも
+                var others = new Array();
+                this.players.forEach(other => {
+                    if (player != other) {
+                        others.push(other);
+                    }
+                });
+                io.to(player.socketId).emit(this.stage, {others : others, player : player, game : this}); // ステージ移行
+            });
+        } else {
+            this.reset();
+        }
         utils.log('Move to stage [' + this.stage + ']');
     }
 
@@ -120,6 +142,10 @@ class Game {
         return this.players
             .filter(player => player != null)
             .filter(player => player.isDone()).length === 3;
+    }
+
+    isFinished() {
+        return this.players.filter(player => player == null).length === 3 && this.stageIndex === 7;
     }
 
     /** 語り部の更新 */
@@ -165,10 +191,9 @@ class Game {
 
     /** socket idによるプレイヤー削除 */
     deletePlayer(id) {
-        this.players.filter(player => player != null).forEach(player => {
-            if (player.socketId == id) {
-                var index = this.players.indexOf(player);
-                this.players.splice(index, 1);
+        this.players.forEach((player, index) => {
+            if (player != null && player.socketId == id) {
+                this.players[index] = null;
                 this.currentNum -= 1;
             }    
         });
