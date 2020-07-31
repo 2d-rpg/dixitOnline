@@ -57,7 +57,7 @@ export default function HandSelection(props) {
         const story_selection = (data, index) => {
             setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
             setSelectedCard(true);
-            setShowHand(false);
+            //setShowHand(false);
             setShowStoryForm(true);
         };
         /** 語り部以外のプレイヤーの手札の表示 */
@@ -102,6 +102,7 @@ export default function HandSelection(props) {
 
     /** お題のフォーム送信ボタンを押したときの動作 */
     const onSubmit = (data, event) => {
+        setShowHand(false);
         setShowStoryForm(false);
         setStory("お題:" + data.story);
         // サーバーに'story_selection'を送信
