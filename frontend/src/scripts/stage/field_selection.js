@@ -2,6 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 
+const WIDTH = '100';
+const HEIGHT = '200';
+
 export default function FieldSelection(props) {
 
     /** フィールドを表示するか否か */
@@ -23,10 +26,10 @@ export default function FieldSelection(props) {
                 setFieldButtons(
                     data.game.field.cards.map((card, index) => {
                         var id = 'field' + index;
-                        var hand_src = "../images/" + card.filename + ".jpg";
+                        var hand_src = "../images/" + card.filename;
                         return (
                         <button id={ id } type='button' onClick={ () => others_field_select(props.socket, data, index)}>
-                            <img width='100' height='100' src={ hand_src } alt={ card.filename }></img>
+                            <img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>
                         </button>);
                     })
                 );
@@ -34,8 +37,8 @@ export default function FieldSelection(props) {
                 props.setMessage('あなたは親です(ﾟ∀ﾟ)子の選択を待ちましょう( ´Д`)y━･~~');
                 setFieldButtons(
                     data.game.field.cards.map((card) => {
-                        var hand_src = "../images/" + card.filename + ".jpg";
-                        return (<img width='100' height='100' src={ hand_src } alt={ card.filename }></img>);
+                        var hand_src = "../images/" + card.filename;
+                        return (<img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>);
                     })
                 );
                 props.socket.emit('wait');
@@ -45,7 +48,7 @@ export default function FieldSelection(props) {
         const others_field_select = (socket,data,index) => {
             props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
             setShowField(false);
-            setSrc("../images/" + data.game.field.cards[index].filename + ".jpg");
+            setSrc("../images/" + data.game.field.cards[index].filename);
             setShowSelected(true);
             socket.emit('field_selection', {index : index});
         }
@@ -64,8 +67,8 @@ export default function FieldSelection(props) {
         <div id='field-wrapper'>
             <div id="field" style={ {display: showfield ? 'inline' : 'none'} }>{ field_buttons }</div>
             <div className="form-inline" id="selected_field_card" style={{display: showselected ? 'inline' : 'none'}}>
-                あなたが選んだカード:
-                <img id="selected_field_card" width="200" height="200" src={src} alt="フィールドから選んだカード"/>
+                あなたがフィールドから選んだカード:
+                <img id="selected_field_card" width={ WIDTH } height={ HEIGHT } src={ src } alt="フィールドから選んだカード"/>
             </div> 
         </div>
     );

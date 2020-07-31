@@ -5,6 +5,8 @@ export default function Result(props) {
     const [showresult,setShowResult] = useState(false);
     /** 結果の内容 */
     const [result, setResult] = useState(null);
+    /** 戻るボタンの表示 */
+    const [showButton, setShowButton] = useState(false);
 
     useEffect(() => {
         /** result画面の表示 */
@@ -16,18 +18,24 @@ export default function Result(props) {
             });
             setResult(result_str);
             setShowResult(true);
+            setShowButton(true);
         }
 
         props.socket.on('result' ,(data) => show_result(data));
     }, [ props.socket ]);
 
-    // const reset_score = () => {
-    //     setShowScore(false);
-    // }
+    const handleclick = () => {
+        setShowButton(false);
+        setShowResult(false);
+        props.socket.emit('restart');
+    };
 
     return(
-        <div id="result" style={ {display: showresult ? 'inline' : 'none'} }>
-            { result }
+        <div id="result-wrapper">
+            <div id="result" style={ {display: showresult ? 'inline' : 'none'} }>
+                { result }
+            </div>
+            <button id="backButton" onClick={ handleclick } type="button" className="btn btn-warning" style={ {display: showButton ? 'block' : 'none'} }>戻る</button>
         </div>
     );
 }

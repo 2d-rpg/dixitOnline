@@ -17,9 +17,9 @@ const others_hand_selection = require('./src/scripts/stage/others_hand_selection
 const field_selection = require('./src/scripts/stage/field_selection');
 const calc_score = require('./src/scripts/stage/calc_score');
 const round_end = require('./src/scripts/stage/round_end');
+const restart = require('./src/scripts/stage/restart');
 
 const disconnect = require('./src/scripts/stage/disconnect');
-// const fs = require('fs');
 const socketIO = require('socket.io');
 // const app = express();
 const server = http.Server();
@@ -45,8 +45,10 @@ io.on('connection', (socket) => {
     socket.on('field_selection', (data) => field_selection.do(socket, data.index, game));
     // クライアントからfield_selecitonがemitされた時
     socket.on('calc_score', () => calc_score.do(socket, game));
-    // クライアントからfield_selecitonがemitされた時
+    // クライアントからround_endがemitされた時
     socket.on('round_end', () => round_end.do(socket, game));
+    // クライアントからrestartがemitされた時
+    socket.on('restart', () => restart.do(io, socket, game));
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
     // TODO: つまりリロードすると復帰不可
@@ -60,11 +62,13 @@ io.on('connection', (socket) => {
         }
         io.sockets.emit('chat_send_from_server', {name: name, value : data.value});
     });
+    // 画像のアップロード
+    socket.on('upload', (data) => utils.uploadFile(data.filename, data.image));
 });
 
 setInterval(() => {
     // 全プレイヤーがステージ移行可能ならば移行する
-    if (game.isAllDone()) { // 全てのプレイヤーが次のステージにいける状態
+    if (game.isAllDone() || game.isFinished()) { // 全てのプレイヤーが次のステージにいける状態
         game.nextStage(io);
     }
 }, 1000/30);
@@ -81,6 +85,7 @@ setInterval(() => {
 // app.post('/', (request, response) => {
 //     response.sendFile(path.join(__dirname, '/src/index.html'));
 // });
+
 
 server.listen(4001, () => {
   utils.log('Starting server on port 4001');
