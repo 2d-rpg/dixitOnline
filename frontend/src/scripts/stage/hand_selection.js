@@ -7,7 +7,7 @@ import '../../css/hand_selection.css';
 import $ from 'jquery';
 
 const WIDTH = '100';
-const HEIGHT = '10';
+const HEIGHT = '150';
 
 export default function HandSelection(props) {
     /** 手札を表示するか否か */
@@ -34,44 +34,33 @@ export default function HandSelection(props) {
             // リセット
             setStory('');
             setSelectedCard(false);
+            setHandButtons(
+                data.player.hand._array.map((card, index) => {
+                    var id_btn = 'eachHandButton' + index;
+                    var id_img = 'eachHandImage' + index;
+                    var hand_src = "../images/" + card.filename;
+                    return (
+                    <div className='eachHandContainer' display='inline-flex'>
+                        <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)}>
+                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                        </p>
+                    </div>);
+                })
+            );
             if(data.player.isMaster){ //語り部の場合
                 props.setMessage('あなたは親です(ﾟ∀ﾟ)カードを選択してください(=^▽^)σ');
-                setHandButtons(
-                    data.player.hand._array.map((card, index) => {
-                        var id_btn = 'eachHandButton' + index;
-                        var id_img = 'eachHandImage' + index;
-                        var hand_src = "../images/" + card.filename;
-                        return (
-                        <div className='eachHandContainer' display='inline-flex'>
-                            <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)}>
-                                <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
-                            </p>
-                        </div>);
-                    })
-                );
             }else{ // 語り部以外のプレイヤーの場合
                 props.setMessage('あなたは子です(ﾟ∀ﾟ)待機中( ´Д`)y━･~~');
-                setHandButtons(
-                    data.player.hand._array.map((card) => {
-                        var hand_src = "../images/" + card.filename;
-                        return (<img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>);
-
-                    })
-                );
             }
         };
         /** 語り部が手札からカードを選択したときの動作 */
         const master_select = (data, index) => {
-            for(let i=0;i<6;i++){
-                $('#eachHandButton' + i).removeClass('selected');
+            if(data.player.isMaster){
+                setMasterIndex(index);
+                story_selection(data, index);
+            }else{
+                //TODO:子の表示
             }
-            let target = document.getElementById('eachHandButton' + index);
-            // if (target.className == null || target.className == "eachHandButton") {
-            //     $('#eachHandButton' + index).addClass('selected');
-            //     //target.className = 'active';
-            // }
-            setMasterIndex(index);
-            story_selection(data, index);
         };
         /** 語り部が手札から選んだカードの表示と手札の非表示及びお題フォームの表示 */
         const story_selection = (data, index) => {
@@ -93,22 +82,26 @@ export default function HandSelection(props) {
                 setStory("お題:" + data.game.masterClaim);
                 setHandButtons(
                 data.player.hand._array.map((card, index) => {
-                    var id = 'hand' + index;
+                    var id_btn = 'eachHandButton' + index;
+                    var id_img = 'eachHandImage' + index;
                     var hand_src = "../images/" + card.filename;
                     return (
-                    <button id={ id } type='button' onClick={ () => others_select(props.socket,data,index)}>
-                        <img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>
-                    </button>);
+                        <div className='eachHandContainer' display='inline-flex'>
+                            <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => others_select(props.socket,data, index)}>
+                                <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                            </p>
+                        </div>);
                 })
             );
             }
         };
         /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
         const others_select = (socket, data, index) => {
+            
             props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
             setShowHand(false);
             setSrc("../images/" + data.player.hand._array[index].filename);
-            setSelectedCard(true);
+            //setSelectedCard(true);
             socket.emit('others_hand_selection', {index : index});
         };
         /** 手札の表示とお題のリセット */
@@ -125,7 +118,7 @@ export default function HandSelection(props) {
 
     /** お題のフォーム送信ボタンを押したときの動作 */
     const onSubmit = (data, event) => {
-        setShowHand(false);
+        setSelectedCard(false);
         setShowStoryForm(false);
         setStory("お題:" + data.story);
         // サーバーに'story_selection'を送信
@@ -137,16 +130,17 @@ export default function HandSelection(props) {
         <div className="hand-container">
             <div id="hand" style={ {display: showhand ? 'inline-flex' : 'none'} }>{ hand_buttons }</div>
             <div id="story">{ story }</div>
-            <form className="form-inline" id="selected_hand_card_form" style={{display: selectedcard ? 'inline' : 'none'}}>
-                あなたが手札から選んだカード:
-                <img id="selected_hand_card" width={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
-            </form> 
+            <div className="master-wrapper">
+                <div className="selected-handcard-wrapper" id="selected-hand-card-wrapper" style={{display: selectedcard ? 'inline' : 'none'}}>
+                    <img id="selected-hand-card" width={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
+                </div> 
 
-            <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>
-                <label htmlFor="claim">お題を入力してね：</label>
-                <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register } placeholder="お題"/>
-                <button type="submit" className="btn btn-primary mb-2">送信</button>
-            </form>
+                <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>
+                    <label htmlFor="claim">お題を入力してね：</label>
+                    <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register } placeholder="お題"/>
+                    <button type="submit" className="btn btn-primary mb-2">送信</button>
+                </form>
+            </div>
         </div>
     );
 }
