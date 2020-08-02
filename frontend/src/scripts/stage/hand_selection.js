@@ -3,8 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import '../../css/hand_selection.css';
+import $ from 'jquery';
+
 const WIDTH = '100';
-const HEIGHT = '200';
+const HEIGHT = '150';
 
 export default function HandSelection(props) {
     /** 手札を表示するか否か */
@@ -35,12 +38,15 @@ export default function HandSelection(props) {
                 props.setMessage('あなたは親です(ﾟ∀ﾟ)カードを選択してください(=^▽^)σ');
                 setHandButtons(
                     data.player.hand._array.map((card, index) => {
-                        var id = 'hand' + index;
+                        var id_btn = 'eachHandButton' + index;
+                        var id_img = 'eachHandImage' + index;
                         var hand_src = "../images/" + card.filename;
                         return (
-                        <button id={ id } type='button' onClick={ () => master_select(data, index)}>
-                            <img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>
-                        </button>);
+                        <div className='handContainer' width={ WIDTH } height={ HEIGHT } display='inline-flex'>
+                            <p className='eachHandButton' id={ id_btn } width={ 1000 } height={ 1000 } type='button' onClick={ () => master_select(data, index)}>
+                                <img className='eachHandImage' id={ id_img } width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>
+                            </p>
+                        </div>);
                     })
                 );
             }else{ // 語り部以外のプレイヤーの場合
@@ -49,12 +55,21 @@ export default function HandSelection(props) {
                     data.player.hand._array.map((card) => {
                         var hand_src = "../images/" + card.filename;
                         return (<img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>);
+
                     })
                 );
             }
         };
         /** 語り部が手札からカードを選択したときの動作 */
         const master_select = (data, index) => {
+            for(let i=0;i<6;i++){
+                $('#eachHandButton' + i).removeClass('selected');
+            }
+            let target = document.getElementById('eachHandButton' + index);
+            if (target.className == null || target.className == "eachHandButton") {
+                $('#eachHandButton' + index).addClass('selected');
+                //target.className = 'active';
+            }
             setMasterIndex(index);
             story_selection(data, index);
         };
@@ -119,8 +134,8 @@ export default function HandSelection(props) {
     };
 
     return (
-        <div>
-            <div id="hand" style={ {display: showhand ? 'inline' : 'none'} }>{ hand_buttons }</div>
+        <div className="hand-container">
+            <div id="hand" style={ {display: showhand ? 'inline-flex' : 'none'} }>{ hand_buttons }</div>
             <div id="story">{ story }</div>
             <form className="form-inline" id="selected_hand_card_form" style={{display: selectedcard ? 'inline' : 'none'}}>
                 あなたが手札から選んだカード:
