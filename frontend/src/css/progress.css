@@ -1,4 +1,6 @@
 #progress
 {
-    top: 50%;
+    position: absolute;
+    margin-top: 30%;
+    width: 100%;
 }

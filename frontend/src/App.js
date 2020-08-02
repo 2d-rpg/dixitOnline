@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import './css/game.css';
+import './css/progress.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PlayerCounter from './scripts/playerCounter';
 import Chat from './scripts/chat';
