@@ -11,6 +11,7 @@ export default function Result(props) {
     useEffect(() => {
         /** result画面の表示 */
         const show_result = (data) => {
+            props.setMessage('結果発表ですわぁ(⌒,_ゝ⌒)');
             let result_str = "";
             data.game.players.forEach(player => {
                 result_str += player.name + ": " + player.score + "点 ";

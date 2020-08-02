@@ -12,6 +12,7 @@ export default function Start(props) {
     useEffect(() => {
         /** プレイヤーが揃ったので，スタートボタンを表示 */
         const start = (player) => {
+            props.setMessage('準備が出来たらスタートボタンを押しましょうᕦ(ò_óˇ)ᕤ');
             setShow(true);
             setName(player.name);
             setShowName(true);
