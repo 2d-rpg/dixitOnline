@@ -1,0 +1,31 @@
+.hand-container
+{
+    position: absolute;
+    margin-top: 30%;
+    height: 100%;
+    width: 100%;
+}
+
+.handContainer{
+    position: relative;
+}
+
+.eachHandButton
+{
+/* transition: 2.5s; */
+    position: relative;
+}
+
+.eachHandImage
+{
+    transition: 2s;
+}
+
+.eachHandButton.selected
+{
+    background-color: red;
+    position: absolute;
+    transition: 1s;
+    top: -10%;
+    /* margin-top: 20px; */
+}
