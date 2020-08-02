@@ -3,6 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+const WIDTH = '100';
+const HEIGHT = '200';
+
 export default function HandSelection(props) {
     /** 手札を表示するか否か */
     const [showhand,setShowHand] = useState(false);
@@ -32,18 +35,18 @@ export default function HandSelection(props) {
                 setHandButtons(
                     data.player.hand._array.map((card, index) => {
                         var id = 'hand' + index;
-                        var hand_src = "../images/" + card.filename + ".jpg";
+                        var hand_src = "../images/" + card.filename;
                         return (
                         <button id={ id } type='button' onClick={ () => master_select(data, index)}>
-                            <img width='100' height='100' src={ hand_src } alt={ card.filename }></img>
+                            <img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>
                         </button>);
                     })
                 );
             }else{ // 語り部以外のプレイヤーの場合
                 setHandButtons(
                     data.player.hand._array.map((card) => {
-                        var hand_src = "../images/" + card.filename + ".jpg";
-                        return (<img width='100' height='100' src={ hand_src } alt={ card.filename }></img>);
+                        var hand_src = "../images/" + card.filename;
+                        return (<img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>);
                     })
                 );
             }
@@ -56,7 +59,7 @@ export default function HandSelection(props) {
         };
         /** 語り部が手札から選んだカードの表示と手札の非表示及びお題フォームの表示 */
         const story_selection = (data, index) => {
-            setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
+            setSrc("../images/" + data.player.hand._array[index].filename);
             setSelectedCard(true);
             //setShowHand(false);
             setShowStoryForm(true);
@@ -73,10 +76,10 @@ export default function HandSelection(props) {
                 setHandButtons(
                 data.player.hand._array.map((card, index) => {
                     var id = 'hand' + index;
-                    var hand_src = "../images/" + card.filename + ".jpg";
+                    var hand_src = "../images/" + card.filename;
                     return (
                     <button id={ id } type='button' onClick={ () => others_select(props.socket,data,index)}>
-                        <img width='100' height='100' src={ hand_src } alt={ card.filename }></img>
+                        <img width={ WIDTH } height={ HEIGHT } src={ hand_src } alt={ card.filename }></img>
                     </button>);
                 })
             );
@@ -85,7 +88,7 @@ export default function HandSelection(props) {
         /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
         const others_select = (socket, data, index) => {
             setShowHand(false);
-            setSrc("../images/" + data.player.hand._array[index].filename + ".jpg");
+            setSrc("../images/" + data.player.hand._array[index].filename);
             setSelectedCard(true);
             socket.emit('others_hand_selection', {index : index});
         };
@@ -117,7 +120,7 @@ export default function HandSelection(props) {
             <div id="story">{ story }</div>
             <form className="form-inline" id="selected_hand_card_form" style={{display: selectedcard ? 'inline' : 'none'}}>
                 あなたがフィールドから選んだカード:
-                <img id="selected_hand_card" width="200" height="200" src={ src } alt="あなたが選んだカード"/> 
+                <img id="selected_hand_card" width={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
             </form> 
 
             <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>

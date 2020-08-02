@@ -20,6 +20,7 @@ export default function Start(props) {
         /** サーバから'start'がemitされたときのイベントハンドラ登録 */
         props.socket.on('start', (data) => start(data.player));
         props.socket.on('reconnect', (data) => props.socket.io.opts.query = { user: data.name });
+        props.socket.on('restart', () => setShowName(false));
     }, [ props.socket ]);
 
     /** スタートボタンを押したときの動作 */
@@ -31,7 +32,7 @@ export default function Start(props) {
 
     return (
         <div>
-            <button id="startButton" onClick={handleclick} type="button" className="btn btn-warning" style={ {display: show ? 'inline' : 'none'} }>スタート</button>
+            <button id="startButton" onClick={ handleclick } type="button" className="btn btn-warning" style={ {display: show ? 'inline' : 'none'} }>スタート</button>
             <div style={ {display: showName ? 'block' : 'none' } }>あなたの名前：{ name }</div>
         </div>
     );

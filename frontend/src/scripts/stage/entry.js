@@ -17,6 +17,7 @@ export default function Entry(props) {
         props.socket.on('show_answer', () => setShow(false));
         props.socket.on('show_score', () => setShow(false));
         props.socket.on('result', () => setShow(false));
+        props.socket.on('restart', () => setShow(true));
     }, [ props.socket ]);
 
     /** エントリーフォーム入力時の動作 */
