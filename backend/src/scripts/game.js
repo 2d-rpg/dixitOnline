@@ -110,9 +110,6 @@ class Game {
             this.players.forEach(player => player.draw(this.stock));
             this.resetAnswers();
         } 
-        if (this.stageIndex === 3) {// fieldの更新
-            this.handToField();
-        }
         this.stageIndex = this.stageIndex % 7;
         this.stage = status[this.stageIndex];
         if (this.stageIndex !== 0) {
@@ -199,6 +196,7 @@ class Game {
     }
 
     /** 手札のカードをフィールドに移動 */
+    // TODO
     handToField() {
         this.players.forEach(player => {
             let card = player.hand.pop();

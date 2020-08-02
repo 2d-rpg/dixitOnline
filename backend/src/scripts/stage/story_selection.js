@@ -12,6 +12,10 @@ class StorySelection {
         player.selectFromHand(masterIndex);
         //player.done();
 
+        let card = player.hand.pop();
+        game.field.add(card, game);
+        socket.emit('update_hand',{player:player});
+
 
         game.players.forEach(eachPlayer => {
 	        eachPlayer.done()

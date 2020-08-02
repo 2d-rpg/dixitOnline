@@ -99,7 +99,7 @@ export default function HandSelection(props) {
         const others_select = (socket, data, index) => {
             
             props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
-            setShowHand(false);
+            //setShowHand(false);
             setSrc("../images/" + data.player.hand._array[index].filename);
             //setSelectedCard(true);
             socket.emit('others_hand_selection', {index : index});
@@ -114,6 +114,7 @@ export default function HandSelection(props) {
         props.socket.on('hand_selection' ,(data) => hand_selection(data));
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
         props.socket.on('result',(data) => reset_selected());
+        props.socket.on('update_hand',(data) => update_hand(data.player));
     }, [ props.socket ]);
 
     /** お題のフォーム送信ボタンを押したときの動作 */
@@ -125,6 +126,23 @@ export default function HandSelection(props) {
         props.socket.emit('story_selection', {message : data.story, masterIndex : masterIndex});
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
     };
+
+    const update_hand = (player) => {
+        setHandButtons(
+            player.hand._array.map((card, index) => {
+                var id_btn = 'eachHandButton' + index;
+                var id_img = 'eachHandImage' + index;
+                var hand_src = "../images/" + card.filename;
+                return (
+                <div className='eachHandContainer' display='inline-flex'>
+                    <p className='eachHandButton' id={ id_btn } type='button'>
+                        <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                    </p>
+                </div>);
+            })
+        );
+    }
+
 
     return (
         <div className="hand-container">
