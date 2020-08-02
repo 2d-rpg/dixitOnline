@@ -50,7 +50,8 @@ function App() {
             <div id="progress">{ message }</div>
             <Entry socket={ socket } setMessage={ setMessage }/>
             <Upload socket={ socket }/>
-            <Start socket={ socket } setMessage={ setMessage }/>
+            <div className="startMsg">スタート!</div>
+            {/* <Start socket={ socket } setMessage={ setMessage }/> */}
             <HandSelection socket={ socket } setMessage={ setMessage }/>
             <FieldSelection socket={ socket } setMessage={ setMessage }/>
             <ShowAnswer socket={ socket } setMessage={ setMessage }/>
