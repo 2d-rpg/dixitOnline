@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 // import logo from './logo.svg';
 import './App.css';
+import './css/game.css';
+import './css/progress.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PlayerCounter from './scripts/playerCounter';
 import Chat from './scripts/chat';
@@ -38,19 +40,30 @@ function App() {
   const [message, setMessage] = useState('ようこそ！');
   return (
     <div className="container">
-      <h1>Dixit Online</h1>
-      <Init socket={ socket }/>
-      <Chat socket={ socket }/>
-      <PlayerCounter socket={ socket }/>
-      <div id="progress">{ message }</div>
-      <Entry socket={ socket } setMessage={ setMessage }/>
-      <Upload socket={ socket }/>
-      <Start socket={ socket } setMessage={ setMessage }/>
-      <HandSelection socket={ socket } setMessage={ setMessage }/>
-      <FieldSelection socket={ socket } setMessage={ setMessage }/>
-      <ShowAnswer socket={ socket } setMessage={ setMessage }/>
-      <ShowScore socket={ socket } setMessage={ setMessage }/>
-      <Result socket={ socket } setMessage={ setMessage }/>
+      <div className='header'>
+        <h1>Dixit Online</h1>
+      </div>
+      <div className="game-container">
+        <div className='game-core-wrapper'>
+          <div className='game-core'>
+            <Init socket={ socket }/>
+            <div id="progress">{ message }</div>
+            <Entry socket={ socket } setMessage={ setMessage }/>
+            <Upload socket={ socket }/>
+            <div className="startMsg">スタート!</div>
+            {/* <Start socket={ socket } setMessage={ setMessage }/> */}
+            <HandSelection socket={ socket } setMessage={ setMessage }/>
+            <FieldSelection socket={ socket } setMessage={ setMessage }/>
+            <ShowAnswer socket={ socket } setMessage={ setMessage }/>
+            <ShowScore socket={ socket } setMessage={ setMessage }/>
+            <Result socket={ socket } setMessage={ setMessage }/>
+          </div>
+        </div>
+        <div className="game-chat">
+          <PlayerCounter socket={ socket }/>
+          <Chat socket={ socket }/>
+        </div>
+      </div>
     </div>
   );
 }

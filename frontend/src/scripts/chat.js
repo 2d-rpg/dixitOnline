@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useForm } from 'react-hook-form';
+import '../css/chat.css';
 
 const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
@@ -12,7 +13,6 @@ export default function Chat(props) {
     const [chatLog, appendMsg] = useState([]);
     /** メッセージを送信したときの動作 */
     const onSubmit = (data, event) => {
-        console.log(data.msg);
         props.socket.emit('chat_send_from_client', {value : data.msg});
         reset();
         event.preventDefault();
@@ -28,7 +28,21 @@ export default function Chat(props) {
 
     return (
         <div id='chat-form-wrapper'>
-            <div id="chatLog">{ chatLog.map((data, index) => <div key={ 'message' + index } >{ data.name + ': ' + data.msg + ' ' + data.time }</div>) }</div>
+            <div id="chat-header">
+                <h4>チャット</h4>
+            </div>
+            <div id="chatLog">
+                { chatLog.map((data, index) => 
+                    <div key={ 'message' + index } >
+                        <div id="chatlog-name">
+                            { data.name }
+                        </div>
+                        <div id="chatlog-msg">
+                            <p>{ data.msg }</p>
+                            <span class="time">{ data.time }</span>
+                        </div>
+                    </div>) }
+            </div>
             <form className="form-inline" id="chatForm" onSubmit={ handleSubmit(onSubmit) }>
                 <label htmlFor="msgForm">メッセージ：</label>
                 <input type="text" className="form-control" id="message" name="msg" ref={ register() } placeholder="メッセージ"/>

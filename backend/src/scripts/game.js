@@ -12,13 +12,12 @@ const fs = require('fs');
 // ここに遷移状態を追加
 const status = [
     'entry',                 // 0
-    'start',                 // 1
-    'hand_selection',        // 2
-    'others_hand_selection', // 3
-    'field_selection',       // 4
-    'show_answer',           // 5
-    'show_score',            // 6
-    'result'                 // 7
+    'hand_selection',        // 1
+    'others_hand_selection', // 2
+    'field_selection',       // 3
+    'show_answer',           // 4
+    'show_score',            // 5
+    'result'                 // 6
 ];
 
 class Game {
@@ -26,7 +25,7 @@ class Game {
     /** ゲーム終了基準点(MAX_SCORE) */
     static MAX_SCORE = 5;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
-    static STAGE_NUM = 6;
+    static STAGE_NUM = 5;
     /** カード枚数 */
     static CARD_NUM = 20;
     /** プレイヤー人数 */
@@ -96,13 +95,13 @@ class Game {
         if (this.stageIndex != Game.STAGE_NUM) {
             this.stageIndex += 1;
         } else {
-            this.stageIndex = 2; // hand_selectionへ
+            this.stageIndex = 1; // hand_selectionへ
             if(this.checkScore()) { // 終了条件
-                this.stageIndex = 7; // result画面へ
+                this.stageIndex = 6; // result画面へ
             }
         }
         // 更新後
-        if (this.stageIndex == 2) { // hand_selection
+        if (this.stageIndex == 1) { // hand_selection
             this.updateMaster(); // 語り部更新
             this.fieldToDiscard();
             if(this.stock._array.length < this.getLength()) {
@@ -111,10 +110,7 @@ class Game {
             this.players.forEach(player => player.draw(this.stock));
             this.resetAnswers();
         } 
-        if (this.stageIndex === 4) {// fieldの更新
-            this.handToField();
-        }
-        this.stageIndex = this.stageIndex % 8;
+        this.stageIndex = this.stageIndex % 7;
         this.stage = status[this.stageIndex];
         if (this.stageIndex !== 0) {
             this.players.forEach(player => { // 全プレイヤーの状態リセット
@@ -145,7 +141,7 @@ class Game {
     }
 
     isFinished() {
-        return this.players.filter(player => player == null).length === 3 && this.stageIndex === 7;
+        return this.players.filter(player => player == null).length === 3 && this.stageIndex === 6;
     }
 
     /** 語り部の更新 */
@@ -200,6 +196,7 @@ class Game {
     }
 
     /** 手札のカードをフィールドに移動 */
+    // TODO
     handToField() {
         this.players.forEach(player => {
             let card = player.hand.pop();

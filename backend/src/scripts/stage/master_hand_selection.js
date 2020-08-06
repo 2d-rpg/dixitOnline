@@ -12,6 +12,9 @@ class MasterHandSelection {
         game.players.forEach(player => { // 全プレイヤーの状態更新
             player.done(); // 状態リセット
         });
+        let card = player.hand.pop();
+        game.field.add(card, game);
+        socket.emit('update_hand',{player:player});
     }
 }
 

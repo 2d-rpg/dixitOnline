@@ -9,6 +9,10 @@ export default function Entry(props) {
     const [show, setShow] = useState(true);
     /** cookieの設定 */
     const [, setCookie] = useCookies(['client-id']);
+    /** プレイヤー名を表示するかどうか */
+    const [showName, setShowName] = useState(false);
+    /** プレイヤー名 */
+    const [name, setName] = useState('');
 
     useEffect(() => {
         props.socket.on('start', () => setShow(false));
@@ -25,16 +29,21 @@ export default function Entry(props) {
         // サーバーに'entry'を送信
         setShow(false);
         setCookie('client-id', data.username, {path: '/'});
+        setName(data.username);
+        setShowName(true);
         props.socket.emit('entry', {username : data.username});
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
         props.setMessage('他のプレイヤーが参加するのを待っています( ´ ▽ ` )');
     }
 
     return (
-        <form className="form-inline" id="entryForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: show ? 'block' : 'none' } }>
-            <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>
-            <input type="text" className="form-control mb-2 mr-sm-2" id="userName" name="username" ref={ register } placeholder="名前を入力してください"/>
-            <button type="submit" className="btn btn-primary mb-2">さんとしてゲームに参加</button>
-        </form>
+        <div className="entry-wrapper">
+            <form className="form-inline" id="entryForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: show ? 'block' : 'none' } }>
+                <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>
+                <input type="text" className="form-control mb-2 mr-sm-2" id="userName" name="username" ref={ register } placeholder="名前を入力してください"/>
+                <button type="submit" className="btn btn-primary mb-2">さんとしてゲームに参加</button>
+            </form>
+            <div style={ {display: showName ? 'block' : 'none' } }>あなたの名前：{ name }</div>
+        </div>
     );
 }
