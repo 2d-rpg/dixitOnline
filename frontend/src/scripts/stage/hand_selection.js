@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import '../../css/hand_selection.css';
-import $ from 'jquery';
 
 const WIDTH = '100';
 const HEIGHT = '150';
@@ -38,7 +37,7 @@ export default function HandSelection(props) {
                 data.player.hand._array.map((card, index) => {
                     var id_btn = 'eachHandButton' + index;
                     var id_img = 'eachHandImage' + index;
-                    var hand_src = "../images/" + card.filename;
+                    var hand_src = "../images/default/" + card.filename;
                     return (
                     <div className='eachHandContainer' display='inline-flex'>
                         <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)}>
@@ -65,7 +64,7 @@ export default function HandSelection(props) {
         /** 語り部が手札から選んだカードの表示と手札の非表示及びお題フォームの表示 */
         const story_selection = (data, index) => {
             props.setMessage('あなたは親です(ﾟ∀ﾟ)カードのお題を入力してください⊂((・x・))⊃');
-            setSrc("../images/" + data.player.hand._array[index].filename);
+            setSrc("../images/default/" + data.player.hand._array[index].filename);
             setSelectedCard(true);
             //setShowHand(false);
             setShowStoryForm(true);
@@ -84,7 +83,7 @@ export default function HandSelection(props) {
                 data.player.hand._array.map((card, index) => {
                     var id_btn = 'eachHandButton' + index;
                     var id_img = 'eachHandImage' + index;
-                    var hand_src = "../images/" + card.filename;
+                    var hand_src = "../images/default/" + card.filename;
                     return (
                         <div className='eachHandContainer' display='inline-flex'>
                             <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => others_select(props.socket,data, index)}>
@@ -100,7 +99,7 @@ export default function HandSelection(props) {
             
             props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
             //setShowHand(false);
-            setSrc("../images/" + data.player.hand._array[index].filename);
+            setSrc("../images/default/" + data.player.hand._array[index].filename);
             //setSelectedCard(true);
             socket.emit('others_hand_selection', {index : index});
         };
@@ -110,12 +109,28 @@ export default function HandSelection(props) {
             setSelectedCard(false);
             setStory('');
         };
+        /** 手札の更新 */
+        const update_hand = (player) => {
+            setHandButtons(
+                player.hand._array.map((card, index) => {
+                    var id_btn = 'eachHandButton' + index;
+                    var id_img = 'eachHandImage' + index;
+                    var hand_src = "../images/default/" + card.filename;
+                    return (
+                    <div className='eachHandContainer' display='inline-flex'>
+                        <p className='eachHandButton' id={ id_btn } type='button'>
+                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                        </p>
+                    </div>);
+                })
+            );
+        };
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
         props.socket.on('hand_selection' ,(data) => hand_selection(data));
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
         props.socket.on('result',(data) => reset_selected());
         props.socket.on('update_hand',(data) => update_hand(data.player));
-    }, [ props.socket ]);
+    }, [ props ]);
 
     /** お題のフォーム送信ボタンを押したときの動作 */
     const onSubmit = (data, event) => {
@@ -127,34 +142,18 @@ export default function HandSelection(props) {
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
     };
 
-    const update_hand = (player) => {
-        setHandButtons(
-            player.hand._array.map((card, index) => {
-                var id_btn = 'eachHandButton' + index;
-                var id_img = 'eachHandImage' + index;
-                var hand_src = "../images/" + card.filename;
-                return (
-                <div className='eachHandContainer' display='inline-flex'>
-                    <p className='eachHandButton' id={ id_btn } type='button'>
-                        <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
-                    </p>
-                </div>);
-            })
-        );
-    }
-
 
     return (
         <div className="hand-container">
             <div id="hand" style={ {display: showhand ? 'inline-flex' : 'none'} }>{ hand_buttons }</div>
             <div id="story">{ story }</div>
             <div className="master-wrapper">
-                <div className="selected-handcard-wrapper" id="selected-hand-card-wrapper" style={{display: selectedcard ? 'inline' : 'none'}}>
-                    <img id="selected-hand-card" width={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
-                </div> 
+                <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper" style={{display: selectedcard ? 'inline' : 'none'}}>
+                    <img id="selected-hand-card" widht={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
+                </p> 
 
                 <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>
-                    <label htmlFor="claim">お題を入力してね：</label>
+                    <label htmlFor="claim"></label>
                     <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register } placeholder="お題"/>
                     <button type="submit" className="btn btn-primary mb-2">送信</button>
                 </form>
