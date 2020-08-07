@@ -4,6 +4,8 @@ import './App.css';
 import './css/game.css';
 import './css/progress.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'jquery/dist/jquery.min.js';
+import 'bootstrap/dist/js/bootstrap.min.js';
 import PlayerCounter from './scripts/playerCounter';
 import Chat from './scripts/chat';
 import Init from './scripts/stage/init';
@@ -19,6 +21,12 @@ import ShowScore from './scripts/stage/show_score';
 import ShowRole from './scripts/stage/show_role';
 import Result from './scripts/stage/result';
 import Upload from './scripts/upload';
+import $ from 'jquery';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestion } from "@fortawesome/free-solid-svg-icons";
+import './css/progress.css';
+
+
 const ENDPOINT = "http://127.0.0.1:4001/";
 // const socket = socketIOClient(ENDPOINT);
 const socket = io(ENDPOINT, {
@@ -26,6 +34,9 @@ const socket = io(ENDPOINT, {
   transports: ['websocket'],
   upgrade: false
 });
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 
 console.log(socket.io.opts.query);
 console.log(document.cookie);
@@ -48,7 +59,14 @@ function App() {
         <div className='game-core-wrapper'>
           <div className='game-core'>
             <Init socket={ socket }/>
-            <div id="progress">{ message }</div>
+            <div id="progress">
+              <div className="help">
+                <FontAwesomeIcon icon={faQuestion} />
+              </div>
+              <div className="help-content">
+                {message}
+              </div>
+            </div>
             <Entry socket={ socket } setMessage={ setMessage }/>
             <Start socket={ socket } setMessage={ setMessage }/>
             <HandSelection socket={ socket } setMessage={ setMessage }/>

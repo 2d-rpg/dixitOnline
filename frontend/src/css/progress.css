@@ -1,23 +1,9 @@
-@import url('https://fonts.googleapis.com/earlyaccess/nikukyu.css');
-@import url('https://fonts.googleapis.com/earlyaccess/nicomoji.css');
-@import url('https://fonts.googleapis.com/css?family=M+PLUS+1p');
 
-@keyframes fadeOutProgress {
-    0% {
-        /* color: blue; */
-        opacity: 1;
-    }
-    100% {
-        /* color: blue; */
-        opacity: 0.5;
-    }
-}
 
-#progress
+/* #progress
 {
     position: absolute;
     top: 50%;
-    /* top: 92%; */
     font-family: 'M PLUS 1p', sans-serif;
     font-size: 150%;
     margin-top: 0;
@@ -30,3 +16,48 @@
     -o-animation: fadeOutProgress ease 5s linear forwards;
     -ms-animation: fadeOutProgress ease 5s linear forwards;
 }
+
+.btn btn-primary {
+    pointer-events: none;
+} */
+#progress {
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    display: flex;
+    width: 100%;
+    height: 5%;
+}
+
+.help {
+    width: 4%;
+    height: 103%;
+    padding-top: 0.5%;
+    background-color: #ccc;
+    font-size: 90%;
+    border: 0 solid black;
+    border-radius: 50%;
+    box-shadow: 2px 2px;
+    color: #fff;
+    transition: 0.2s;
+    /* margin: auto; */
+}
+
+.help-content {
+    display: none;
+    margin: auto;
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: 150%;
+}
+
+.help:hover {
+    background-color: #aaa;
+}
+
+.help:hover + .help-content {
+    display: block;
+}
+
+/* .help + .help-content {
+    display: block;
+} */
