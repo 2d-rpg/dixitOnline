@@ -35,9 +35,11 @@ exports.shuffle = ([...array]) => {
 exports.uploadFile = (filename, image) => {
     var data = image.replace(/^data:image\/\w+;base64,/, "");
     var buf = new Buffer.from(data, 'base64');
-    fs.writeFile('../frontend/public/images/uploaded/' + filename, buf, (err) => {
-        if (err) {
-            console.log('err');
-        }
-    });
+    if (fs.readdirSync('../frontend/public/images/uploaded').indexOf(filename) == -1) {
+        fs.writeFile('../frontend/public/images/uploaded/' + filename, buf, (err) => {
+            if (err) {
+                console.log('err');
+            }
+        });
+    }
 };
