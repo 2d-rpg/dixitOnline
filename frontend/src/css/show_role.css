@@ -1,0 +1,14 @@
+.role-wrapper
+{
+    margin: 0;
+    padding-left: 85%;
+    position: absolute;
+    margin-top: 50%;
+    height: 100%; /* TODO: game-coreに収まるように設定必要 */
+    width: 100%;
+}
+
+.text
+{
+    
+}
