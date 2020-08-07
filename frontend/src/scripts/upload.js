@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import '../css/upload.css';
 
@@ -8,6 +8,11 @@ export default function Upload(props) {
     const { register, handleSubmit, reset } = useForm();
     /** エントリーフォームの表示 */
     const [show, setShow] = useState(true);
+    /** エントリーフォームの表示 */
+
+    useEffect(() => {
+        props.socket.on('hand_selection', () => setShow(false));
+    }, [ props.socket, setShow ]);
 
     /** エントリーフォーム入力時の動作 */
     const onSubmit = (data, event) => {

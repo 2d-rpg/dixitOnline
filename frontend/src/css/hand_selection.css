@@ -3,7 +3,7 @@
     margin: 0;
     padding-left: 0;
     position: absolute;
-    margin-top: 40%;
+    margin-top: 50%;
     height: 26%; /* TODO: game-coreに収まるように設定必要 */
     width: 100%;
 }
@@ -48,7 +48,7 @@
 .master-wrapper
 {
     position: absolute;
-    top: -150px;
+    top: -150%;
     left: 50%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);

@@ -2,11 +2,31 @@
 @import url('https://fonts.googleapis.com/earlyaccess/nicomoji.css');
 @import url('https://fonts.googleapis.com/css?family=M+PLUS+1p');
 
+@keyframes fadeOutProgress {
+    0% {
+        /* color: blue; */
+        opacity: 1;
+    }
+    100% {
+        /* color: blue; */
+        opacity: 0.5;
+    }
+}
+
 #progress
 {
     position: absolute;
+    top: 50%;
+    /* top: 92%; */
     font-family: 'M PLUS 1p', sans-serif;
     font-size: 150%;
-    margin-top: 35%;
+    margin-top: 0;
     width: 100%;
+    opacity: 0.5;
+
+    animation: fadeOutProgress ease 5s;
+    -webkit-animation: fadeOutProgress ease 5s linear forwards;
+    -moz-animation: fadeOutProgress ease 5s linear forwards;
+    -o-animation: fadeOutProgress ease 5s linear forwards;
+    -ms-animation: fadeOutProgress ease 5s linear forwards;
 }
