@@ -34,7 +34,7 @@ class Game {
     constructor() {
         /** 山札(stock) */
         this.stock = new Stock();
-        const files = fs.readdirSync('../frontend/public/images/');
+        const files = fs.readdirSync('../frontend/public/images/default/');
         utils.shuffle(files);
         for (var i = 0; i < files.length; i++) { 
             this.stock.push(new Card(files[i]));
@@ -60,7 +60,7 @@ class Game {
 
     reset() {
         this.stock = new Stock();
-        const files = fs.readdirSync('../frontend/public/images/');
+        const files = fs.readdirSync('../frontend/public/images/default/');
         utils.shuffle(files);
         for (var i = 0; i < files.length; i++) { 
             this.stock.push(new Card(files[i]));

@@ -3,8 +3,8 @@
     margin: 0;
     padding-left: 0;
     position: absolute;
-    margin-top: 30%;
-    height: 100%;
+    margin-top: 40%;
+    height: 26%; /* TODO: game-coreに収まるように設定必要 */
     width: 100%;
 }
 
@@ -54,3 +54,20 @@
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
 }
+
+/* .selected-handcard-wrapper
+{
+    border: 1px solid #000;
+    border-radius: 10px;
+    height: 150px;
+    width: 100px;
+}
+
+#selected-hand-card
+{
+    margin: 0;
+    border-radius: 10px;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+} */
