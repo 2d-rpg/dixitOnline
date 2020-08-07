@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCookies } from 'react-cookie';
+import '../../css/upload.css';
 
 export default function Upload(props) {
     /** エントリーフォーム */

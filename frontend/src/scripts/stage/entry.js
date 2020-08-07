@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCookies } from 'react-cookie';
+import '../../css/entry.css';
 
 export default function Entry(props) {
     /** エントリーフォーム */
@@ -38,6 +39,7 @@ export default function Entry(props) {
 
     return (
         <div className="entry-wrapper">
+            <div className="welcome-word" style={ {display: show ? 'block' : 'none' } }>こんにてゃ</div>
             <form className="form-inline" id="entryForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: show ? 'block' : 'none' } }>
                 <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>
                 <input type="text" className="form-control mb-2 mr-sm-2" id="userName" name="username" ref={ register } placeholder="名前を入力してください"/>

@@ -55,8 +55,8 @@ function App() {
             <ShowAnswer socket={ socket } setMessage={ setMessage }/>
             <ShowScore socket={ socket } setMessage={ setMessage }/>
             <Result socket={ socket } setMessage={ setMessage }/>
+            <Upload socket={ socket }/>
           </div>
-          <Upload socket={ socket }/>
         </div>
         <div className="game-chat">
           <PlayerCounter socket={ socket }/>
