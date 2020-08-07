@@ -16,6 +16,7 @@ import io from 'socket.io-client';
 import FieldSelection from './scripts/stage/field_selection';
 import ShowAnswer from './scripts/stage/show_answer';
 import ShowScore from './scripts/stage/show_score';
+import ShowRole from './scripts/stage/show_role';
 import Result from './scripts/stage/result';
 import Upload from './scripts/upload';
 const ENDPOINT = "http://127.0.0.1:4001/";
@@ -54,6 +55,7 @@ function App() {
             <FieldSelection socket={ socket } setMessage={ setMessage }/>
             <ShowAnswer socket={ socket } setMessage={ setMessage }/>
             <ShowScore socket={ socket } setMessage={ setMessage }/>
+            <ShowRole socket={ socket } setMessage={ setMessage } />
             <Result socket={ socket } setMessage={ setMessage }/>
             <Upload socket={ socket }/>
           </div>

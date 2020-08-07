@@ -17,6 +17,7 @@ class Card {
         this.statusIndex = 0;
         // image file name
         this.filename = filename;
+        this.tailfilename = "card_back.png";
         this.head = false; // 表かどうか
         this.player = null; // カードの持ち主が誰か
     }
