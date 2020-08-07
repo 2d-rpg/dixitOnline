@@ -10,7 +10,7 @@ export default function ShowAnswer(props) {
         /** 答えの表示 */
         const show_answer = (data) => {
             let filename = data.game.field.masterCard.filename;
-            setSrc("../images/" + filename + ".jpg");
+            setSrc("../images/default/" + filename + ".jpg");
             setShowAnswer(true);
             props.socket.emit('calc_score');
         }

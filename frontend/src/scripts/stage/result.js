@@ -22,7 +22,7 @@ export default function Result(props) {
         }
 
         props.socket.on('result' ,(data) => show_result(data));
-    }, [ props.socket ]);
+    }, [ props ]);
 
     const handleclick = () => {
         setShowButton(false);

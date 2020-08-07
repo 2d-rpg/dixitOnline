@@ -1,9 +1,16 @@
 import React, {useState, useEffect} from 'react';
+import '../css/help.css';
 
 export default function Progress(props) {
 
-    const [message, setMassage] = useState('ようこそ！');
-    // 文章を集約
+    const [message, setMassage] = useState('ようfefe');
+
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        props.socket.on('hand-selection', () => setShow(true));
+    }, [ props.socket, setShow ]);
+    
     const cannot_play = '現在プレイ中です しばらくお待ちください';
     const waiting_entry = '他のプレイヤーが参加するのを待っています...';
     // const master_hand_selection = 'あなたは語り部です カードを選択してください';
@@ -22,10 +29,11 @@ export default function Progress(props) {
         props.socket.on('others_hand_selection' ,() => setMassage(others_hand_selection));
     });
 
+
     return (
-        <div id="progress">
-            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title={message}>
-                fefef
+        <div id="help">
+            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Tooltip on right">
+                { message } 
             </button>
         </div>
     );
