@@ -17,7 +17,7 @@ exports.logWithStage = (stage, message) => {
 
 /** Uniform random sample image */
 exports.randomSample = () => {
-    const files = fs.readdirSync('../frontend/public/images/')
+    const files = fs.readdirSync('../frontend/public/images/default/')
     var rand = Math.floor(Math.random() * files.length); // 0 to files.length-1
     return files[rand];
 };
@@ -35,7 +35,7 @@ exports.shuffle = ([...array]) => {
 exports.uploadFile = (filename, image) => {
     var data = image.replace(/^data:image\/\w+;base64,/, "");
     var buf = new Buffer.from(data, 'base64');
-    fs.writeFile('../frontend/public/images/' + filename, buf, (err) => {
+    fs.writeFile('../frontend/public/images/uploaded/' + filename, buf, (err) => {
         if (err) {
             console.log('err');
         }

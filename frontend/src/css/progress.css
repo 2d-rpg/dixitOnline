@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/earlyaccess/nikukyu.css');
+@import url('https://fonts.googleapis.com/earlyaccess/nicomoji.css');
+@import url('https://fonts.googleapis.com/css?family=M+PLUS+1p');
+
 #progress
 {
     position: absolute;
-    margin-top: 30%;
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: 150%;
+    margin-top: 35%;
     width: 100%;
 }

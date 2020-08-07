@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import '../css/upload.css';
 
 export default function Upload(props) {
     /** エントリーフォーム */
@@ -12,10 +13,12 @@ export default function Upload(props) {
     const onSubmit = (data, event) => {
         // サーバーに'entry'を送信
         const reader = new FileReader();
-        reader.readAsDataURL(data.imageFile[0]);
-        reader.onload = () => {
-            props.socket.emit('upload', {filename: data.imageFile[0].name, image : reader.result});
-        };
+        if (data.imageFile.length != 0) {
+            reader.readAsDataURL(data.imageFile[0]);
+            reader.onload = () => {
+                props.socket.emit('upload', {filename: data.imageFile[0].name, image : reader.result});
+            };
+        }
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
     }
 

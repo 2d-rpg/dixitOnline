@@ -1,28 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCookies } from 'react-cookie';
+import '../../css/upload.css';
 
 export default function Upload(props) {
     /** エントリーフォーム */
     const { upload, handleSubmit } = useForm();
     /** エントリーフォームの表示 */
-    const [show, setShow] = useState(true);
+    const [show, setShowForm] = useState(true);
     /** cookieの設定 */
     const [, setCookie] = useCookies(['client-id']);
 
     useEffect(() => {
-        props.socket.on('start', () => setShow(false));
+        props.socket.on('start', () => setShowForm(false));
         // props.socket.on('hand_selection', () => setShow(false));
         // props.socket.on('field_selection', () => setShow(false));
         // props.socket.on('show_answer', () => setShow(false));
         // props.socket.on('show_score', () => setShow(false));
         // props.socket.on('result', () => setShow(false));
-    }, [ props.socket ]);
+    }, [ props.socket, setShowForm ]);
 
     /** エントリーフォーム入力時の動作 */
     const onSubmit = (data, event) => {
         // サーバーに'entry'を送信
-        setShow(false);
+        setShowForm(false);
         setCookie('client-id', data.username, {path: '/'});
         props.socket.emit('entry', {username : data.username});
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)

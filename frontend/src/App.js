@@ -49,14 +49,13 @@ function App() {
             <Init socket={ socket }/>
             <div id="progress">{ message }</div>
             <Entry socket={ socket } setMessage={ setMessage }/>
-            <Upload socket={ socket }/>
-            <div className="startMsg">スタート!</div>
-            {/* <Start socket={ socket } setMessage={ setMessage }/> */}
+            <Start socket={ socket } setMessage={ setMessage }/>
             <HandSelection socket={ socket } setMessage={ setMessage }/>
             <FieldSelection socket={ socket } setMessage={ setMessage }/>
             <ShowAnswer socket={ socket } setMessage={ setMessage }/>
             <ShowScore socket={ socket } setMessage={ setMessage }/>
             <Result socket={ socket } setMessage={ setMessage }/>
+            <Upload socket={ socket }/>
           </div>
         </div>
         <div className="game-chat">
