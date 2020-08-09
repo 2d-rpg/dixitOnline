@@ -73,7 +73,7 @@ setInterval(() => {
     }
 }, 1000/30);
 
-// app.use('/', express.static(__dirname + '/src'));
+app.use('/', express.static(__dirname + '/build'));
 // io.use((socket, next) => {
     // console.log(socket.request);
 // });
@@ -82,7 +82,7 @@ setInterval(() => {
 // サーバー生成時にfunction以下のリクエストリスナーが登録されるため
 // クライアントからHTTPリクエストが送信されるたびにfunctionが実行される
 // ここではヘッダ出力(writeHead)とindex.htmlの出力(readFileSync)
-app.post('/', (request, response) => {
+app.get('/', (request, response) => {
     response.sendFile(path.join(__dirname, '/build/index.html'));
 });
 
