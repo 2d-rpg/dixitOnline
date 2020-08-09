@@ -21,8 +21,8 @@ const restart = require('./src/scripts/stage/restart');
 
 const disconnect = require('./src/scripts/stage/disconnect');
 const socketIO = require('socket.io');
-// const app = express();
-const server = http.Server();
+const app = express();
+const server = http.Server(app);
 const io = socketIO(server);
 
 // ゲームオブジェクト作成
@@ -82,9 +82,9 @@ setInterval(() => {
 // サーバー生成時にfunction以下のリクエストリスナーが登録されるため
 // クライアントからHTTPリクエストが送信されるたびにfunctionが実行される
 // ここではヘッダ出力(writeHead)とindex.htmlの出力(readFileSync)
-// app.post('/', (request, response) => {
-//     response.sendFile(path.join(__dirname, '/src/index.html'));
-// });
+app.post('/', (request, response) => {
+    response.sendFile(path.join(__dirname, '/build/index.html'));
+});
 
 
 server.listen(4001, () => {
