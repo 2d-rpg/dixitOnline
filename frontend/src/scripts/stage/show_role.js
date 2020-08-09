@@ -37,7 +37,7 @@ export default function ShowRole(props) {
 
     return(
     <div className="role-wrapper" style={{ textAlign: "center", padding: 50 }, {display: showrole ? 'block' : 'none'} } >
-      <FontAwesomeIcon style={iconStyle}  icon={isMaster ? faCrown : faChessPawn}/>
+      <FontAwesomeIcon className="role-figure" style={iconStyle}  icon={isMaster ? faCrown : faChessPawn}/>
       <span className="text">{isMaster ? "語り部" : "聞き手"}</span>
     </div>
     );
