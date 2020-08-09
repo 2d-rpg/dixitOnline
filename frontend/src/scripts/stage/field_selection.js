@@ -67,7 +67,7 @@ export default function FieldSelection(props) {
                 game.field.cards.map((card, index) => {
                     var id_btn = 'eachFieldButton' + index;
                     var id_img = 'eachFieldImage' + index;
-                    var field_src = "../images/back/card_back.png";
+                    var field_src = "../images/back/" + card.tailfilename;
                     return (
                     <div className='eachFieldContainer' display='inline-flex'>
                         <p className='eachFieldButton' id={ id_btn } type='button'>
