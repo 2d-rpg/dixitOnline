@@ -87,6 +87,6 @@ app.get('/', (request, response) => {
 });
 
 
-server.listen(80, () => {
-  utils.log('Starting server on port 4001');
+server.listen(3000, () => {
+  utils.log('Starting server on port 3000');
 });
