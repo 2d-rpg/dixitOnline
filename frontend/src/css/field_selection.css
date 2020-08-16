@@ -15,9 +15,9 @@
 
 .eachFieldButton
 {
+
     border: 1px solid #000;
     border-radius: 10px;
-    
     padding-left: 0;
     transition-duration: 2.5s;
     transition-property: top;
@@ -35,10 +35,23 @@
     /* transition-duration: 20s; */
 }
 
-.eachFieldButton:hover
+.eachFieldRadio
+{
+    display: none;
+}
+
+.eachFieldRadio:checked + .eachFieldButton
 {
     border: solid;
     border-color: red;
+    position: absolute;
+    top: -10%;
+}
+
+.eachFieldButton:hover
+{
+    border: solid;
+    border-color: blue;
     position: absolute;
     top: -10%;
 }
