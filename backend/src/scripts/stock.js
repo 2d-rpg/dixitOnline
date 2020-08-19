@@ -31,6 +31,9 @@ class Stock {
         }
         return null;
     }
+    shuffle() {
+        this._array = utils.shuffle(this._array);
+    }
 }
 
 module.exports = Stock;

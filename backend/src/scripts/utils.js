@@ -24,11 +24,15 @@ exports.randomSample = () => {
 
 /** Fisher-Yates shuffle */
 exports.shuffle = ([...array]) => {
+    // var today = new Date();
+    // var seed = Date.parse(today);
+    var newArray = [];
     for (let i = array.length - 1; i >= 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        newArray.push(array[j]);
+        array.splice(j,1);
     }
-    return array;
+    return newArray;
 };
 
 

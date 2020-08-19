@@ -35,10 +35,10 @@ class Game {
         /** 山札(stock) */
         this.stock = new Stock();
         const files = fs.readdirSync('../frontend/public/images/default/');
-        utils.shuffle(files);
         for (var i = 0; i < files.length; i++) { 
             this.stock.push(new Card(files[i]));
         }
+        this.stock.shuffle();
         /** このゲームに参加しているプレイヤー */
         this.players = new Array(Game.PLAYER_NUM).fill(null);
         /** 現在のプレイヤー人数 */
