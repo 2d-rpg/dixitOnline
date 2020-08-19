@@ -19,6 +19,8 @@ export default function FieldSelection(props) {
 
     const [showfieldWrapper, setShowfieldWrapper] = useState(true);
 
+    // const [cardCheckbox,setCardCheckbox] = useState({id:null,checked:true});
+    // const [cardCheckbox,setCardCheckbox] = useState(false);
 
     useEffect(() => {
         /** フィールドの表示 */
@@ -31,7 +33,12 @@ export default function FieldSelection(props) {
                     var field_src = "../images/default/" + card.filename;
                     return (
                     <div className='eachFieldContainer' display='inline-flex'>
-                        <p className='eachFieldButton' id={ id_btn } type='button' onClick={ () => others_field_select(props.socket, data, index)}>
+                        <input className="eachFieldRadio" name="field-cb" id={"cb" +  id_btn } type="radio" value={id_btn}></input>
+                        <p className='eachFieldButton' id={ id_btn } type='button' onClick={ () => {
+                            others_field_select(props.socket, data, index);
+                            // ToDo : getElementByIdを使っている
+                            document.getElementById("cb" +  id_btn).checked = !document.getElementById("cb" +  id_btn).checked;
+                        }}>
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     </div>);
@@ -53,6 +60,9 @@ export default function FieldSelection(props) {
                 // setShowSelected(true);
                 socket.emit('field_selection', {index : index});
             }
+        }
+        const check = () => {
+
         }
         /** フィールドの表示リセット */
         const field_reset = () => {
@@ -93,10 +103,10 @@ export default function FieldSelection(props) {
     return (
         <div className='field-wrapper' style={ {display: showfieldWrapper ? 'block' : 'none'} }>
             <div id="field" style={ {display: showfield ? 'inline-flex' : 'none'} }>{ field_buttons }</div>
-            <div className="form-inline" id="selected_field_card" style={{display: showselected ? 'inline' : 'none'}}>
+            {/* <div className="form-inline" id="selected_field_card" style={{display: showselected ? 'inline' : 'none'}}>
                 あなたがフィールドから選んだカード:
                 <img id="selected_field_card" width={ WIDTH } height={ HEIGHT } src={ src } alt="フィールドから選んだカード"/>
-            </div> 
+            </div>  */}
         </div>
     );
 }

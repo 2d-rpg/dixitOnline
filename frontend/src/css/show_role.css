@@ -1,20 +1,25 @@
 .role-wrapper
 {
-    margin: 0;
-    padding-right: 13%;
+    /* margin: 0; */
+    /* padding-right: 13%; */
     position: absolute;
     right: 0;
     bottom: 0;
-    margin-top: 50%;
-    height: 30%; /* TODO: game-coreに収まるように設定必要 */
-    width: 13%;
+    /* margin-top: 50%; */
+    height: 30%; 
+    width: 14%; 
     border: solid 3px #6091d3;/*線*/
     border-radius: 10px;/*角の丸み*/
+}
+
+.role-figure{
+    /* border: solid 3px #6091d3;線 */
+    margin-left:5%;
+    margin-right:5%;
 }
 
 .text
 {
     /* position: absolute; */
     text-align: center;
-    bottom: 0;
 }

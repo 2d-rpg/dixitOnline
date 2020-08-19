@@ -10,7 +10,9 @@ export default function ShowScore(props) {
         /** スコアの表示 */
         const show_score = (data) => {
             setScore('あなたのスコア: ' + data.player.score + "点");
-            props.socket.emit('round_end');
+            setTimeout(() => {
+                props.socket.emit('round_end');
+            }, 3000);
         }
         /** スコアの表示リセット */
         const reset_score = () => {

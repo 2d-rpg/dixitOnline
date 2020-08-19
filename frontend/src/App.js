@@ -27,7 +27,8 @@ import { faQuestion } from "@fortawesome/free-solid-svg-icons";
 import './css/progress.css';
 
 
-const ENDPOINT = "http://34.83.112.24:3000/";
+// const ENDPOINT = "http://34.83.112.24:3000/";
+const ENDPOINT = "localhost:4001/";
 // const socket = socketIOClient(ENDPOINT);
 const socket = io(ENDPOINT, {
   query: { 'client-id': cookieVal('client-id') },
