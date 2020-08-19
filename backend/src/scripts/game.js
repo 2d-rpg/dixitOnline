@@ -61,10 +61,10 @@ class Game {
     reset() {
         this.stock = new Stock();
         const files = fs.readdirSync('../frontend/public/images/default/');
-        utils.shuffle(files);
         for (var i = 0; i < files.length; i++) { 
             this.stock.push(new Card(files[i]));
         }
+        this.stock.shuffle();
         this.discard = new Discard();
         this.field = new Field();
         this.stage = status[0];
@@ -101,7 +101,7 @@ class Game {
             }
         }
         // 更新後
-        if (this.stageIndex == 1) { // hand_selection
+        if (this.stageIndex === 1) { // hand_selection
             this.updateMaster(); // 語り部更新
             this.fieldToDiscard();
             if(this.stock._array.length < this.getLength()) {
@@ -110,7 +110,10 @@ class Game {
             this.players.forEach(player => player.draw(this.stock));
             this.resetAnswers();
         } 
-        this.stageIndex = this.stageIndex % 7;
+        if (this.stageIndex === 3) { // field_selection
+            this.field.shuffle(); // 場札をシャッフル
+        }
+        this.stageIndex = this.stageIndex % 7; // restart用
         this.stage = status[this.stageIndex];
         if (this.stageIndex !== 0) {
             this.players.forEach(player => { // 全プレイヤーの状態リセット
@@ -195,8 +198,10 @@ class Game {
         });
     }
 
-    /** 手札のカードをフィールドに移動 */
-    // TODO
+    /** 
+     * 手札のカードをフィールドに移動
+     * @deprecated
+     */
     handToField() {
         this.players.forEach(player => {
             let card = player.hand.pop();
@@ -218,7 +223,7 @@ class Game {
         for (let i = 0; i < len; i++) {
             this.stock.push(this.discard.pop());
         }
-        utils.shuffle(this.stock._array);
+        this.stock.shuffle();
     }
 
     /** 最大スコアをチェックし，終了条件確認 */

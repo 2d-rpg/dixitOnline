@@ -29,7 +29,6 @@ class Stock {
         // 墓地回収
             return null;
         }
-        return null;
     }
     shuffle() {
         this._array = utils.shuffle(this._array);

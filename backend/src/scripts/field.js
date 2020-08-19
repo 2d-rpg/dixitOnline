@@ -7,17 +7,21 @@ class Field {
         this.cards = new Array();
         this.masterCard = null;
     }
+    /** フィールドにカードを追加 */
     add(card, game) {
         card.nextStatus();
         if(game.findPlayer(card.player).isMaster){
             this.masterCard = card;
         }
         this.cards.push(card);
-        utils.shuffle(this.cards);
-        // this.cards.shuffle();
     }
+    /** フィールドからカードを削除 */
     pop() {
         return this.cards.pop();
+    }
+    /** フィールドのカードをシャッフル */
+    shuffle() {
+        this.cards = utils.shuffle(this.cards);
     }
     new(){
         this.cards.splice(0);
