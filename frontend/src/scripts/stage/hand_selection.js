@@ -145,19 +145,20 @@ export default function HandSelection(props) {
 
     return (
         <div className="hand-container">
-            <div id="hand" style={ {display: showhand ? 'inline-flex' : 'none'} }>{ hand_buttons }</div>
-            <div id="story">{ story }</div>
-            <div className="master-wrapper">
-                <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper" style={{display: selectedcard ? 'inline' : 'none'}}>
-                    <img id="selected-hand-card" widht={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
-                </p> 
-
-                <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>
-                    <label htmlFor="claim"></label>
-                    <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register } placeholder="お題"/>
-                    <button type="submit" className="btn btn-primary mb-2">送信</button>
-                </form>
+            <div className="hand-content">
+                <div id="hand" style={ {display: showhand ? 'inline-flex' : 'none'} }>{ hand_buttons }</div>
+                <div className="master-wrapper">
+                    <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper" style={{display: selectedcard ? 'inline' : 'none'}}>
+                        <img id="selected-hand-card" widht={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
+                    </p> 
+                    <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>
+                        <label htmlFor="claim"></label>
+                        <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register } placeholder="お題"/>
+                        <button type="submit" className="btn btn-primary mb-2">送信</button>
+                    </form>
+                </div>
             </div>
+            <div id="story">{ story }</div>
         </div>
     );
 }
