@@ -6,6 +6,7 @@
 }
 
 .hand-content {
+    position: relative;
 }
 
 #hand {
@@ -55,6 +56,14 @@
     position: absolute;
     width: 100%;
     top: 40%;
+}
+
+.modal, .modal-backdrop {
+    position: absolute !important;
+}
+
+.modal-baackdrop {
+    width: 100%;
 }
 
 /* .selected-handcard-wrapper

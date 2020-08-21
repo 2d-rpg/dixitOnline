@@ -26,6 +26,13 @@ export default function HandSelection(props) {
     const [hand_buttons, setHandButtons] = useState(null);
     /** お題フォーム */
     const { register, handleSubmit } = useForm();
+    $('#exampleModalCenter').on('shown.bs.modal', function (e) {
+        $('body').removeClass('modal-open');
+        $('.game-core').addClass('modal-open');
+    });
+    $('#exampleModalCenter').on('hidden.bs.modal', function (e) {
+        $('.game-core').removeClass('modal-open');
+    });
 
     useEffect(() => {
         /** 手札の表示 */
@@ -156,7 +163,6 @@ export default function HandSelection(props) {
         <div className="hand-wrapper">
             <div className="hand-content">
                 <div id="hand" style={ {display: showhand ? 'inline-flex' : 'none'} }>{ hand_buttons }</div>
-                <div id="story">{ story }</div>
                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -178,9 +184,9 @@ export default function HandSelection(props) {
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">閉じる</button>
                                     {/* <button type="button" class="btn btn-primary">Save changes</button> */}
-                                    <button type="submit" className="btn btn-primary mb-2">送信</button>
+                                    <button type="submit" className="btn btn-primary mb-2">決定</button>
                                 </div>
                             </form>
                         </div>

@@ -184,7 +184,7 @@ img
 
 .form-control
 {
-    border: none !important;
+    /* border: none !important; */
     border-radius: 20px !important;
 }
 .input-msg-group-text
