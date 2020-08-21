@@ -27,11 +27,19 @@
 ### ミーティングログ
 
 - [google drawings](https://docs.google.com/drawings/d/1RziwR98sGqgaBaB3Q2iUu9hP-BSzAivgzpFYMBZ3xn8/edit)
-- [コード解説(wiki)](https://github.com/2d-rpg/dixitOnline/wiki/%E3%82%B3%E3%83%BC%E3%83%89%E8%A7%A3%E8%AA%AC)
+- [React概要(wiki)](https://github.com/2d-rpg/dixitOnline/wiki/React%E6%A6%82%E8%A6%81)
+- [サーバへのデプロイ方法(wiki)](https://github.com/2d-rpg/dixitOnline/wiki/%E3%82%B5%E3%83%BC%E3%83%90%E3%81%B8%E3%81%AE%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4%E6%96%B9%E6%B3%95)
+
+- 8/9(Sun) :
+    - サーバへのデプロイ([PR #36](https://github.com/2d-rpg/dixitOnline/pull/36), [サーバデプロイ手順](https://github.com/2d-rpg/dixitOnline/wiki/%E3%82%B5%E3%83%BC%E3%83%90%E3%81%B8%E3%81%AE%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4%E6%96%B9%E6%B3%95))
+
+- 8/7(Fri) :
+    - 裏面表示
+    - ヘルプの実装([PR #29](https://github.com/2d-rpg/dixitOnline/pull/29))
+    - 役割の表示([PR #30](https://github.com/2d-rpg/dixitOnline/pull/30))
 
 - 8/2(Sun) :
-    - UIデザイン
-    - アニメーション
+    - カードの選択時のUI([PR #28](https://github.com/2d-rpg/dixitOnline/pull/28))
 
 - 7/31(Fri) :
     - hand_selection分離([PR #24](https://github.com/2d-rpg/dixitOnline/pull/24))

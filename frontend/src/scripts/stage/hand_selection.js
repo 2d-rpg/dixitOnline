@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import $ from 'jquery';
 
 import '../../css/hand_selection.css';
 
@@ -38,11 +39,18 @@ export default function HandSelection(props) {
                     var id_btn = 'eachHandButton' + index;
                     var id_img = 'eachHandImage' + index;
                     var hand_src = "../images/default/" + card.filename;
-                    return (
-                    <div className='eachHandContainer' display='inline-flex'>
+                    const handButton = data.player.isMaster? (
+                        <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)} data-toggle="modal" data-target="#exampleModalCenter">
+                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                        </p> 
+                    ) : (
                         <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)}>
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p>
+                    );
+                    return (
+                    <div className='eachHandContainer' display='inline-flex'>
+                        { handButton }
                     </div>);
                 })
             );
@@ -134,6 +142,7 @@ export default function HandSelection(props) {
 
     /** お題のフォーム送信ボタンを押したときの動作 */
     const onSubmit = (data, event) => {
+        $('#exampleModalCenter').modal('toggle');
         setSelectedCard(false);
         setShowStoryForm(false);
         setStory("お題:" + data.story);
@@ -147,16 +156,34 @@ export default function HandSelection(props) {
         <div className="hand-container">
             <div id="hand" style={ {display: showhand ? 'inline-flex' : 'none'} }>{ hand_buttons }</div>
             <div id="story">{ story }</div>
-            <div className="master-wrapper">
-                <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper" style={{display: selectedcard ? 'inline' : 'none'}}>
-                    <img id="selected-hand-card" widht={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
-                </p> 
-
-                <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>
-                    <label htmlFor="claim"></label>
-                    <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register } placeholder="お題"/>
-                    <button type="submit" className="btn btn-primary mb-2">送信</button>
-                </form>
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">お題を決めよう！</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>
+                    <div class="modal-body">
+                        <div className="master-wrapper">
+                                <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper" style={{display: selectedcard ? 'inline' : 'none'}}>
+                                    <img id="selected-hand-card" widht={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
+                                </p> 
+                                <label htmlFor="claim"></label>
+                                <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register } placeholder="お題"/>
+                                {/* <button type="submit" className="btn btn-primary mb-2">送信</button> */}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                        {/* <button type="button" class="btn btn-primary">Save changes</button> */}
+                        <button type="submit" className="btn btn-primary mb-2">送信</button>
+                    </div>
+                    </form>
+                    </div>
+                </div>
             </div>
         </div>
     );

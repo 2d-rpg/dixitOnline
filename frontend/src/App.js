@@ -37,7 +37,7 @@ const socket = io(ENDPOINT, {
 });
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
-})
+});
 
 console.log(socket.io.opts.query);
 console.log(document.cookie);
@@ -65,7 +65,7 @@ function App() {
                 <FontAwesomeIcon icon={faQuestion} />
               </div>
               <div className="help-content">
-                {message}
+                { message }
               </div>
             </div>
             <Entry socket={ socket } setMessage={ setMessage }/>
