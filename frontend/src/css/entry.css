@@ -1,10 +1,26 @@
 .entry-wrapper {
     position: absolute;
     width: 100%;
+    /* margin-top: 40%; */
+    z-index: 100;
+}
+
+.entry-content {
+    position: absolute;
+    width: 100%;
     margin-top: 40%;
     z-index: 100;
 }
 
 .welcome-word {
-    font-size: 150%;
+    size: 200%
+}
+
+.player-name {
+    text-align: right;
+    width: 100%;
+    padding-top: 30px;
+    padding-right: 50px;
+    position: absolute;
+    top: 0px;
 }

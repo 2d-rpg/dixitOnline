@@ -153,38 +153,41 @@ export default function HandSelection(props) {
 
 
     return (
-        <div className="hand-container">
-            <div id="hand" style={ {display: showhand ? 'inline-flex' : 'none'} }>{ hand_buttons }</div>
-            <div id="story">{ story }</div>
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalCenterTitle">お題を決めよう！</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>
-                    <div class="modal-body">
-                        <div className="master-wrapper">
-                                <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper" style={{display: selectedcard ? 'inline' : 'none'}}>
-                                    <img id="selected-hand-card" widht={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
-                                </p> 
-                                <label htmlFor="claim"></label>
-                                <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register } placeholder="お題"/>
-                                {/* <button type="submit" className="btn btn-primary mb-2">送信</button> */}
+        <div className="hand-wrapper">
+            <div className="hand-content">
+                <div id="hand" style={ {display: showhand ? 'inline-flex' : 'none'} }>{ hand_buttons }</div>
+                <div id="story">{ story }</div>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">お題を決めよう！</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: showstoryform ? 'inline' : 'none'} }>
+                                <div class="modal-body">
+                                    <div className="master-wrapper">
+                                            <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper" style={{display: selectedcard ? 'inline' : 'none'}}>
+                                                <img id="selected-hand-card" widht={ WIDTH } height={ HEIGHT } src={ src } alt="あなたが選んだカード"/> 
+                                            </p> 
+                                            <label htmlFor="claim"></label>
+                                            <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register } placeholder="お題"/>
+                                            {/* <button type="submit" className="btn btn-primary mb-2">送信</button> */}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    {/* <button type="button" class="btn btn-primary">Save changes</button> */}
+                                    <button type="submit" className="btn btn-primary mb-2">送信</button>
+                                </div>
+                            </form>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                        {/* <button type="button" class="btn btn-primary">Save changes</button> */}
-                        <button type="submit" className="btn btn-primary mb-2">送信</button>
-                    </div>
-                    </form>
                     </div>
                 </div>
             </div>
+            <div id="story">{ story }</div>
         </div>
     );
 }
