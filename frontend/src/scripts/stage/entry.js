@@ -15,8 +15,6 @@ export default function Entry(props) {
     /** プレイヤー名 */
     const [name, setName] = useState('');
 
-    const [playerName, movePlayerName] = useState();
-
     useEffect(() => {
         props.socket.on('start', () => {
             setShow(false)

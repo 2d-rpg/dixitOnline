@@ -12,7 +12,7 @@ export default function ShowAnswer(props) {
         const show_answer = (data) => {
             let filename = data.game.field.masterCard.filename;
             setSrc("../images/default/" + filename);
-            setShowAnswer(true);console.log('フラ');
+            setShowAnswer(true);
             setTimeout(() => {
                 props.socket.emit('calc_score');
             }, 3000);

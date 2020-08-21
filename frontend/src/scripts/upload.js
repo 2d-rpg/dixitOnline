@@ -18,7 +18,7 @@ export default function Upload(props) {
     const onSubmit = (data, event) => {
         // サーバーに'entry'を送信
         const reader = new FileReader();
-        if (data.imageFile.length != 0) {
+        if (data.imageFile.length !== 0) {
             reader.readAsDataURL(data.imageFile[0]);
             reader.onload = () => {
                 props.socket.emit('upload', {filename: data.imageFile[0].name, image : reader.result});
