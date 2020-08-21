@@ -14,7 +14,7 @@ export default function Entry(props) {
     const [showName, setShowName] = useState(false);
     /** プレイヤー名 */
     const [name, setName] = useState('');
-
+    
     useEffect(() => {
         props.socket.on('start', () => {
             setShow(false)
@@ -49,7 +49,7 @@ export default function Entry(props) {
                     <button type="submit" className="btn btn-primary mb-2">さんとしてゲームに参加</button>
                 </form>
             </div>
-            <div className="player-name" style={ {display: showName ? 'block' : 'none' } }>あなたの名前：{ name }</div>
+            <div className="player-name" style={ {display: showName ? 'block' : 'none' } }>あなたの名前：<br/>{ name }</div>
         </div>
     );
 }
