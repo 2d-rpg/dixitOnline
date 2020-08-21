@@ -14,9 +14,11 @@ export default function Entry(props) {
     const [showName, setShowName] = useState(false);
     /** プレイヤー名 */
     const [name, setName] = useState('');
-
+    
     useEffect(() => {
-        props.socket.on('start', () => setShow(false));
+        props.socket.on('start', () => {
+            setShow(false)
+        });
         props.socket.on('hand_selection', () => setShow(false));
         props.socket.on('field_selection', () => setShow(false));
         props.socket.on('show_answer', () => setShow(false));
@@ -39,13 +41,15 @@ export default function Entry(props) {
 
     return (
         <div className="entry-wrapper">
-            <div className="welcome-word" style={ {display: show ? 'block' : 'none' } }>こんにてゃ</div>
-            <form className="form-inline" id="entryForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: show ? 'block' : 'none' } }>
-                <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>
-                <input type="text" className="form-control mb-2 mr-sm-2" id="userName" name="username" ref={ register } placeholder="名前を入力してください"/>
-                <button type="submit" className="btn btn-primary mb-2">さんとしてゲームに参加</button>
-            </form>
-            <div style={ {display: showName ? 'block' : 'none' } }>あなたの名前：{ name }</div>
+            <div className="entry-content">
+                <div className="welcome-word" style={ {display: show ? 'block' : 'none' } }>こんにてゃ</div>
+                <form className="form-inline" id="entryForm" onSubmit={ handleSubmit(onSubmit) } style={ {display: show ? 'block' : 'none' } }>
+                    <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>
+                    <input type="text" className="form-control mb-2 mr-sm-2" name="username" ref={ register } placeholder="名前を入力してください"/>
+                    <button type="submit" className="btn btn-primary mb-2">さんとしてゲームに参加</button>
+                </form>
+            </div>
+            <div className="player-name" style={ {display: showName ? 'block' : 'none' } }>あなたの名前：<br/>{ name }</div>
         </div>
     );
 }
