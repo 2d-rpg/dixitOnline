@@ -33,7 +33,7 @@ export default function StoryModal(props) {
         }
         setShowErrMsg(false);
         $('#exampleModalCenter').modal('toggle');
-        props.setStory("お題:" + data.story);
+        props.setStory(data.story);
         // サーバーに'story_selection'を送信
         props.socket.emit('story_selection', { message : data.story, masterIndex : props.masterIndex });
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)

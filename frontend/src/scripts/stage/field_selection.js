@@ -1,7 +1,8 @@
 // field_selectionステージ
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../css/field_selection.css';
+import Card from '../card';
 
 export default function FieldSelection(props) {
 
@@ -12,8 +13,6 @@ export default function FieldSelection(props) {
 
     const [showfieldWrapper, setShowfieldWrapper] = useState(true);
 
-    // let refs = null;
-
     // const [cardCheckbox,setCardCheckbox] = useState({id:null,checked:true});
     // const [cardCheckbox,setCardCheckbox] = useState(false);
 
@@ -21,9 +20,7 @@ export default function FieldSelection(props) {
         /** 初期化 */
         const initialize = (data) => {
             setShowField(false);
-            // refs = useRef([...new Array(data.game.PLAYLER_NUM)].map(() => React.createRef()))
         };
-        // refs.current[refs.current.length - 1].current.focus();
         /** フィールドの表示 */
         const field_selection = (data) => {
             setShowfieldWrapper(true);
@@ -32,13 +29,13 @@ export default function FieldSelection(props) {
                     var id_btn = 'eachFieldButton' + index;
                     var id_img = 'eachFieldImage' + index;
                     var field_src = "../images/default/" + card.filename;
-                    return (
-                    <div className='eachFieldContainer' display='inline-flex'>
-                        <input className="eachFieldRadio" name="field-cb" id={"cb" +  id_btn } type="radio" value={id_btn}></input>
-                        <p className='eachFieldButton' id={ id_btn } type='button' onClick={ () => selected(data, index, id_btn) }>
+                    const fieldRadio = <input className="eachFieldRadio" name="field-cb" id={"cb" +  id_btn } type="radio" value={id_btn}></input>;
+                    const fieldButton = (
+                        <p className='eachFieldButton' id={ id_btn } type='button' onClick={ () => selected(data, index, id_btn, field_src) }>
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
-                    </div>);
+                    );
+                    return (<Card radio={ fieldRadio } button={ fieldButton } kind={ 'Field' }/>);
                 })
             );
             if(!data.player.isMaster){ // 語り部以外のプレイヤーの場合
@@ -48,9 +45,11 @@ export default function FieldSelection(props) {
                 props.socket.emit('wait');
             }
         };
-        const selected = (data, index, id_btn) => {
+        const selected = (data, index, id_btn, field_src) => {
             others_field_select(props.socket, data, index);
-            // ToDo : getElementByIdを使っている
+            console.log(field_src);
+            props.setSelectedFieldSrc(field_src);
+            // TODO: getElementByIdを使っている
             document.getElementById("cb" +  id_btn).checked = !document.getElementById("cb" +  id_btn).checked;
         };
         /** 語り部以外のプレイヤーがフィールド上のカードを選んだときの動作 */
@@ -65,8 +64,8 @@ export default function FieldSelection(props) {
             setShowField(false);
             setShowfieldWrapper(false);
         }
-        /** フィールドの更新 */
-        const update_field = (game) => {
+        /** フィールドの更新(裏面の状態) */
+        const update_field_with_back = (game) => {
             setShowField(true);
             setFieldButtons(
                 game.field.cards.map((card, index) => {
@@ -74,13 +73,13 @@ export default function FieldSelection(props) {
                     var id_img = 'eachFieldImage' + index;
                     var id_lst = 'eachFieldSelected' + index;
                     var field_src = "../images/back/" + card.tailfilename;
-                    return (
-                    <div className='eachFieldContainer' display='inline-flex'>
+                    const fieldButton = (
                         <p className='eachFieldButton' id={ id_btn } type='button'>
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
-                        <span className="eachFieldSelectedList" id={ id_lst }></span>
-                    </div>);
+                    );
+                    const seleceted = <span className="eachFieldSelectedList" id={ id_lst }></span>
+                    return (<Card button={ fieldButton } selected={ seleceted } kind={ 'Field' }/>);
                 })
             );
         };
@@ -88,8 +87,8 @@ export default function FieldSelection(props) {
         props.socket.on('field_selection' ,(data) => field_selection(data));
         props.socket.on('hand_selection' ,(data) => initialize(data));
         props.socket.on('result' ,() => field_reset());
-        props.socket.on('update_field', (data) => update_field(data.game));
-    }, [ props ]);
+        props.socket.on('update_field_with_back', (data) => update_field_with_back(data.game));
+    }, [ props, props.setSelectedFieldSrc ]);
 
     return (
         <div className='field-wrapper' style={ {display: showfieldWrapper ? 'block' : 'none'} }>

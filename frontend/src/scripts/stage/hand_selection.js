@@ -1,17 +1,15 @@
 // master_hand_selectionステージ
 
 import React, { useEffect, useState } from 'react';
-
-import '../../css/hand_selection.css';
 import StoryModal from './modal/story_modal';
+import Card from '../card';
+import '../../css/hand_selection.css';
 
 export default function HandSelection(props) {
     /** 手札を表示するか否か */
     const [showhand,setShowHand] = useState(false);
     /** 語り部が選んだカードの手札上のインデックス */
     const [masterIndex, setMasterIndex] = useState(null);
-    /** お題の内容 */
-    const [story, setStory] = useState('');
     /** 手札から選ばれたカードのソース */
     const [src, setSrc] = useState(null);
     /** 手札の内容 */
@@ -22,7 +20,7 @@ export default function HandSelection(props) {
         const hand_selection = (data) => {
             setShowHand(true);
             // リセット
-            setStory('');
+            props.setStory('');
             setHandButtons(
                 data.player.hand._array.map((card, index) => {
                     var id_btn = 'eachHandButton' + index;
@@ -33,14 +31,11 @@ export default function HandSelection(props) {
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p> 
                     ) : (
-                        <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)}>
+                        <p className='eachHandButton' id={ id_btn } type='button'>
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p>
                     );
-                    return (
-                    <div className='eachHandContainer' display='inline-flex'>
-                        { handButton }
-                    </div>);
+                    return (<Card button={ handButton } kind={ 'Hand' }/>);
                 })
             );
             if(data.player.isMaster){ //語り部の場合
@@ -70,22 +65,20 @@ export default function HandSelection(props) {
                 props.socket.emit('wait');
             }else{
                 props.setMessage('あなたは子です(ﾟ∀ﾟ)お題に沿ったカードを選択してください(=^▽^)σ');
-                console.log(data.player.hand);
-                setShowHand(true);
-                setStory("お題:" + data.game.masterClaim);
+                props.setStory(data.game.masterClaim);
                 setHandButtons(
-                data.player.hand._array.map((card, index) => {
-                    var id_btn = 'eachHandButton' + index;
-                    var id_img = 'eachHandImage' + index;
-                    var hand_src = "../images/default/" + card.filename;
-                    return (
-                        <div className='eachHandContainer' display='inline-flex'>
+                    data.player.hand._array.map((card, index) => {
+                        var id_btn = 'eachHandButton' + index;
+                        var id_img = 'eachHandImage' + index;
+                        var hand_src = "../images/default/" + card.filename;
+                        const handButton = (
                             <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => others_select(props.socket,data, index)}>
                                 <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                             </p>
-                        </div>);
-                })
-            );
+                        );
+                        return (<Card button={ handButton } kind={ 'Hand' }/>);
+                    })
+                );
             }
         };
         /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
@@ -97,7 +90,7 @@ export default function HandSelection(props) {
         };
         /** 手札の表示とお題のリセット */
         const reset_story= () => {
-            setStory('');
+            props.setStory('');
         };
         /** 手札の更新 */
         const update_hand = (player) => {
@@ -106,12 +99,12 @@ export default function HandSelection(props) {
                     var id_btn = 'eachHandButton' + index;
                     var id_img = 'eachHandImage' + index;
                     var hand_src = "../images/default/" + card.filename;
-                    return (
-                    <div className='eachHandContainer' display='inline-flex'>
+                    const handButton = (
                         <p className='eachHandButton' id={ id_btn } type='button'>
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p>
-                    </div>);
+                    );
+                    return (<Card button={ handButton } kind={ 'Hand' }/>);
                 })
             );
         };
@@ -120,16 +113,17 @@ export default function HandSelection(props) {
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
         props.socket.on('result',(data) => reset_story());
         props.socket.on('update_hand',(data) => update_hand(data.player));
+        props.socket.on('restart',() => setShowHand(false));
     }, [ props ]);
 
 
     return (
-        <div className="hand-wrapper">
+        <div className="hand-wrapper" style={ {display: showhand ? 'block' : 'none'} }>
             <div className="hand-content">
-                <div id="hand" style={ {display: showhand ? 'inline-flex' : 'none'} }>{ hand_buttons }</div>
-                <StoryModal socket={ props.socket } setStory={ setStory } masterIndex={ masterIndex } src={ src }/>
+                <div id="hand">{ hand_buttons }</div>
+                <StoryModal socket={ props.socket } setStory={ props.setStory } masterIndex={ masterIndex } src={ src }/>
             </div>
-            <div id="story">{ story }</div>
+            {/* <div id="story">{ story }</div> */}
         </div>
     );
 }

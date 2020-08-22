@@ -40,6 +40,7 @@
     box-shadow: 2px 2px;
     color: #fff;
     transition: 0.2s;
+    cursor: help;
     /* margin: auto; */
 }
 

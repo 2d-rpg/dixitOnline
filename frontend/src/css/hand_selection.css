@@ -1,8 +1,15 @@
-.hand-container
+.hand-wrapper
 {
     position: absolute;
-    height: 100%; /* TODO: game-coreに収まるように設定必要 */
     width: 100%;
+    top: 70%;
+}
+
+.hand-container
+{
+    /* position: absolute;
+    height: 100%;
+    width: 100%; */
 }
 
 .hand-content {
@@ -10,14 +17,15 @@
 }
 
 #hand {
-    margin-top: 50%;
+    /* margin-top: 50%; */
+    display: inline-flex;
 }
 
 .eachHandContainer{
-    padding-left: 0;
     width: 100px;
     height: 150px;
     position: relative;
+    padding: 0.3%;
 }
 
 .eachHandButton
@@ -48,14 +56,6 @@
     border-color: red;
     position: absolute;
     top: -10%;
-}
-
-
-
-#story {
-    position: absolute;
-    width: 100%;
-    top: 40%;
 }
 
 .modal, .modal-backdrop {
