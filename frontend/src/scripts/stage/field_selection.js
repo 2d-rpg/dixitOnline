@@ -48,7 +48,6 @@ export default function FieldSelection(props) {
         const selected = (data, index, id_btn, field_src) => {
             others_field_select(props.socket, data, index);
             console.log(field_src);
-            props.setSelectedFieldSrc(field_src);
             // TODO: getElementByIdを使っている
             document.getElementById("cb" +  id_btn).checked = !document.getElementById("cb" +  id_btn).checked;
         };
