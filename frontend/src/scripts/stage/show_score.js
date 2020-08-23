@@ -10,10 +10,9 @@ export default function ShowScore(props) {
         /** スコアの表示 */
         const show_score = (data) => {
             setScore(data.player.score);
-            props.socket.emit('round_end');
         }
         /** サーバからemitされたときのイベントハンドラ一覧 */
-        props.socket.on('show_score', (data) => show_score(data));
+        props.socket.on('show_answer', (data) => show_score(data));
     }, [ props.socket ]);
 
     return(

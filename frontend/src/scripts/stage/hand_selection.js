@@ -67,7 +67,7 @@ export default function HandSelection(props) {
             if(data.player.isMaster){
                 props.setMessage('あなたは親です(ﾟ∀ﾟ)待機中( ´Д`)y━･~~');
                 props.socket.emit('wait');
-            }else{
+            } else {
                 props.setMessage('あなたは子です(ﾟ∀ﾟ)お題に沿ったカードを選択してください(=^▽^)σ');
                 props.setStory(data.game.masterClaim);
                 setHandButtons(
