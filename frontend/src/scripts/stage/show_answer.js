@@ -70,7 +70,7 @@ export default function ShowAnswer(props) {
                             <div className="show-answer-selected-cards">
                                 <div className="answer-card-wrapper">
                                     <p>正解</p>
-                                    <Card button={ answerSrc } kind={ 'Answer' }/>
+                                    <Card button={ answerSrc } kind={ 'answer' }/>
                                 </div>
                                 <div className="field-result-wrapper">
                                     <p>フィールド選択の最終結果をここに表示(TODO)</p>

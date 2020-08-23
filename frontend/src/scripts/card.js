@@ -16,7 +16,7 @@ import '../css/card.css';
  */
 export default function Card(props) {
     /** カードの種類．HandかFieldか */
-    const className =  props.kind === 'Answer' ? 'each' + props.kind + 'Container' : 'each' + props.kind + 'Container zoom-up-card';
+    const className =  props.kind === 'answer' || props.kind === 'selected' ? props.kind + 'Container' : 'each' + props.kind + 'Container zoom-up-card';
     /** アニメーションの設定 */
     // const [springProps, set] = useSpring(() => ({ scale: 1, config: { mass: 5, tension: 350, friction: 40, duration: 10 } }));
 

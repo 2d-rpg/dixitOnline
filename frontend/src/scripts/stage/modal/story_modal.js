@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Card from '../../card';
 import $ from 'jquery';
-
-const WIDTH = '100';
-const HEIGHT = '150';
+import '../../../css/story_modal.css';
 
 const REGEX = /( |　)+/g
 
@@ -53,9 +52,7 @@ export default function StoryModal(props) {
                     <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) }>
                         <div class="modal-body">
                             <div className="master-wrapper">
-                                    <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper">
-                                        <img id="selected-hand-card" widht={ WIDTH } height={ HEIGHT } src={ props.src } alt="あなたが選んだカード"/> 
-                                    </p> 
+                                    <Card button={ props.src } kind={ 'selected' }/>
                                     <span className="invalid-feedback" style={ {display: showErrMsg ? 'inline' : 'none'} }>入力されたお題は不適切です</span>
                                     <label htmlFor="claim"></label>
                                     <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register() } placeholder="お題" required/>
