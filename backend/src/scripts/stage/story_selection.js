@@ -15,7 +15,7 @@ class StorySelection {
         game.field.add(card, game);
         socket.emit('update_hand',{player:player});
         // フィールドの更新
-        game.players.forEach(player => io.to(player.socketId).emit('update_field', { game: game }));
+        game.players.forEach(player => io.to(player.socketId).emit('update_field_with_back', { game: game }));
 
         game.players.forEach(eachPlayer => {
 	        eachPlayer.done();

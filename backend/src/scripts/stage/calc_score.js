@@ -7,6 +7,7 @@ class ShowAnswer {
         const answerIndex = game.field.masterCardIndex();
         const player = game.findPlayer(socket.id);
         const answers = game.answers;
+        const previous = player.score;
         console.log('[debug] BEFORE ' + player.name + ': ' + player.score);
         if(answers.every(value => value.cardIndex === answerIndex)) {// 全員正解の場合
             if(!player.isMaster) {// 子
@@ -34,7 +35,7 @@ class ShowAnswer {
                 player.score += count; //
             }
         }
-        player.done();
+        socket.emit('score_diff', { previous: previous, new: player.score, diff: player.score - previous });
         console.log('[debug] AFTER ' + player.name + ': ' + player.score);
     }
 }

@@ -1,8 +1,18 @@
-.answer-wrapper
+/* .answer-wrapper
 {
     top: 10%;
     padding-left: 0;
     position: absolute;
     width: 100%;
     z-index: 100;
+} */
+
+.show-answer-selected-cards
+{
+    display: inline-flex;
+}
+
+.answer-card-wrapper, .selected-card-wrapper
+{
+    margin: 5%;
 }

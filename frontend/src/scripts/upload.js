@@ -12,6 +12,7 @@ export default function Upload(props) {
 
     useEffect(() => {
         props.socket.on('hand_selection', () => setShow(false));
+        props.socket.on('restart', () => setShow(true));
     }, [ props.socket, setShow ]);
 
     /** エントリーフォーム入力時の動作 */
