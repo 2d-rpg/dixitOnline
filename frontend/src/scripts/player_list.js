@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChessPawn, faCrown } from "@fortawesome/free-solid-svg-icons";
+import { faChessRook, faChessPawn } from "@fortawesome/free-solid-svg-icons";
 import '../css/player_list.css';
 
 export default function PlayerList(props) {
@@ -21,7 +21,7 @@ export default function PlayerList(props) {
                     <tr className="self-status">
                         <td className="status-icon">
                             <div className="status-rank">{index+1}</div>
-                            <FontAwesomeIcon className={ player.isMaster?"icon-master":"icon-other"} icon={ player.isMaster ? faCrown : faChessPawn }/>
+                            <FontAwesomeIcon className={ player.isMaster?"icon-master":"icon-other"} icon={ player.isMaster ? faChessRook : faChessPawn }/>
                         </td>{/*ここに王冠*/}
                         <td><div className="status-name">{ player.name }</div></td>
                         <td><div className="status-score">{ player.score }</div></td>
@@ -32,7 +32,7 @@ export default function PlayerList(props) {
                     <tr className="other-status">
                         <td className="status-icon">
                             <div className="status-rank">{index+1}</div>
-                            <FontAwesomeIcon className={ player.isMaster?"icon-master":"icon-other"} icon={ player.isMaster ? faCrown : faChessPawn }/>
+                            <FontAwesomeIcon className={ player.isMaster?"icon-master":"icon-other"} icon={ player.isMaster ? faChessRook : faChessPawn }/>
                         </td>{/*ここに王冠*/}
                         <td><div className="status-name">{ player.name }</div></td>
                         <td><div className="status-score">{ player.score }</div></td>
