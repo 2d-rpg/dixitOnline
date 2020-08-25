@@ -36,6 +36,7 @@ class ShowAnswer {
             }
         }
         socket.emit('score_diff', { previous: previous, new: player.score, diff: player.score - previous });
+        socket.emit('update_player_list',{game : game});
         console.log('[debug] AFTER ' + player.name + ': ' + player.score);
     }
 }

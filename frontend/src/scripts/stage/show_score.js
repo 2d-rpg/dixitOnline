@@ -4,8 +4,6 @@ export default function ShowScore(props) {
     /** プレイヤーのスコア */
     const [score, setScore] = useState(0);
 
-    const [player, setPlayerName] = useState();// 残しといて　ユーザのリスト表示に使うかも
-
     useEffect(() => {
         /** スコアの表示 */
         const show_score = (data) => {

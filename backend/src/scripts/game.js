@@ -39,7 +39,7 @@ class Game {
         }
         this.stock.shuffle();
         /** このゲームに参加しているプレイヤー */
-        this.players = new Array(Game.PLAYER_NUM).fill(null);
+        this.players = [];
         /** 現在のプレイヤー人数 */
         this.currentNum = 0;
         /** 墓地(discard) */
@@ -77,7 +77,7 @@ class Game {
         for (var i = 0; i < 5; i++) { 
             player.draw(this.stock);
         }
-        this.players[this.currentNum] = player;
+        this.players.push(player);
         this.players[this.currentNum].done(); //エントリー完了
         this.currentNum += 1;
         return this.players[this.currentNum-1];
