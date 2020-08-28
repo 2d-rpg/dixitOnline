@@ -55,3 +55,15 @@
     position: absolute;
     top: -10%;
 }
+
+#field
+{
+    margin: 3%;
+}
+
+.fieldSelectButton
+{
+    /* width: 20%; */
+    margin: auto;
+}
+

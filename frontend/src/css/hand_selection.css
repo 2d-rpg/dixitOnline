@@ -2,14 +2,7 @@
 {
     position: absolute;
     width: 100%;
-    /* top: 70%; */
-}
-
-.hand-container
-{
-    /* position: absolute;
-    height: 100%;
-    width: 100%; */
+    top: 70%;
 }
 
 .hand-content {
@@ -17,7 +10,7 @@
 }
 
 #hand {
-    margin-top: 50%;
+    /* margin-top: 50%; */
     display: inline-flex;
 }
 

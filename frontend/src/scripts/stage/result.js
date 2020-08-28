@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMedal } from '@fortawesome/free-solid-svg-icons';
 import $ from 'jquery';
 import '../../css/result.css';
+
+const rank = ["1", "2", "3", "4", "5", "6"];
+const rank_suffix = ["st", "nd", "rd", "th", "th", "th"];
+
+const iconStyle = [ { 'color': 'gold' }, { 'color': 'blue' }, { 'color': 'chocolate' } ];
 
 export default function Result(props) {
     /** 結果の内容 */
     const [result, setResult] = useState(null);
 
     // モーダルの表示の中心をbodyではなく.game-coreに変更
-    $('#resultModal').on('shown.bs.modal', function (e) {
+    $('#resultModalWindow').on('shown.bs.modal', function (e) {
         $('body').removeClass('modal-open');
         $('.game-core').addClass('modal-open');
     });
-    $('#resultModal').on('hidden.bs.modal', function (e) {
+    $('#resultModalWindow').on('hidden.bs.modal', function (e) {
         $('.game-core').removeClass('modal-open');
-        props.socket.emit('restart');
     });
 
     useEffect(() => {
@@ -27,44 +33,56 @@ export default function Result(props) {
                     return 0;
                 }).map((player, index) => {
                     var id_result = 'eachResult' + index;
+                    const icon = index < 4 ? <FontAwesomeIcon style={ iconStyle[index] }  icon={ faMedal }/> : null; 
                     return(
                         <tr className='eachResult' id={ id_result }>
-                            <td>{ player.name }</td>
-                            <td>{ player.score }</td>
+                            <td className="eachResultIcon">{ icon }</td>
+                            <td className="eachResultRank">{ rank[index] }</td>
+                            <td className="eachResultRank">{ rank_suffix[index] }</td>
+                            <td className="eachResultName">{ player.name }</td>
+                            <td className="eachResutScore">{ player.score }</td>
                         </tr>
                     );
                 })
             );
-            $('#resultModal').modal('toggle');
+            $('#resultModalWindow').modal('toggle');
         }
 
         props.socket.on('result' ,(data) => show_result(data));
-    }, [ props ]);
+    }, [ props, result ]);
+
+    const handleclick = () => {
+        $('#resultModalWindow').modal('toggle');
+        props.socket.emit('restart');
+    }
 
     return(
-        <div id="result-wrapper">
-        <div className="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalTitle" aria-hidden="true">
+        <div className="modal fade" id="resultModalWindow" tabindex="-1" role="dialog" aria-labelledby="resultModalTitle" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" id="resultModalDialog" role="document">
-                <div clasName="modal-content">
+                <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="resultModalTitle">結果</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" onClick={ handleclick } aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div className="modal-body">
                         <table id="result-table">
                             <tbody id="result">
+                                <tr className='eachResult'>
+                                    <td colspan="3">順位</td>
+                                    <td>プレイヤー名</td>
+                                    <td>スコア</td>
+                                </tr>
                                 { result }
                             </tbody>
                         </table>
                     </div>
                     <div className="modal-footer">
-                        <button id="backButton" type="button" className="btn btn-warning" data-dismiss="modal">戻る</button>
+                        <button id="backButton" onClick={ handleclick } type="button" className="btn btn-warning m-auto">戻る</button>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     );
 }

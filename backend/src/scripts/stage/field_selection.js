@@ -3,7 +3,7 @@ const utils = require('../utils');
 
 class FieldSelection {
 
-    static do(socket, index, game) {
+    static do(socket, io, index, game) {
         // 答えを集計
         utils.logWithStage(game.stage, 'socket id: [' + socket.id + ']\'s Player was selected.');
         let id = socket.id;
@@ -11,8 +11,14 @@ class FieldSelection {
         let dict = {}
         dict['id'] = id;
         dict['cardIndex'] = cardIndex;
-        game.answers.push(dict);
-        game.findPlayer(id).done();
+        if (game.answers.some(element => element.id === id)) {
+            game.answers.filter(element => element.id === id)[0].cardIndex = cardIndex;
+        } else {
+            game.answers.push(dict);
+        }
+        // game.players.forEach(player => {
+        //     io.to(player.socketId).emit('update_selected_field', { game: game });
+        // });
     }
 }
 

@@ -7,7 +7,7 @@ class StorySelection {
     constructor() {}
 
     static do(socket, io, message, masterIndex, game) {
-        game.setMasterClaim(message);
+        game.setStory(message);
         let player = game.findPlayer(socket.id);
         player.selectFromHand(masterIndex);
         // 手札の更新

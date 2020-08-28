@@ -16,16 +16,30 @@ import '../css/card.css';
  */
 export default function Card(props) {
     /** カードの種類．HandかFieldか */
-    const className =  props.kind === 'answer' || props.kind === 'selected' ? props.kind + 'Container' : 'each' + props.kind + 'Container zoom-up-card';
+    let className =  props.kind === 'answer' || props.kind === 'selected' ? props.kind + 'Container' : 'each' + props.kind + 'Container zoom-up-card';
+    if (props.kind === 'answer' && props.isMaster) {
+        className += ' correctAnswer';
+    }
     /** アニメーションの設定 */
     // const [springProps, set] = useSpring(() => ({ scale: 1, config: { mass: 5, tension: 350, friction: 40, duration: 10 } }));
 
     const isField = (props.kind === 'Field');
+    const isAnswer = (props.kind === 'answer');
 
     const resultComponent = isField ? (
         <div className={ className } display='inline-flex'>
             { props.radio }
             { props.button }
+        </div>
+    ) : isAnswer && props.isMaster ? (
+        <div className={ className } display='inline-flex'>
+            <div className="innnderAnswerContainer">
+                { props.button }
+            </div>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     ) : (
         <div className={ className } display='inline-flex'>
