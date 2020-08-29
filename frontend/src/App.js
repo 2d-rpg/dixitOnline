@@ -20,6 +20,7 @@ import ShowRole from './scripts/stage/show_role';
 import Result from './scripts/stage/result';
 import Upload from './scripts/upload';
 import Status from './scripts/status';
+import PlayerList from './scripts/player_list';
 
 import './App.css';
 import './css/game.css';
@@ -50,6 +51,7 @@ socket.on('reconnect_failed', () => console.log('reconnect_failed'));
 socket.on('connect_error', (error) => console.log('connect_error: ' + error));
 
 function App() {
+  /** help */
   const [message, setMessage] = useState('ようこそ！');
   /** お題の内容 */
   const [story, setStory] = useState('');
@@ -74,11 +76,13 @@ function App() {
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
             <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc }/>
-            <Result socket={ socket } setMessage={ setMessage }/>
             <StoryModal socket={ socket } setStory={ setStory } masterIndex={ masterIndex } src={ src }/>
             <FieldSelection socket={ socket } setMessage={ setMessage }/>
             <ShowAnswer socket={ socket } setMessage={ setMessage }/>
             <Status socket={ socket } name={ name }/>
+            <Result socket={ socket } setMessage={ setMessage }/>
+            <Status socket={ socket } name={ name } showStatus={ showStatus } setShowStatus={ setShowStatus }/>
+            <PlayerList socket={ socket } name={ name }/>
             <ShowRole socket={ socket } setMessage={ setMessage } />
             <Upload socket={ socket }/>
           </div>

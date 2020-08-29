@@ -13,6 +13,9 @@ class Entry {
             console.log(socket.handshake.quey);
             // 全クライアントのプレイヤー人数表示更新
             io.sockets.emit('update_number_of_player', {num : game.getLength()});
+            game.players.forEach(player => {
+                io.to(player.socketId).emit('update_player_list',{game : game});
+            });
             utils.logWithStage('entry', 'Player Name: [' + player.name + '] ([' 
                 + player.socketId + ']) joined.');
         } else {
