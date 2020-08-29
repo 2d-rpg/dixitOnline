@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane, faComment } from '@fortawesome/free-solid-svg-icons';
 import '../css/chat.css';
 
 const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -11,8 +13,14 @@ export default function Chat(props) {
     const { register, handleSubmit, reset } = useForm();
     /** チャットログ */
     const [chatLog, appendMsg] = useState([]);
+    /** チャットログの参照 */
+    const chatLogElement = useRef();
+    /** チャットフォームの参照 */
+    const chatFormElement = useRef();
+
     /** メッセージを送信したときの動作 */
     const onSubmit = (data, event) => {
+        if (data.msg === '') return;
         props.socket.emit('chat_send_from_client', {value : data.msg});
         reset();
         event.preventDefault();
@@ -22,32 +30,61 @@ export default function Chat(props) {
         /** サーバからのチャット更新 */
         props.socket.on('chat_send_from_server', (data) => {
             const time = new Date();
-            appendMsg((prev) => [...prev, {name: data.name, msg: data.value, time: format(time)}]);
+            appendMsg((prev) => [...prev, { name: data.name, msg: data.value, time: format(time), self: props.socket.id === data.socketId }]);
+            chatLogElement.current.scrollTop = chatLogElement.current.scrollHeight;
         });
-    }, [ register, props.socket ]);
+
+
+    }, [ register, props.socket, chatLogElement ]);
 
     return (
-        <div id='chat-form-wrapper'>
-            <div id="chat-header">
-                <h4>チャット</h4>
+        <div className='chat-form-wrapper'>
+            <div className="chat-header">
+                <h4><span className="chat-icon"><FontAwesomeIcon icon={ faComment }/></span> チャット</h4>
             </div>
-            <div id="chatLog">
-                { chatLog.map((data, index) => 
-                    <div key={ 'message' + index } >
-                        <div id="chatlog-name">
-                            { data.name }
-                        </div>
-                        <div id="chatlog-msg">
-                            <p>{ data.msg }</p>
-                            <span class="time">{ data.time }</span>
-                        </div>
-                    </div>) }
+            <div className="chat-log-wrapper">
+                <div id="chatLog" ref={ chatLogElement }>
+                    { chatLog.map((data, index) => 
+                        data.self ? (
+                            <div className="outgoing-chats" key={ 'message' + index }>
+                                <div className="outgoing-msg">
+                                    <div className="outgoing-chats-msg">
+                                        <div className="outgoing-msg-inbox">
+                                            <p>{ data.msg }</p>
+                                            <span className="time">{ data.time }</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="received-chats" key={ 'message' + index }>
+                                <div className="received-chats-name">
+                                    { data.name }
+                                </div>
+                                <div className="received-msg">
+                                    <div className="received-chats-msg">
+                                        <div className="received-msg-inbox">
+                                            <p>{ data.msg }</p>
+                                            <span className="time">{ data.time }</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )) }
+                </div>
             </div>
-            <form className="form-inline" id="chatForm" onSubmit={ handleSubmit(onSubmit) }>
-                <label htmlFor="msgForm">メッセージ：</label>
-                <input type="text" className="form-control" id="message" name="msg" ref={ register() } placeholder="メッセージ"/>
-                <button type="submit" className="btn btn-primary">送信</button>
-            </form>
+            <div className="chat-bottom">
+                <div className="input-msg-group">
+                    <form className="form-inline chat-form-content" id="chatForm" ref={ chatFormElement } onSubmit={ handleSubmit(onSubmit) }>
+                        <input type="text" className="form-control chat-input" id="message" name="msg" ref={ register() } placeholder="メッセージ"/>
+                        <div className="input-msg-group-append">
+                            <span onClick={ handleSubmit(onSubmit) } form="chatForm" class="input-msg-group-text">
+                                <FontAwesomeIcon className="send-icon" icon={ faPaperPlane }/>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 }

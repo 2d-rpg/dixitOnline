@@ -52,7 +52,7 @@ class Game {
         /** 語り部(最初に入ってきた人から) */
         this.master = -1;
         /** お題 */
-        this.masterClaim = "";
+        this.story = "";
         /** 投票の結果 */
         this.answers = [];
     }
@@ -168,8 +168,8 @@ class Game {
     }
 
     /** 語り部によるお題の設定 */
-    setMasterClaim(message){
-        this.masterClaim = message;
+    setStory(message){
+        this.story = message;
     }
 
     /** 終了条件 */
@@ -265,8 +265,9 @@ class Game {
 
     /** スコア計算 */
     calcScore() {
-        const answerIndex = this.field.masterCardIndex();
+        const answerIndex = this.field.masterCardIndex;
         this.players.forEach(player => {
+            player.prescore = player.score;
             console.log('[debug] BEFORE ' + player.name + ': ' + player.score);
             if(this.answers.every(value => value.cardIndex === answerIndex)) {// 全員正解の場合
                 if(!player.isMaster) {// 子
@@ -283,20 +284,16 @@ class Game {
                 if(player.isMaster) {
                     player.score += 3;
                 } else {
-                    const dict = this.answers.filter(item => {
-                        item.id === player.socketId;
-                    })
-                    if(dict['cardIndex'] == this.answerIndex) {
+                    if(this.answers.filter(item => item.id === player.socketId)[0].cardIndex === answerIndex) {
                         player.score += 3;
                     }
                     // 間違えさせた分
-                    const count = this.answers.filter(answer => this.field.cards[answer.cardIndex].player.socketId === player.socketId).length;
+                    const count = this.answers.filter(answer => this.field.cards[answer.cardIndex].player === player.socketId).length;
                     player.score += count; //
                 }
             }
             console.log('[debug] AFTER ' + player.name + ': ' + player.score);
         });
-        // socket.emit('score_diff', { previous: previous, new: player.score, diff: player.score - previous });
     }
 }
 

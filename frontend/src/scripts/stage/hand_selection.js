@@ -1,17 +1,12 @@
 // master_hand_selectionステージ
 
 import React, { useEffect, useState } from 'react';
-import StoryModal from './modal/story_modal';
 import Card from '../card';
 import '../../css/hand_selection.css';
 
 export default function HandSelection(props) {
     /** 手札を表示するか否か */
     const [showhand,setShowHand] = useState(false);
-    /** 語り部が選んだカードの手札上のインデックス */
-    const [masterIndex, setMasterIndex] = useState(null);
-    /** 手札から選ばれたカードのソース */
-    const [src, setSrc] = useState(null);
     /** 手札の内容 */
     const [hand_buttons, setHandButtons] = useState(null);
 
@@ -20,7 +15,6 @@ export default function HandSelection(props) {
         const hand_selection = (data) => {
             setShowHand(true);
             // リセット
-            props.setStory('');
             setHandButtons(
                 data.player.hand._array.map((card, index) => {
                     var id_btn = 'eachHandButton' + index;
@@ -47,7 +41,7 @@ export default function HandSelection(props) {
         /** 語り部が手札からカードを選択したときの動作 */
         const master_select = (data, index) => {
             if(data.player.isMaster){
-                setMasterIndex(index);
+                props.setMasterIndex(index);
                 story_selection(data, index);
             }else{
                 //TODO:子の表示
@@ -57,7 +51,7 @@ export default function HandSelection(props) {
         const story_selection = (data, index) => {
             props.setMessage('あなたは親です(ﾟ∀ﾟ)カードのお題を入力してください⊂((・x・))⊃');
             const selectedSrc = "../images/default/" + data.player.hand._array[index].filename;
-            setSrc(
+            props.setSrc(
                 <p className="selectedButton" id="selected-hand-card-wrapper">
                     <img className="selectedImage" src={ selectedSrc } alt="あなたが選んだカード"/> 
                 </p> );
@@ -69,7 +63,6 @@ export default function HandSelection(props) {
                 props.socket.emit('wait');
             } else {
                 props.setMessage('あなたは子です(ﾟ∀ﾟ)お題に沿ったカードを選択してください(=^▽^)σ');
-                props.setStory(data.game.masterClaim);
                 setHandButtons(
                     data.player.hand._array.map((card, index) => {
                         var id_btn = 'eachHandButton' + index;
@@ -90,15 +83,11 @@ export default function HandSelection(props) {
             
             props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
             const selectedSrc = "../images/default/" + data.player.hand._array[index].filename;
-            setSrc(
+            props.setSrc(
                 <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper">
                     <img id="selected-hand-card" src={ selectedSrc } alt="あなたが選んだカード"/> 
                 </p> );
             socket.emit('others_hand_selection', {index : index});
-        };
-        /** 手札の表示とお題のリセット */
-        const reset_story= () => {
-            props.setStory('');
         };
         /** 手札の更新 */
         const update_hand = (player) => {
@@ -119,7 +108,6 @@ export default function HandSelection(props) {
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
         props.socket.on('hand_selection' ,(data) => hand_selection(data));
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
-        props.socket.on('result',(data) => reset_story());
         props.socket.on('update_hand',(data) => update_hand(data.player));
         props.socket.on('restart',() => setShowHand(false));
     }, [ props ]);
@@ -129,9 +117,7 @@ export default function HandSelection(props) {
         <div className="hand-wrapper" style={ {display: showhand ? 'block' : 'none'} }>
             <div className="hand-content">
                 <div id="hand">{ hand_buttons }</div>
-                <StoryModal socket={ props.socket } setStory={ props.setStory } masterIndex={ masterIndex } src={ src }/>
             </div>
-            {/* <div id="story">{ story }</div> */}
         </div>
     );
 }

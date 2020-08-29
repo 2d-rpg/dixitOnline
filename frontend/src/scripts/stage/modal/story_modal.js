@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Card from '../../card';
 import $ from 'jquery';
 import '../../../css/story_modal.css';
 
-const REGEX = /( |　)+/g
+const REGEX = /( |　)+/g;
 
 export default function StoryModal(props) {
     /** お題フォーム */
@@ -21,6 +21,10 @@ export default function StoryModal(props) {
         setShowErrMsg(false);
         $('.game-core').removeClass('modal-open');
     });
+
+    useEffect(() => {
+        props.socket.on('others_hand_selection', (data) => props.setStory(data.game.story));
+    }, [ props ]);
 
     /** お題のフォーム送信ボタンを押したときの動作 */
     const onSubmit = (data, event) => {
@@ -40,29 +44,26 @@ export default function StoryModal(props) {
     };
 
     return(
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalCenterTitle">お題を決めよう！</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalCenterTitle">お題を決めよう！</h5>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form className="form-inline" id="masterForm" onSubmit={ handleSubmit(onSubmit) }>
-                        <div class="modal-body">
-                            <div className="master-wrapper">
-                                    <Card button={ props.src } kind={ 'selected' }/>
-                                    <span className="invalid-feedback" style={ {display: showErrMsg ? 'inline' : 'none'} }>入力されたお題は不適切です</span>
-                                    <label htmlFor="claim"></label>
-                                    <input type="text" className="form-control mb-2 mr-sm-2" id="masterClaim" name="story" ref={ register() } placeholder="お題" required/>
-                                    <button type="submit" className="btn btn-primary mb-2">決定</button>
-                            </div>
+                        <div className="modal-body">
+                            <Card button={ props.src } kind={ 'selected' }/>
+                            <form className="form-group" id="masterForm" onSubmit={ handleSubmit(onSubmit) }>
+                                <span className="invalid-feedback" style={ {display: showErrMsg ? 'inline' : 'none'} }>入力されたお題は不適切です</span>
+                                <label htmlFor="claim"></label>
+                                <input type="text" className="form-control" id="masterClaim" name="story" ref={ register() } placeholder="お題" required/>
+                            </form>
                         </div>
-                        {/* <div class="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal">閉じる</button>
-                        </div> */}
-                    </form>
+                        <div className="modal-footer">
+                            <button type="submit" className="btn btn-primary m-auto" form="masterForm">決定</button>
+                        </div>
                 </div>
             </div>
         </div>

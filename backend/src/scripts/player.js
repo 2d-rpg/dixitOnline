@@ -16,6 +16,7 @@ class Player {
         this.hand = new Hand();
         this.isMaster = false;
         this.score = 0;
+        this.prescore = 0;
         this.name = obj.username;
         this.state = 'undone';
         Player.count += 1;
