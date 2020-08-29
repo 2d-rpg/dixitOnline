@@ -61,6 +61,8 @@ function App() {
   const [masterIndex, setMasterIndex] = useState(null);
   /** 手札から選ばれたカードのソース */
   const [src, setSrc] = useState(null);
+  /** ステータス(プレイヤー名とスコア)の表示 */
+  const [showStatus, setShowStatus] = useState(false);
 
   return (
     <div className="container">
@@ -72,14 +74,13 @@ function App() {
           <div className='game-core'>
             <Init socket={ socket }/>
             <Help message={ message }/>
-            <Entry socket={ socket } setMessage={ setMessage } setName={ setName }/>
+            <Entry socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
             <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc }/>
             <StoryModal socket={ socket } setStory={ setStory } masterIndex={ masterIndex } src={ src }/>
             <FieldSelection socket={ socket } setMessage={ setMessage }/>
             <ShowAnswer socket={ socket } setMessage={ setMessage }/>
-            <Status socket={ socket } name={ name }/>
             <Result socket={ socket } setMessage={ setMessage }/>
             <Status socket={ socket } name={ name } showStatus={ showStatus } setShowStatus={ setShowStatus }/>
             <PlayerList socket={ socket } name={ name }/>
