@@ -7,29 +7,26 @@ import Card from '../card';
 export default function FieldSelection(props) {
 
     /** フィールドを表示するか否か */
-    const [showfield,setShowField] = useState(true);
+    const [showfield, setShowField] = useState(true);
     /** 決定済みかどうか */
     const [decided, setDecided] = useState(false);
     /** フィールド決定ボタン表示するか否か */
-    const [showButton,setShowButton] = useState(false);
+    const [showButton, setShowButton] = useState(false);
     /** フィールドの表示内容 */
     const [field_buttons, setFieldButtons] = useState(null);
 
     const [showfieldWrapper, setShowfieldWrapper] = useState(true);
-
-    // const [cardCheckbox,setCardCheckbox] = useState({id:null,checked:true});
-    // const [cardCheckbox,setCardCheckbox] = useState(false);
 
     useEffect(() => {
         /** 初期化 */
         const initialize = (data) => {
             setShowField(false);
             setDecided(false);
+            setShowfieldWrapper(true);
         };
         /** フィールドの表示 */
         const field_selection = (data) => {
             setShowfieldWrapper(true);
-            console.log(decided);
             setFieldButtons(
                 data.game.field.cards.map((card, index) => {
                     var id_btn = 'eachFieldButton' + index;
