@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import './App.css';
-import './css/game.css';
-import './css/progress.css';
+import { withCookies } from 'react-cookie';
+import io from 'socket.io-client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import $ from 'jquery';
+
 import PlayerCounter from './scripts/playerCounter';
 import Chat from './scripts/chat';
 import Story from './scripts/story';
@@ -12,18 +13,18 @@ import Init from './scripts/stage/init';
 import Entry from './scripts/stage/entry';
 import Start from './scripts/stage/start';
 import HandSelection from './scripts/stage/hand_selection';
-import { withCookies } from 'react-cookie';
-import io from 'socket.io-client';
+import StoryModal from './scripts/stage/modal/story_modal';
 import FieldSelection from './scripts/stage/field_selection';
 import ShowAnswer from './scripts/stage/show_answer';
 import ShowRole from './scripts/stage/show_role';
 import Result from './scripts/stage/result';
 import Upload from './scripts/upload';
-import $ from 'jquery';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestion } from "@fortawesome/free-solid-svg-icons";
 import Status from './scripts/status';
 import PlayerList from './scripts/player_list';
+
+import './App.css';
+import './css/game.css';
+import Help from './scripts/help';
 
 
 // const ENDPOINT = "http://34.83.112.24:3000/";
@@ -32,7 +33,8 @@ const ENDPOINT = "localhost:4001/";
 const socket = io(ENDPOINT, {
   query: { 'client-id': cookieVal('client-id') },
   transports: ['websocket'],
-  upgrade: false
+  upgrade: false,
+  timeout: 1800000 // タイムアウト時間を30分に(デフォルトは20秒)
 });
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
@@ -55,6 +57,10 @@ function App() {
   const [story, setStory] = useState('');
   /** プレイヤー名 */
   const [name, setName] = useState(null);
+  /** 語り部が選んだカードの手札上のインデックス */
+  const [masterIndex, setMasterIndex] = useState(null);
+  /** 手札から選ばれたカードのソース */
+  const [src, setSrc] = useState(null);
   /** ステータス(プレイヤー名とスコア)の表示 */
   const [showStatus, setShowStatus] = useState(false);
 
@@ -67,18 +73,12 @@ function App() {
         <div className='game-core-wrapper'>
           <div className='game-core'>
             <Init socket={ socket }/>
-            <div id="progress">
-              <div className="help">
-                <FontAwesomeIcon icon={faQuestion} />
-              </div>
-              <div className="help-content">
-                { message }
-              </div>
-            </div>
+            <Help message={ message }/>
             <Entry socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
-            <HandSelection socket={ socket } setMessage={ setMessage } setStory={ setStory }/>
+            <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc }/>
+            <StoryModal socket={ socket } setStory={ setStory } masterIndex={ masterIndex } src={ src }/>
             <FieldSelection socket={ socket } setMessage={ setMessage }/>
             <ShowAnswer socket={ socket } setMessage={ setMessage }/>
             <Result socket={ socket } setMessage={ setMessage }/>

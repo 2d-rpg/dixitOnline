@@ -22,6 +22,7 @@ const restart = require('./src/scripts/stage/restart');
 const disconnect = require('./src/scripts/stage/disconnect');
 const socketIO = require('socket.io');
 const ConfirmAnswer = require('./src/scripts/stage/confirm_answer');
+const ConfirmFieldSelection = require('./src/scripts/stage/confirm_field_selection');
 const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
@@ -43,9 +44,9 @@ io.on('connection', (socket) => {
     // クライアントからstory_selectionがemitされた時
     socket.on('others_hand_selection', (data) => others_hand_selection.do(socket, io, data.index, game));
     // クライアントからfield_selecitonがemitされた時
-    socket.on('field_selection', (data) => field_selection.do(socket, data.index, game));
+    socket.on('field_selection', (data) => field_selection.do(socket, io, data.index, game));
     // クライアントからfield_selecitonがemitされた時
-    // socket.on('calc_score', () => calc_score.do(socket, game));
+    socket.on('confirm_field_selection', () => ConfirmFieldSelection.do(socket, game));
     // クライアントからfield_selecitonがemitされた時
     socket.on('confirm_answer', () => ConfirmAnswer.do(socket, game));
     // クライアントからround_endがemitされた時
@@ -63,7 +64,7 @@ io.on('connection', (socket) => {
         if (player != null) {
             name = player.name;
         }
-        io.sockets.emit('chat_send_from_server', {name: name, value : data.value});
+        io.sockets.emit('chat_send_from_server', { name: name, value : data.value, socketId: socket.id });
     });
     // 画像のアップロード
     socket.on('upload', (data) => utils.uploadFile(data.filename, data.image));

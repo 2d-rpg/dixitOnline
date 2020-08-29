@@ -6,6 +6,7 @@ class Field {
     constructor(size) {
         this.cards = new Array();
         this.masterCard = null;
+        this.masterCardIndex = 0;
     }
     /** フィールドにカードを追加 */
     add(card, game) {
@@ -22,12 +23,14 @@ class Field {
     /** フィールドのカードをシャッフル */
     shuffle() {
         this.cards = utils.shuffle(this.cards);
+        this.updateMasterCardIndex();
     }
-    new(){
-        this.cards.splice(0);
-    }
-    masterCardIndex(){
-        return this.cards[this.masterCard];
+    /** 
+     * フィールドの内の正解のカードのインデックスを更新.
+     * 主にシャッフルが終わった後に行う．
+     */
+    updateMasterCardIndex(){
+        this.masterCardIndex = this.cards.indexOf(this.masterCard);
     }
 }
 
