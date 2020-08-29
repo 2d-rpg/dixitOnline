@@ -56,14 +56,18 @@ export default function HandSelection(props) {
         /** 語り部が手札から選んだカードの表示と手札の非表示及びお題フォームの表示 */
         const story_selection = (data, index) => {
             props.setMessage('あなたは親です(ﾟ∀ﾟ)カードのお題を入力してください⊂((・x・))⊃');
-            setSrc("../images/default/" + data.player.hand._array[index].filename);
+            const selectedSrc = "../images/default/" + data.player.hand._array[index].filename;
+            setSrc(
+                <p className="selectedButton" id="selected-hand-card-wrapper">
+                    <img className="selectedImage" src={ selectedSrc } alt="あなたが選んだカード"/> 
+                </p> );
         };
         /** 語り部以外のプレイヤーの手札の表示 */
         const others_hand_selection = (data) => {
             if(data.player.isMaster){
                 props.setMessage('あなたは親です(ﾟ∀ﾟ)待機中( ´Д`)y━･~~');
                 props.socket.emit('wait');
-            }else{
+            } else {
                 props.setMessage('あなたは子です(ﾟ∀ﾟ)お題に沿ったカードを選択してください(=^▽^)σ');
                 props.setStory(data.game.masterClaim);
                 setHandButtons(
@@ -85,7 +89,11 @@ export default function HandSelection(props) {
         const others_select = (socket, data, index) => {
             
             props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
-            setSrc("../images/default/" + data.player.hand._array[index].filename);
+            const selectedSrc = "../images/default/" + data.player.hand._array[index].filename;
+            setSrc(
+                <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper">
+                    <img id="selected-hand-card" src={ selectedSrc } alt="あなたが選んだカード"/> 
+                </p> );
             socket.emit('others_hand_selection', {index : index});
         };
         /** 手札の表示とお題のリセット */

@@ -4,16 +4,13 @@ export default function ShowScore(props) {
     /** プレイヤーのスコア */
     const [score, setScore] = useState(0);
 
-    const [player, setPlayerName] = useState();// 残しといて　ユーザのリスト表示に使うかも
-
     useEffect(() => {
         /** スコアの表示 */
         const show_score = (data) => {
             setScore(data.player.score);
-            props.socket.emit('round_end');
         }
         /** サーバからemitされたときのイベントハンドラ一覧 */
-        props.socket.on('show_score', (data) => show_score(data));
+        props.socket.on('show_answer', (data) => show_score(data));
     }, [ props.socket ]);
 
     return(

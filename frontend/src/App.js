@@ -23,6 +23,7 @@ import $ from 'jquery';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestion } from "@fortawesome/free-solid-svg-icons";
 import Status from './scripts/status';
+import PlayerList from './scripts/player_list';
 
 
 // const ENDPOINT = "http://34.83.112.24:3000/";
@@ -48,6 +49,7 @@ socket.on('reconnect_failed', () => console.log('reconnect_failed'));
 socket.on('connect_error', (error) => console.log('connect_error: ' + error));
 
 function App() {
+  /** help */
   const [message, setMessage] = useState('ようこそ！');
   /** お題の内容 */
   const [story, setStory] = useState('');
@@ -81,6 +83,7 @@ function App() {
             <ShowAnswer socket={ socket } setMessage={ setMessage }/>
             <Result socket={ socket } setMessage={ setMessage }/>
             <Status socket={ socket } name={ name } showStatus={ showStatus } setShowStatus={ setShowStatus }/>
+            <PlayerList socket={ socket } name={ name }/>
             <ShowRole socket={ socket } setMessage={ setMessage } />
             <Upload socket={ socket }/>
           </div>

@@ -87,7 +87,7 @@ export default function FieldSelection(props) {
         props.socket.on('hand_selection' ,(data) => initialize(data));
         props.socket.on('result' ,() => field_reset());
         props.socket.on('update_field_with_back', (data) => update_field_with_back(data.game));
-    }, [ props, props.setSelectedFieldSrc ]);
+    }, [ props ]);
 
     return (
         <div className='field-wrapper' style={ {display: showfieldWrapper ? 'block' : 'none'} }>

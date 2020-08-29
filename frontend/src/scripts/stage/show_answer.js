@@ -36,19 +36,18 @@ export default function ShowAnswer(props) {
                     <img className='answerImage' src={ src } alt={ filename }></img>
                 </p>
             );
-            props.socket.emit('calc_score');
+            open_modal(data);
         }
         /** モーダルの表示 */
         const open_modal = (data) => {
-            setScoreInfo({ previous: data.previous, new: data.new, diff: data.diff });
-            setMessage( data.diff === 0 ? '残念！' : 'やったね！' );
+            setScoreInfo({ previous: scoreInfo.new, new: data.player.score, diff: data.player.score - scoreInfo.new });
+            setMessage( scoreInfo.diff === 0 ? '残念！' : 'やったね！' );
             $('#answerModal').modal('toggle');
         };
         /** サーバからのemitされたときのイベントハンドラ一覧 */
         props.socket.on('show_answer' ,(data) => show_answer(data));
-        props.socket.on('score_diff', (data) => open_modal(data));
 
-    }, [ props.socket ]);
+    }, [ props.socket, scoreInfo ]);
 
     const handleclick = () => {
         props.socket.emit('confirm_answer');
@@ -70,7 +69,7 @@ export default function ShowAnswer(props) {
                             <div className="show-answer-selected-cards">
                                 <div className="answer-card-wrapper">
                                     <p>正解</p>
-                                    <Card button={ answerSrc } kind={ 'Answer' }/>
+                                    <Card button={ answerSrc } kind={ 'answer' }/>
                                 </div>
                                 <div className="field-result-wrapper">
                                     <p>フィールド選択の最終結果をここに表示(TODO)</p>

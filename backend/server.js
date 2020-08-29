@@ -45,11 +45,11 @@ io.on('connection', (socket) => {
     // クライアントからfield_selecitonがemitされた時
     socket.on('field_selection', (data) => field_selection.do(socket, data.index, game));
     // クライアントからfield_selecitonがemitされた時
-    socket.on('calc_score', () => calc_score.do(socket, game));
+    // socket.on('calc_score', () => calc_score.do(socket, game));
     // クライアントからfield_selecitonがemitされた時
     socket.on('confirm_answer', () => ConfirmAnswer.do(socket, game));
     // クライアントからround_endがemitされた時
-    socket.on('round_end', () => round_end.do(socket, game));
+    // socket.on('round_end', () => round_end.do(socket, game));
     // クライアントからrestartがemitされた時
     socket.on('restart', () => restart.do(io, socket, game));
 
