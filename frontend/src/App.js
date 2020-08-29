@@ -10,6 +10,7 @@ import Chat from './scripts/chat';
 import Story from './scripts/story';
 import Init from './scripts/stage/init';
 import Entry from './scripts/stage/entry';
+import Room from './scripts/stage/room';
 import Start from './scripts/stage/start';
 import HandSelection from './scripts/stage/hand_selection';
 import { withCookies } from 'react-cookie';
@@ -76,6 +77,7 @@ function App() {
               </div>
             </div>
             <Entry socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
+            <Room socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
             <HandSelection socket={ socket } setMessage={ setMessage } setStory={ setStory }/>

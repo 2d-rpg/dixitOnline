@@ -10,7 +10,7 @@ class Restart {
 
     static do(io, socket, game) {
         game.deletePlayer(socket.id);
-        io.sockets.emit('update_number_of_player', { num: game.getLength() });
+        io.sockets.emit('update_number_of_player', { num: game.players.length });
         console.log('delete');
         socket.emit('restart');
     }

@@ -20,7 +20,7 @@ export default function Entry(props) {
     const onSubmit = (data, event) => {
         // サーバーに'entry'を送信
         setShow(false);
-        setCookie('client-id', data.username, {path: '/'});
+        setCookie('client-id', data.username, {path: '/', secure: true});
         props.setName(data.username);
         props.setShowStatus(true);
         props.socket.emit('entry', {username : data.username});

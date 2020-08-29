@@ -7,10 +7,13 @@ const http = require('http');
 const path = require('path');
 const utils = require('./src/scripts/utils');
 const Game = require('./src/scripts/game');
+const RoomContainer = require('./src/scripts/room_container');
 // ステージごとのファイル読み込み
 const wait = require('./src/scripts/stage/wait');
 const init = require('./src/scripts/stage/init');
 const entry = require('./src/scripts/stage/entry');
+const room_create = require('./src/scripts/stage/room_create');
+const room_entry = require('./src/scripts/stage/room_entry');
 const start = require('./src/scripts/stage/start');
 const story_selection = require('./src/scripts/stage/story_selection');
 const others_hand_selection = require('./src/scripts/stage/others_hand_selection');
@@ -27,15 +30,19 @@ const server = http.Server(app);
 const io = socketIO(server);
 
 // ゲームオブジェクト作成
+let roomContainer = new RoomContainer();
 let game = new Game();
 // 接続が完了したときに呼び出す関数
 io.on('connection', (socket) => {
     // 行動する必要がない時
-    socket.on('wait', () => wait.do(socket, game));
+    // socket.on('wait', () => wait.do(socket, game));
     // クライアント接続時
-    socket.on('init', (config) => init.do(config, io, socket, game));
+    socket.on('init', (config) => init.do(config, io, socket, roomContainer));
     // クライアントからentryがemitされた時
-    socket.on('entry', (data) =>  entry.do(data, io, socket, game));
+    socket.on('entry', (data) =>  entry.do(data, io, socket, roomContainer));
+
+    socket.on('room_create', (data) => room_create.do(data, io, socket, roomContainer));
+    socket.on('room_entry', (data) => room_entry.do(data, io, socket, roomContainer));
     // クライアントからstartがemitされた時
     socket.on('start', () => start.do(socket, game));
     // クライアントからstory_selectionがemitされた時
