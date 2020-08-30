@@ -26,6 +26,7 @@ import PlayerList from './scripts/player_list';
 import './App.css';
 import './css/game.css';
 import Help from './scripts/help';
+import Test from './test';
 
 
 // const ENDPOINT = "http://34.83.112.24:3000/";
@@ -95,6 +96,7 @@ function App() {
           <Chat socket={ socket }/>
         </div>
       </div>
+      <Test/>
     </div>
   );
 }
