@@ -26,8 +26,8 @@ export default function Entry(props) {
         }
         // サーバーに'entry'を送信
         setShow(false);
+        setCookie('client-id', data.username, {path: '/', secure: true});
         props.setShowStatus(true);
-        setCookie('client-id', data.username, {path: '/'});
         props.setName(data.username);
         props.socket.emit('entry', {username : data.username});
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)

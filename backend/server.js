@@ -6,17 +6,17 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const utils = require('./src/scripts/utils');
-const Game = require('./src/scripts/game');
+const RoomManager = require('./src/scripts/room_manager');
 // ステージごとのファイル読み込み
 const wait = require('./src/scripts/stage/wait');
 const init = require('./src/scripts/stage/init');
 const entry = require('./src/scripts/stage/entry');
+const room_create = require('./src/scripts/stage/room_create');
+const room_entry = require('./src/scripts/stage/room_entry');
 const start = require('./src/scripts/stage/start');
 const story_selection = require('./src/scripts/stage/story_selection');
 const others_hand_selection = require('./src/scripts/stage/others_hand_selection');
 const field_selection = require('./src/scripts/stage/field_selection');
-const calc_score = require('./src/scripts/stage/calc_score');
-const round_end = require('./src/scripts/stage/round_end');
 const restart = require('./src/scripts/stage/restart');
 
 const disconnect = require('./src/scripts/stage/disconnect');
@@ -28,39 +28,43 @@ const server = http.Server(app);
 const io = socketIO(server);
 
 // ゲームオブジェクト作成
-let game = new Game();
+let roomManager = new RoomManager();
 // 接続が完了したときに呼び出す関数
 io.on('connection', (socket) => {
     // 行動する必要がない時
-    socket.on('wait', () => wait.do(socket, game));
+    socket.on('wait', () => wait.do(socket, roomManager));
     // クライアント接続時
-    socket.on('init', (config) => init.do(config, io, socket, game));
+    socket.on('init', (config) => init.do(config, io, socket, roomManager));
     // クライアントからentryがemitされた時
-    socket.on('entry', (data) =>  entry.do(data, io, socket, game));
+    socket.on('entry', (data) =>  entry.do(data, io, socket, roomManager));
+
+    socket.on('room_create', (data) => room_create.do(data, io, socket, roomManager));
+    socket.on('room_entry', (data) => room_entry.do(data, io, socket, roomManager));
     // クライアントからstartがemitされた時
-    socket.on('start', () => start.do(socket, game));
+    socket.on('start', () => start.do(socket, roomManager));
     // クライアントからstory_selectionがemitされた時
-    socket.on('story_selection', (data) => story_selection.do(socket, io, data.message,data.masterIndex, game));
+    socket.on('story_selection', (data) => story_selection.do(socket, io, data.message,data.masterIndex, roomManager));
     // クライアントからstory_selectionがemitされた時
-    socket.on('others_hand_selection', (data) => others_hand_selection.do(socket, io, data.index, game));
+    socket.on('others_hand_selection', (data) => others_hand_selection.do(socket, io, data.index, roomManager));
     // クライアントからfield_selecitonがemitされた時
-    socket.on('field_selection', (data) => field_selection.do(socket, io, data.index, game));
+    socket.on('field_selection', (data) => field_selection.do(socket, io, data.index, roomManager));
     // クライアントからfield_selecitonがemitされた時
-    socket.on('confirm_field_selection', () => ConfirmFieldSelection.do(socket, game));
+    socket.on('confirm_field_selection', () => ConfirmFieldSelection.do(socket, roomManager));
     // クライアントからfield_selecitonがemitされた時
-    socket.on('confirm_answer', () => ConfirmAnswer.do(socket, game));
+    socket.on('confirm_answer', () => ConfirmAnswer.do(socket, roomManager));
     // クライアントからround_endがemitされた時
-    // socket.on('round_end', () => round_end.do(socket, game));
+    socket.on('round_end', () => round_end.do(socket, roomManager));
     // クライアントからrestartがemitされた時
-    socket.on('restart', () => restart.do(io, socket, game));
+    socket.on('restart', () => restart.do(io, socket, roomManager));
+    // ToDo: deletegameに変更
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
     // TODO: つまりリロードすると復帰不可
-    socket.on('disconnect', (reason) => disconnect.do(io, socket, game, reason));
+    socket.on('disconnect', (reason) => disconnect.do(io, socket, roomManager, reason));
     // メッセージ用
     socket.on('chat_send_from_client', function(data) {
         let name = 'ゲスト';
-        const player = game.findPlayer(socket.id)
+        const player = roomManager.findPlayer(socket)
         if (player != null) {
             name = player.name;
         }
@@ -72,9 +76,11 @@ io.on('connection', (socket) => {
 
 setInterval(() => {
     // 全プレイヤーがステージ移行可能ならば移行する
-    if (game.isAllDone() || game.isFinished()) { // 全てのプレイヤーが次のステージにいける状態
-        game.nextStage(io);
-    }
+    roomManager.roomList.map(room => room.game).forEach(game => {
+        if (game.isAllDone() || game.isFinished()) { // 全てのプレイヤーが次のステージにいける状態
+            game.nextStage(io);
+        }
+    });
 }, 1000/30);
 
 app.use('/', express.static(__dirname + '/build'));

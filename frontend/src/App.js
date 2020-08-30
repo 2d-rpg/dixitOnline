@@ -11,6 +11,7 @@ import Chat from './scripts/chat';
 import Story from './scripts/story';
 import Init from './scripts/stage/init';
 import Entry from './scripts/stage/entry';
+import Room from './scripts/stage/room';
 import Start from './scripts/stage/start';
 import HandSelection from './scripts/stage/hand_selection';
 import StoryModal from './scripts/stage/modal/story_modal';
@@ -61,8 +62,13 @@ function App() {
   const [masterIndex, setMasterIndex] = useState(null);
   /** 手札から選ばれたカードのソース */
   const [src, setSrc] = useState(null);
+<<<<<<< HEAD
+  const [showStatus, setShowStatus] = useState(false);
+
+=======
   /** ステータス(プレイヤー名とスコア)の表示 */
   const [showStatus, setShowStatus] = useState(false);
+>>>>>>> origin/develop
 
   return (
     <div className="container">
@@ -74,7 +80,12 @@ function App() {
           <div className='game-core'>
             <Init socket={ socket }/>
             <Help message={ message }/>
+<<<<<<< HEAD
+            <Entry socket={ socket } setMessage={ setMessage } setName={ setName }/>
+            <Room socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
+=======
             <Entry socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
+>>>>>>> origin/develop
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
             <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc }/>
