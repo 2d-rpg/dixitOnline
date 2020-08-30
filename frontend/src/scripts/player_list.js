@@ -41,18 +41,10 @@ export default function PlayerList(props) {
                 })
             );
         }
-<<<<<<< HEAD
         props.socket.on('hand_selection', (data) => updatePlayerList(data.game.players));
         props.socket.on('show_answer', (data) => updatePlayerList(data.game.players));
         props.socket.on('update_player_list', (data) => updatePlayerList(data.game.players));
         props.socket.on('restart', (data) => updatePlayerList(data.game.players));
-=======
-
-        props.socket.on('hand_selection', (data) => updatePlayerList(data.game.players));
-        props.socket.on('show_answer', (data) => updatePlayerList(data.game.players));
-        props.socket.on('update_player_list', (data) => updatePlayerList(data.game.players));
-        props.socket.on('restart', () => setShowPlayerList(false));
->>>>>>> origin/develop
     }, [ props ]);
 
     return (
