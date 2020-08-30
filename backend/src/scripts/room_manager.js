@@ -7,24 +7,23 @@ const Card = require('./card');
 const utils = require('./utils');
 const fs = require('fs');
 
-class RoomContainer {
+class RoomManager {
     constructor() {
-        this.roomList = [];
+        this.roomList = [new Room("あいうえお")];
         this.players = [];
     }
 
     /** プレイヤーの追加 */
     addPlayer(name, socket) {
         let player = new Player({socketId: socket.id, username: name, socket: socket});
+
         this.players.push(player);
         player.done(); //エントリー完了
         return player;
     }
 
     findPlayer(socket) {
-        return this.players.filter( function(player) {
-            return player.socketId === socket.id;
-        })[0];
+        return this.players.filter( player => player.socketId === socket.id )[0];
     }
 
     createRoom(name) {
@@ -33,11 +32,14 @@ class RoomContainer {
         return room;
     }
 
-    findRoom(name) {
-        return this.roomList.filter(function(room) {
-            return room.name === name;
-        })[0];
+    findRoomByName(name) {
+        return this.roomList.filter(room => room.name === name)[0];
     }
+
+    findRoomBySocket(socket) {
+        return this.roomList.filter(room => room.players.some(player => player.socketId === socket.id))[0];
+    }
+
 }
 
-module.exports = RoomContainer;
+module.exports = RoomManager;

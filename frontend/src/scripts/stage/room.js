@@ -14,14 +14,14 @@ export default function Room(props) {
 
     const [showRoomList, setShowRoomList] = useState(true);
 
-    const updateRoomList = (roomContainer) => {
-        if (roomContainer.roomList.length == 0) {
+    const updateRoomList = (roomManager) => {
+        if (roomManager.roomList.length == 0) {
             setRoomList(
                 <div>現在ルームは存在しませんm9(^Д^)</div>
             );
         } else {
             setRoomList(
-                roomContainer.roomList.map((room) => {
+                roomManager.roomList.map((room) => {
                     return(
                         <div className="room_list_content">
                             <div>{ room.name }</div>
@@ -60,11 +60,11 @@ export default function Room(props) {
 
     useEffect(() => {
         props.socket.on('room', (data) => {
-            updateRoomList(data.roomContainer);
+            updateRoomList(data.roomManager);
             setShowRoom(true);
         });
         props.socket.on('room_create', () => setShowRoom(false));
-        props.socket.on('update_roomlist', (data) => updateRoomList(data.roomContainer));
+        props.socket.on('update_roomlist', (data) => updateRoomList(data.roomManager));
     });
 
     return(

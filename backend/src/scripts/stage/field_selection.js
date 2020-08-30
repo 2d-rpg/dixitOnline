@@ -3,8 +3,9 @@ const utils = require('../utils');
 
 class FieldSelection {
 
-    static do(socket, io, index, game) {
+    static do(socket, io, index, roomManager) {
         // 答えを集計
+        let game = roomManager.findRoomBySocket(socket).game;
         utils.logWithStage(game.stage, 'socket id: [' + socket.id + ']\'s Player was selected.');
         let id = socket.id;
         let cardIndex = index;

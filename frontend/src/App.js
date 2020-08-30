@@ -62,6 +62,8 @@ function App() {
   const [masterIndex, setMasterIndex] = useState(null);
   /** 手札から選ばれたカードのソース */
   const [src, setSrc] = useState(null);
+  const [showStatus, setShowStatus] = useState(false);
+
 
   return (
     <div className="container">

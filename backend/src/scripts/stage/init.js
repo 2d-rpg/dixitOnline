@@ -6,8 +6,8 @@ class Init {
 
     constructor() { }
 
-    static do(config, io, socket, roomContainer) {
-        io.sockets.emit('update_number_of_player', { num: roomContainer.players.length });
+    static do(config, io, socket, roomManager) {
+        io.sockets.emit('update_number_of_player', { num: roomManager.players.length });
         // console.log(socket.handshake.query);
         // let player = gameContainer.addPlayer(data, socket);
         // if (gameContainer.players.length < 10 && game.stageIndex === 0) { // プレイヤー人数が3人未満のとき

@@ -5,16 +5,14 @@ const room_entry = require('./room_entry');
 
 class RoomCreate {
 
-    constructor() {}
-
-    static do(data, io, socket, roomContainer) {
-        let room = roomContainer.createRoom(data.roomname);
+    static do(data, io, socket, roomManager) {
+        let room = roomManager.createRoom(data.roomname);
         // 全クライアントのプレイヤー人数表示更新
-        io.sockets.emit('update_number_of_player', {num : roomContainer.players.length});
-        io.sockets.emit('update_roomlist', {roomContainer : roomContainer});
+        io.sockets.emit('update_number_of_player', {num : roomManager.players.length});
+        io.sockets.emit('update_roomlist', {roomManager : roomManager});
         // console.log("fefe");
         // console.log(room);
-        room_entry.do({roomname:room.name, game:room.game}, io, socket, roomContainer);
+        room_entry.do({roomname:room.name, game:room.game}, io, socket, roomManager);
         // game.players.forEach(player => {
         //     io.to(player.socketId).emit('update_player_list',{game : game});
         // });

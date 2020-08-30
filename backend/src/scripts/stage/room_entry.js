@@ -3,18 +3,14 @@
 const utils = require('../utils');
 
 class RoomEntry {
-
-    constructor() {}
-
-    static do(data, io, socket, roomContainer) {
-        let player = roomContainer.findPlayer(socket);
-        let room = roomContainer.findRoom(data.roomname);
+    static do(data, io, socket, roomManager) {
+        let player = roomManager.findPlayer(socket);
+        socket.join(data.roomname);
+        let room = roomManager.findRoomByName(data.roomname);
         room.entry(player);
-        // 部屋全員に対してプレイヤーリスト更新をemit
-        room.players.map((each) => {
-            io.sockets.sockets[each.socketId].emit('update_player_list', {game: room.game});
-        })
-        // socket.emit('room', {roomContainer : roomContainer});
+        io.to(data.roomname).emit('update_player_list', {game: room.game});
+        
+        // socket.emit('room', {roomManager : roomManager});
         // game.players.forEach(player => {
         //     io.to(player.socketId).emit('update_player_list',{game : game});
         // });
