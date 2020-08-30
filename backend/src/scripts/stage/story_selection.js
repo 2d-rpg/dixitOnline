@@ -6,7 +6,8 @@ class StorySelection {
 
     constructor() {}
 
-    static do(socket, io, message, masterIndex, game) {
+    static do(socket, io, message, masterIndex, roomManager) {
+        let game = roomManager.findRoomBySocket(socket).game;
         game.setStory(message);
         let player = game.findPlayer(socket.id);
         player.selectFromHand(masterIndex);

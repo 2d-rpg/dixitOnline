@@ -1,7 +1,7 @@
 class ConfirmAnswer {
 
-    static do(socket, game) {
-        game.findPlayer(socket.id).done();
+    static do(socket, roomManager) {
+        roomManager.findPlayer(socket).done();
     }
 }
 

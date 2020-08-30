@@ -11,6 +11,7 @@ import Chat from './scripts/chat';
 import Story from './scripts/story';
 import Init from './scripts/stage/init';
 import Entry from './scripts/stage/entry';
+import Room from './scripts/stage/room';
 import Start from './scripts/stage/start';
 import HandSelection from './scripts/stage/hand_selection';
 import StoryModal from './scripts/stage/modal/story_modal';
@@ -25,6 +26,7 @@ import PlayerList from './scripts/player_list';
 import './App.css';
 import './css/game.css';
 import Help from './scripts/help';
+import Test from './test';
 
 
 // const ENDPOINT = "http://34.83.112.24:3000/";
@@ -74,7 +76,8 @@ function App() {
           <div className='game-core'>
             <Init socket={ socket }/>
             <Help message={ message }/>
-            <Entry socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
+            <Entry socket={ socket } setMessage={ setMessage } setName={ setName }/>
+            <Room socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
             <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc }/>
@@ -93,6 +96,7 @@ function App() {
           <Chat socket={ socket }/>
         </div>
       </div>
+      <Test/>
     </div>
   );
 }
