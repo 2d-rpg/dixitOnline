@@ -5,15 +5,12 @@ import '../css/status.css';
 
 export default function Status(props) {
 
-    const [showStatus, setShowStatus] = useState(false);
-
     useEffect(() => {
-        props.socket.on('hand_selection',() => setShowStatus(true));
-        props.socket.on('restart',() => setShowStatus(false));
-    });
+        props.socket.on('restart',() => props.setShowStatus(false));
+    }, [ props ]);
 
     return (
-        <div className="player-status" style={ {display: showStatus ? 'block' : 'none'} }>
+        <div className="player-status" style={ {display: props.showStatus ? 'block' : 'none'} }>
             <PlayerName name={ props.name }/>
             <ShowScore socket={ props.socket }/>
         </div>);

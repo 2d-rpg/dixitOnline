@@ -14,7 +14,7 @@ export default function Entry(props) {
     const [, setCookie] = useCookies(['client-id']);
     
     useEffect(() => {
-        props.socket.on('hand_selection', () => setShow(false));
+        // props.socket.on('hand_selection', () => setShow(false));
         props.socket.on('restart', () => setShow(true));
     }, [ props.socket ]);
 
@@ -27,9 +27,11 @@ export default function Entry(props) {
         // サーバーに'entry'を送信
         setShow(false);
         setCookie('client-id', data.username, {path: '/', secure: true});
+        props.setShowStatus(true);
         props.setName(data.username);
         props.socket.emit('entry', {username : data.username});
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
+        reset();
         props.setMessage('他のプレイヤーが参加するのを待っています( ´ ▽ ` )');
     }
 
