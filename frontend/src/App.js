@@ -76,7 +76,7 @@ function App() {
           <div className='game-core'>
             <Init socket={ socket }/>
             <Help message={ message }/>
-            <Entry socket={ socket } setMessage={ setMessage } setName={ setName }/>
+            <Entry socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Room socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>

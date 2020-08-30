@@ -1,8 +1,11 @@
 // master_hand_selectionステージ
 
 import React, { useEffect, useState } from 'react';
-import Card from '../card';
+import { useTransition, a } from 'react-spring';
+import Card from '../card'; 
 import '../../css/hand_selection.css';
+
+const width = 800;
 
 export default function HandSelection(props) {
     /** 手札を表示するか否か */
@@ -10,11 +13,40 @@ export default function HandSelection(props) {
     /** 手札の内容 */
     const [hand_buttons, setHandButtons] = useState(null);
 
+    const [handElement, setHandElement] = useState(null);
+
+    const [index,setIndex] = useState(10);
+
+    const transitions = useTransition(handElement, item => item.css, {
+        from: ({ xy, width, height }) => ({ xy, width, height, opacity: 0 }),
+        enter: ({ xy, width, height }) => ({ xy, width, height, opacity: 1 }),
+        update: ({ xy, width, height, opacity }) => ({ xy, width, height, opacity}),
+        leave: { height: 0, opacity: 0 },
+        config: { mass: 5, tension: 500, friction: 100, duration: 2000},
+        trail: 25
+    });
+
     useEffect(() => {
         /** 手札の表示 */
         const hand_selection = (data) => {
             setShowHand(true);
-            // リセット
+            // リセット 
+            setHandElement(data.player.hand._array.map((child, i) => {
+                //const xy = [(width / columns) * column, (heights[column] += child.height / 2) - child.height / 2] // X = container width / number of columns * column index, Y = it's just the height of the current column
+                let xy = [(width / 6) * i, 0];
+                let opacity = 1;
+                // if(times % 2 == 0){
+                if(i == index){
+                    xy = [400,400];
+                    opacity = 0;
+                }else if(i > index){
+                    i -= 1;
+                    xy = [(width / 6) * i,0];
+                }
+                return { ...child, xy:xy, width: width / 6, height: child.height / 2,opacity : opacity}
+            })
+            );
+
             setHandButtons(
                 data.player.hand._array.map((card, index) => {
                     var id_btn = 'eachHandButton' + index;
@@ -23,13 +55,18 @@ export default function HandSelection(props) {
                     const handButton = data.player.isMaster? (
                         <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)} data-toggle="modal" data-target="#exampleModalCenter">
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
-                        </p> 
+                        </p>
                     ) : (
                         <p className='eachHandButton' id={ id_btn } type='button'>
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p>
                     );
-                    return (<Card button={ handButton } kind={ 'Hand' }/>);
+                    return (//<Card button={ handButton } kind={ 'Hand' }/>
+                    transitions.map(({ item, props: { xy, ...rest }, key },index) => (
+                        <a.div key={key} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`), ...rest }}>
+                        <Card button={ handButton } kind={ 'Hand' }/>
+                        </a.div>
+                    )));
                 })
             );
             if(data.player.isMaster){ //語り部の場合
@@ -40,6 +77,7 @@ export default function HandSelection(props) {
         };
         /** 語り部が手札からカードを選択したときの動作 */
         const master_select = (data, index) => {
+            setIndex(index);
             if(data.player.isMaster){
                 props.setMasterIndex(index);
                 story_selection(data, index);
@@ -80,6 +118,7 @@ export default function HandSelection(props) {
         };
         /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
         const others_select = (socket, data, index) => {
+            setIndex(index);
             
             props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
             const selectedSrc = "../images/default/" + data.player.hand._array[index].filename;
