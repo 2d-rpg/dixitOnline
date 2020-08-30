@@ -72,8 +72,8 @@ class Game {
     }
 
     /** プレイヤーの追加 */
-    addPlayer(data, socket) {
-        let player = new Player({socketId: socket.id, username: data.username});
+    addPlayer(data) {
+        let player = data.player;
         for (var i = 0; i < 5; i++) { 
             player.draw(this.stock);
         }
@@ -82,11 +82,21 @@ class Game {
         this.currentNum += 1;
         return this.players[this.currentNum-1];
     }
+    // addPlayer(data, socket) {
+    //     let player = new Player({socketId: socket.id, username: data.username});
+    //     for (var i = 0; i < 5; i++) { 
+    //         player.draw(this.stock);
+    //     }
+    //     this.players.push(player);
+    //     this.players[this.currentNum].done(); //エントリー完了
+    //     this.currentNum += 1;
+    //     return this.players[this.currentNum-1];
+    // }
 
     /** 現在のプレイヤー数を確認 */
-    getLength() {
-        return this.players.filter(player => player != null).length;
-    }
+    // getLength() {
+    //     return this.players.filter(player => player != null).length;
+    // }
 
     /** 次のステージへ移行 */
     nextStage(io) {
@@ -103,7 +113,7 @@ class Game {
         if (this.stageIndex === 1) { // hand_selection
             this.updateMaster(); // 語り部更新
             this.fieldToDiscard();
-            if(this.stock._array.length < this.getLength()) {
+            if(this.stock._array.length < this.players.length) {
                 this.discardToStock();
             }
             this.players.forEach(player => player.draw(this.stock));

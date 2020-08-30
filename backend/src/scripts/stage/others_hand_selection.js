@@ -6,7 +6,9 @@ class OthersHandSelection {
 
     constructor() {}
 
-    static do(socket, io, index, game) {
+    static do(socket, io, index, roomManager) {
+        console.log(roomManager.findRoomBySocket(socket));
+        let game = roomManager.findRoomBySocket(socket).game;
         let player = game.findPlayer(socket.id);
         if(!player.isDone()){
             player.selectFromHand(index);
@@ -16,7 +18,9 @@ class OthersHandSelection {
             socket.emit('update_hand',{ player: player });
             // フィールドの更新
             game.players.forEach(player => io.to(player.socketId).emit('update_field_with_back', { game: game }));
+            console.log(game.players);
             player.done();
+            console.log(game.players);
         }
     }
 }

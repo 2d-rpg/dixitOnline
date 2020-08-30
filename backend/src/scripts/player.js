@@ -11,6 +11,7 @@ class Player {
     
     constructor(obj){
         // 初期化
+        this.game = null;
         this.socketId = obj.socketId;
         this.hand = new Hand();
         this.isMaster = false;
