@@ -11,7 +11,7 @@ export default function Upload(props) {
     /** エントリーフォームの表示 */
 
     useEffect(() => {
-        props.socket.on('hand_selection', () => setShow(false));
+        props.socket.on('room', () => setShow(false));
         props.socket.on('restart', () => setShow(true));
     }, [ props.socket, setShow ]);
 

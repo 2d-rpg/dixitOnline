@@ -89,6 +89,7 @@ function App() {
             <PlayerList socket={ socket } name={ name }/>
             <ShowRole socket={ socket } setMessage={ setMessage } />
             <Upload socket={ socket }/>
+            {/* <Test/> */}
           </div>
         </div>
         <div className="game-chat">
@@ -96,7 +97,6 @@ function App() {
           <Chat socket={ socket }/>
         </div>
       </div>
-      <Test/>
     </div>
   );
 }

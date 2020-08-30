@@ -18,6 +18,8 @@ export default function Chat(props) {
     /** チャットフォームの参照 */
     const chatFormElement = useRef();
 
+    const [showChat, setShowChat] = useState(false);
+
     /** メッセージを送信したときの動作 */
     const onSubmit = (data, event) => {
         if (data.msg === '') return;
@@ -34,11 +36,13 @@ export default function Chat(props) {
             chatLogElement.current.scrollTop = chatLogElement.current.scrollHeight;
         });
 
+        props.socket.on('update_player_list',() => setShowChat(true));
+        props.socket.on('round_end',() => setShowChat(false));
 
     }, [ register, props.socket, chatLogElement ]);
 
     return (
-        <div className='chat-form-wrapper'>
+        <div className='chat-form-wrapper' style={ {display: showChat ? 'block' : 'none'} }>
             <div className="chat-header">
                 <h4><span className="chat-icon"><FontAwesomeIcon icon={ faComment }/></span> チャット</h4>
             </div>
