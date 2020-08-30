@@ -68,7 +68,8 @@ io.on('connection', (socket) => {
         if (player != null) {
             name = player.name;
         }
-        io.sockets.emit('chat_send_from_server', { name: name, value : data.value, socketId: socket.id });
+        let roomname = roomManager.findRoomBySocket(socket).name;
+        io.to(roomname).emit('chat_send_from_server', { name: name, value : data.value, socketId: socket.id });
     });
     // 画像のアップロード
     socket.on('upload', (data) => utils.uploadFile(data.filename, data.image));

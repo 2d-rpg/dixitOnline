@@ -20,6 +20,11 @@ export default function Card(props) {
     if (props.kind === 'answer' && props.isMaster) {
         className += ' correctAnswer';
     }
+    // eachHandContainer
+    // eachFieldContainer
+    // answerContainer
+    // selectedContainer
+
     /** アニメーションの設定 */
     // const [springProps, set] = useSpring(() => ({ scale: 1, config: { mass: 5, tension: 350, friction: 40, duration: 10 } }));
 

@@ -26,6 +26,7 @@ import PlayerList from './scripts/player_list';
 import './App.css';
 import './css/game.css';
 import Help from './scripts/help';
+import Test from './test';
 
 
 // const ENDPOINT = "http://34.83.112.24:3000/";
@@ -62,13 +63,8 @@ function App() {
   const [masterIndex, setMasterIndex] = useState(null);
   /** 手札から選ばれたカードのソース */
   const [src, setSrc] = useState(null);
-<<<<<<< HEAD
-  const [showStatus, setShowStatus] = useState(false);
-
-=======
   /** ステータス(プレイヤー名とスコア)の表示 */
   const [showStatus, setShowStatus] = useState(false);
->>>>>>> origin/develop
 
   return (
     <div className="container">
@@ -80,12 +76,8 @@ function App() {
           <div className='game-core'>
             <Init socket={ socket }/>
             <Help message={ message }/>
-<<<<<<< HEAD
             <Entry socket={ socket } setMessage={ setMessage } setName={ setName }/>
             <Room socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
-=======
-            <Entry socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
->>>>>>> origin/develop
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
             <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc }/>
@@ -97,6 +89,7 @@ function App() {
             <PlayerList socket={ socket } name={ name }/>
             <ShowRole socket={ socket } setMessage={ setMessage } />
             <Upload socket={ socket }/>
+            {/* <Test/> */}
           </div>
         </div>
         <div className="game-chat">
