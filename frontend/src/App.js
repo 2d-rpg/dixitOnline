@@ -26,7 +26,6 @@ import PlayerList from './scripts/player_list';
 import './App.css';
 import './css/game.css';
 import Help from './scripts/help';
-import Test from './test';
 
 
 // const ENDPOINT = "http://34.83.112.24:3000/";
@@ -76,7 +75,7 @@ function App() {
           <div className='game-core'>
             <Init socket={ socket }/>
             <Help message={ message }/>
-            <Entry socket={ socket } setMessage={ setMessage } setName={ setName }/>
+            <Entry socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Room socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
@@ -89,7 +88,6 @@ function App() {
             <PlayerList socket={ socket } name={ name }/>
             <ShowRole socket={ socket } setMessage={ setMessage } />
             <Upload socket={ socket }/>
-            {/* <Test/> */}
           </div>
         </div>
         <div className="game-chat">

@@ -22,7 +22,7 @@ const status = [
 class Game {
 
     /** ゲーム終了基準点(MAX_SCORE) */
-    static MAX_SCORE = 3;
+    static MAX_SCORE = 5;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
     static STAGE_NUM = 4;
     /** カード枚数 */
@@ -132,15 +132,7 @@ class Game {
                 player.reset(); // 状態リセット
             });
             this.players.forEach(player => { // ステージ移行
-                // ディープコピー (何段階もコピーするのでObject.createは不可)
-                // TODO: もっといい方法あるかも
-                var others = new Array();
-                this.players.forEach(other => {
-                    if (player != other) {
-                        others.push(other);
-                    }
-                });
-                io.to(player.socketId).emit(this.stage, {others : others, player : player, game : this}); // ステージ移行
+                io.to(player.socketId).emit(this.stage, { player : player, game : this }); // ステージ移行
             });
         } else {
             this.reset();

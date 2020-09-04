@@ -12,7 +12,6 @@ export default function Entry(props) {
     const [show, setShow] = useState(true);
     /** cookieの設定 */
     const [, setCookie] = useCookies(['client-id']);
-    
     useEffect(() => {
         // props.socket.on('hand_selection', () => setShow(false));
         props.socket.on('restart', () => setShow(true));

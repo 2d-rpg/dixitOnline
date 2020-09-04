@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PlayerName from './player_name';
 import ShowScore from './stage/show_score';
 import '../css/status.css';

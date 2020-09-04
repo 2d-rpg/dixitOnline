@@ -1,6 +1,7 @@
 // master_hand_selectionステージ
 
 import React, { useEffect, useState } from 'react';
+import $ from 'jquery';
 import Card from '../card';
 import '../../css/hand_selection.css';
 
@@ -20,7 +21,7 @@ export default function HandSelection(props) {
                     var id_btn = 'eachHandButton' + index;
                     var id_img = 'eachHandImage' + index;
                     var hand_src = "../images/default/" + card.filename;
-                    const handButton = data.player.isMaster? (
+                    const handButton = data.player.isMaster ? (
                         <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)} data-toggle="modal" data-target="#exampleModalCenter">
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p> 
@@ -29,7 +30,7 @@ export default function HandSelection(props) {
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p>
                     );
-                    return (<Card button={ handButton } kind={ 'Hand' }/>);
+                    return(<Card button={ handButton } kind={ 'Hand' }/>);
                 })
             );
             if(data.player.isMaster){ //語り部の場合
@@ -69,7 +70,7 @@ export default function HandSelection(props) {
                         var id_img = 'eachHandImage' + index;
                         var hand_src = "../images/default/" + card.filename;
                         const handButton = (
-                            <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => others_select(props.socket,data, index)}>
+                            <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => others_select(props.socket ,data, index)}>
                                 <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                             </p>
                         );
@@ -80,14 +81,25 @@ export default function HandSelection(props) {
         };
         /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
         const others_select = (socket, data, index) => {
-            
+            $("#eachHandButton" + index).addClass("toField");
+            document.getElementsByClassName("toField")[0].animate([
+                // keyframes
+                { transform: 'translateY(0px)' }, 
+                { transform: 'translateY(-200px)', opacity: 0 }
+              ], { 
+                // timing options
+                duration: 2000,
+            });
             props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
             const selectedSrc = "../images/default/" + data.player.hand._array[index].filename;
             props.setSrc(
                 <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper">
                     <img id="selected-hand-card" src={ selectedSrc } alt="あなたが選んだカード"/> 
                 </p> );
-            socket.emit('others_hand_selection', {index : index});
+            setTimeout(
+                () => socket.emit('others_hand_selection', {index : index}),
+                2000,
+            );
         };
         /** 手札の更新 */
         const update_hand = (player) => {
@@ -111,7 +123,6 @@ export default function HandSelection(props) {
         props.socket.on('update_hand',(data) => update_hand(data.player));
         props.socket.on('restart',() => setShowHand(false));
     }, [ props ]);
-
 
     return (
         <div className="hand-wrapper" style={ {display: showhand ? 'block' : 'none'} }>

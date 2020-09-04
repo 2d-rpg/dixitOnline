@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useCookies } from 'react-cookie';
 import '../../css/room.css';
 
 
@@ -17,7 +16,7 @@ export default function Room(props) {
     const [showRoomList, setShowRoomList] = useState(true);
 
     const updateRoomList = (roomManager) => {
-        if (roomManager.roomList.length == 0) {
+        if (roomManager.roomList.length === 0) {
             setRoomList(
                 <div>現在ルームは存在しませんm9(^Д^)</div>
             );
