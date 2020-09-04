@@ -38,7 +38,6 @@ export default function StoryModal(props) {
         $('#exampleModalCenter').modal('toggle');
         props.setStory(data.story);
         // サーバーに'story_selection'を送信
-        props.setIndex(props.masterIndex);
         setTimeout(
             () => props.socket.emit('story_selection', { message : data.story, masterIndex : props.masterIndex }),
             200
