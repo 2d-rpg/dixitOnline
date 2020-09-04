@@ -26,66 +26,53 @@ export default function Card(props) {
     const [inProp, setInProp] = useState(false);
     const [showButton, setShowButton] = useState(true);
     const [showMessage, setShowMessage] = useState(false);
+
+    const [ret, setRet] = useState(null);
     
     const [style, setStyle] = useState({
-        position: 'absolute',
+        left: 100*props.index+'px',
     });
 
     var id_btn = 'eachHandButton' + props.index;
     var id_img = 'eachHandImage' + props.index;
     var hand_src = "../images/default/" + props.card.filename;
-
-    const click = () => {
-        master_select(props.data, props.index);
-    }
-
-    const master_select = (data, index) => {
-        if(data.player.isMaster){
-            props.setMasterIndex(index);
-            story_selection(data, index);
-        }else{
-            //TODO:子の表示
-        }
-    };
-    const story_selection = (data, index) => {
-        props.setMessage('あなたは親です(ﾟ∀ﾟ)カードのお題を入力してください⊂((・x・))⊃');
-        const selectedSrc = "../images/default/" + data.player.hand._array[index].filename;
-        props.setSrc(
-            <p className="selectedButton" id="selected-hand-card-wrapper">
-                <img className="selectedImage" src={ selectedSrc } alt="あなたが選んだカード"/> 
-            </p> );
-    };
     
     useEffect(() => {
-        
-        if (props.card.status == 'hand') {
-            let positionX = 300 - props.index*100;
-            let positionY = -500;
-            setStyle(
-                {
-                    transform: 'translate('+positionX+'px,'+positionY+'px)',
-                }
-            );
-        } else if(props.card.status == 'field') {
-            let positionX = 0;
-            let positionY = 500;
-            setStyle(
-                {
-                    transform: 'translate('+positionX+'px,'+positionY+'px)',
-                }
-            );
+        const click = () => {
+            if (props.card.status == 'hand') {
+                let positionX = 300 - props.index*100;
+                let positionY = -500;
+                setStyle(
+                    {
+                        transform: 'translate('+positionX+'px,'+positionY+'px)',
+                    }
+                );
+            } else if(props.card.status == 'field') {
+                let positionX = 0;
+                let positionY = 500;
+                setStyle(
+                    {
+                        transform: 'translate('+positionX+'px,'+positionY+'px)',
+                    }
+                );
+            }
         }
-        
-        /** 語り部が手札から選んだカードの表示と手札の非表示及びお題フォームの表示 */
+        // props.socket.on('')
+        setRet( 
+        // <p className='eachHandButton' id={ id_btn } type='button' onClick={() => click}>
+        //     <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ props.card.filename }></img>
+        // </p>
+        <p id={ id_btn } type='button' onClick={() => click}>
+            <img id={ id_img } src={ hand_src } alt={ props.card.filename }></img>
+        </p>
+        );
         
     },[]);
     
     return (
-        <div className="card">
-            <div className="card-content" style={style}>
-                <p className='eachHandButton' id={ id_btn } type='button' onClick={() => click}>
-                    <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ props.card.filename }></img>
-                </p>
+        <div className="card" style={style}>
+            <div className="card-content">
+                {ret}
             </div>
         </div>
     );

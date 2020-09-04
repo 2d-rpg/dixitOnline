@@ -9,11 +9,11 @@
     width: 100px;
     height: 150px;
     padding: 0.3%;
-    top: 500px;
-    left: 0;
+    top: 70%;
+    /* left: 10%; */
     transition-duration: 4s;
 }
 
 .card-content {
-
+    position: absolute;
 }

@@ -1,0 +1,40 @@
+.alert {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition-duration: 4s;
+}
+.alert-enter {
+    background-color: turquoise;
+    transition-duration: 4s;
+}
+.alert-enter-active {
+    transform: translate(-500px,-500px);
+}
+.alert-enter-done {
+    transform: translate(-500px,-500px);
+}
+.alert-exit {
+    background-color: turquoise;
+    border: solid 10px black;
+}
+.alert-exit-active {
+    background-color: violet;
+    border: solid 10px black;
+}
+.alert-exit-done {
+    background-color: yellowgreen;
+    border: solid 10px black;
+}
+.alert-appear {
+    background-color: purple;
+}
+.alert-appear-active {
+    background-color: green;
+}
+
+.zoom-up-card:hover
+{
+    transform: scale(1.2);
+    z-index: 100;
+}
