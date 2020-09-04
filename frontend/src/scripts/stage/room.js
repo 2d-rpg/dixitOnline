@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCookies } from 'react-cookie';
+import '../../css/room.css';
+
 
 export default function Room(props) {
 
@@ -23,9 +25,11 @@ export default function Room(props) {
             setRoomList(
                 roomManager.roomList.map((room) => {
                     return(
-                        <div className="room_list_content">
-                            <div>{ room.name }</div>
-                            <button className="btn btn-primary mb-2" onClick={ () => roomEntrySubmit(room.name)}>決定</button>
+                        <div className="room-list-content">
+                            <div className="room-name">{ room.name }</div>
+                            <div className="room-decision-button">
+                                <button className="btn btn-primary mb-2" onClick={ () => roomEntrySubmit(room.name)}>決定</button>
+                            </div>
                         </div>
                     );
                 })
@@ -69,7 +73,7 @@ export default function Room(props) {
 
     return(
         <div className="room" style={ {display: showRoom ? 'block' : 'none'} }>
-            <div>
+            <div className="room-button">
                 <button onClick={ clickRoomCreate }>
                     ルームを新規作成
                 </button>

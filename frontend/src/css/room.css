@@ -1,0 +1,46 @@
+.room-list {
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.room-list-content {
+    width: 30%;
+    display: flex;
+    background-color: #45A1CF;
+    margin:auto;
+}
+
+.room-list-content > * {
+    font-weight: 600;
+    text-shadow: 2px 0 2px #606060;
+    background-color: rgba(155,155,155,0.3);
+    /* background-clip: padding-box; */
+    box-shadow: 3px 3px 1px #007AB7;
+    border: solid 5px transparent;
+    padding: 0 10px 0 10px;
+}
+
+.room-decision-button {
+    width: 35%;
+    margin-right: 0;
+    padding-top: 10px;
+}
+
+.room-button {
+    padding-top: 10%;
+    padding-bottom: 2%;
+}
+
+.room-name {
+    width: 65%;
+    font-weight: 600;
+    text-shadow: 2px 0 2px #606060;
+    background-color: rgba(155,155,155,0.3);
+    /* background-clip: padding-box; */
+    box-shadow: 3px 3px 1px #007AB7;
+    border: solid 5px transparent;
+    padding: 13px 10px 0 10px;
+    color: white;
+    font-size: 130%;
+}
+

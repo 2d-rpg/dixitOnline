@@ -6,6 +6,7 @@ import useMeasure from './useMeasure'
 import useMedia from './useMedia'
 import data from './data'
 import './style.css'
+import { faTable } from '@fortawesome/free-solid-svg-icons';
 
 let x = 0;
 
@@ -16,15 +17,17 @@ export default function Test() {
     // Hook2: Measure the width of the container element
     const [bind, { width }] = useMeasure();
     // Hook3: Hold items
-    const [items, set] = useState(data.slice(0,6));
+    const [items, set] = useState(data.slice(0, 6));
 
-    const [index,setIndex] = useState(10);
+    const [flag, setFlag] = useState(false);
 
-    const [hand,setHand] = useState(null);
+    const [index, setIndex] = useState(10);
+
+    // const [hand,setHand] = useState(null);
     // Hook4: shuffle data every 2 seconds
     //useEffect(() => void setInterval(() => set(shuffle), 2000), [])
     // Form a grid of stacked items using width & columns we got from hooks 1 & 2
-    let heights = new Array(columns).fill(0) // Each column gets a height starting with zero
+    // let heights = new Array(columns).fill(0) // Each column gets a height starting with zero
 
     const onSubmit = (index) => {
         setIndex(index);
@@ -32,10 +35,9 @@ export default function Test() {
         //items.splice(index,1);
     }
 
-    const shuff = () => {
-        x += 1;
-        set(data.slice(x*6%12,((x+1) * 6-1)%12 + 1));
-        //set(shuffle);
+    const changeData = () => {
+        setFlag(!flag);
+        set(!flag ? data.slice(6, 12) : data.slice(0, 6));
     }
 
     let gridItems = items.map((child, i) => {
@@ -65,9 +67,8 @@ export default function Test() {
     // Render the grid
     return (
         <div>
-            <button type="submit" className="btn btn-primary mb-2" onClick={ shuff }>ボタン</button>
-        <div {...bind} class="list" style={{ height: Math.max(...heights) }}>
-            {hand}s
+            <button type="submit" className="btn btn-primary mb-2" onClick={ changeData }>ボタン</button>
+        <div {...bind} class="list" >
         {transitions.map(({ item, props: { xy, ...rest }, key },index) => (
             <a.div key={key} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`), ...rest }}>
             <div type="button" style={{ backgroundImage: item.css }} onClick={() => onSubmit(index)}/>
