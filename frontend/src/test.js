@@ -7,6 +7,8 @@ import useMedia from './useMedia'
 import data from './data'
 import './style.css'
 
+let x = 0;
+
 export default function Test() {
 
     // Hook1: Tie media queries to the number of columns
@@ -14,7 +16,7 @@ export default function Test() {
     // Hook2: Measure the width of the container element
     const [bind, { width }] = useMeasure();
     // Hook3: Hold items
-    const [items, set] = useState(data);
+    const [items, set] = useState(data.slice(0,6));
 
     const [index,setIndex] = useState(10);
 
@@ -31,6 +33,8 @@ export default function Test() {
     }
 
     const shuff = () => {
+        x += 1;
+        set(data.slice(x*6%12,((x+1) * 6-1)%12 + 1));
         //set(shuffle);
     }
 
