@@ -23,7 +23,7 @@ export default function PlayerList(props) {
                                 <td className="status-icon">
                                     <div className="status-rank">{ index + 1 }</div>
                                     <FontAwesomeIcon className={ player.isMaster?"icon-master":"icon-other"} icon={ player.isMaster ? faChessRook : faChessPawn }/>
-                                </td>{/*ここに王冠*/}
+                                </td>
                                 <td><div className="status-name">{ player.name }</div></td>
                                 <td><div className="status-score">{ player.score }</div></td>
                             </tr>
@@ -32,7 +32,7 @@ export default function PlayerList(props) {
                                 <td className="status-icon">
                                     <div className="status-rank">{ index + 1 }</div>
                                     <FontAwesomeIcon className={ player.isMaster?"icon-master":"icon-other"} icon={ player.isMaster ? faChessRook : faChessPawn }/>
-                                </td>{/*ここに王冠*/}
+                                </td>
                                 <td><div className="status-name">{ player.name }</div></td>
                                 <td><div className="status-score">{ player.score }</div></td>
                             </tr>

@@ -38,13 +38,12 @@ export default function HandSelection(props) {
 
     useEffect(() => {
         const update_hand_data = (data) => {
-            props.setIndex(10);
+            // props.setIndex(10);
             setHandData(data.handData);
         }
         /** 手札の表示 */
         const hand_selection = (data) => {
             setShowHand(true);
-            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             // リセット
             setHandButtons(
                 // data.player.hand._array.map((card, index) => {
@@ -61,10 +60,7 @@ export default function HandSelection(props) {
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ item.filename }></img>
                         </p>
                     );
-                    return(
-                    <a.div key={key} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`), ...rest }}>
-                        <Card button={ handButton } kind={ 'Hand' }/>
-                    </a.div>);
+                    // return (<Card button={ handButton } kind={ 'Hand' } card={card}/>);
                 })
             );
             if(data.player.isMaster){ //語り部の場合
@@ -110,10 +106,7 @@ export default function HandSelection(props) {
                                 <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ item.filename }></img>
                             </p>
                         );
-                        return (
-                        <a.div key={key} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`), ...rest }}>
-                            <Card button={ handButton } kind={ 'Hand' }/>
-                        </a.div>);
+                        // return (<Card button={ handButton } kind={ 'Hand' }/>);
                     })
                 );
             }
@@ -143,10 +136,7 @@ export default function HandSelection(props) {
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ item.filename }></img>
                         </p>
                     );
-                    return (
-                    <a.div key={key} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`), ...rest }}>
-                        <Card button={ handButton } kind={ 'Hand' }/>
-                    </a.div>);
+                    // return (<Card button={ handButton } kind={ 'Hand' }/>);
                 })
             );
         };
