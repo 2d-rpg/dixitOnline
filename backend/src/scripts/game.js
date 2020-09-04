@@ -116,7 +116,10 @@ class Game {
             if(this.stock._array.length < this.players.length) {
                 this.discardToStock();
             }
-            this.players.forEach(player => player.draw(this.stock));
+            this.players.forEach(player => {
+                player.draw(this.stock);
+                io.to(player.socketId).emit('update_hand_data', { handData: player.hand._array });
+            });
             this.resetAnswers();
         } 
         if (this.stageIndex === 3) { // field_selection

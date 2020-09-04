@@ -66,6 +66,8 @@ function App() {
   /** ステータス(プレイヤー名とスコア)の表示 */
   const [showStatus, setShowStatus] = useState(false);
 
+  const [index, setIndex] = useState(10);
+
   return (
     <div className="container">
       <div className='header'>
@@ -80,8 +82,8 @@ function App() {
             <Room socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
-            <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc }/>
-            <StoryModal socket={ socket } setStory={ setStory } masterIndex={ masterIndex } src={ src }/>
+            <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc } index={ index }/>
+            <StoryModal socket={ socket } setStory={ setStory } masterIndex={ masterIndex } src={ src } setIndex={ setIndex }/>
             <FieldSelection socket={ socket } setMessage={ setMessage }/>
             <ShowAnswer socket={ socket } setMessage={ setMessage }/>
             <Result socket={ socket } setMessage={ setMessage }/>
@@ -89,7 +91,6 @@ function App() {
             <PlayerList socket={ socket } name={ name }/>
             <ShowRole socket={ socket } setMessage={ setMessage } />
             <Upload socket={ socket }/>
-            {/* <Test/> */}
           </div>
         </div>
         <div className="game-chat">

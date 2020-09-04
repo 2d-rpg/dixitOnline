@@ -1,6 +1,7 @@
 // master_hand_selectionステージ
 
 import React, { useEffect, useState } from 'react';
+import { useTransition, a } from 'react-spring';
 import Card from '../card';
 import '../../css/hand_selection.css';
 
@@ -10,26 +11,71 @@ export default function HandSelection(props) {
     /** 手札の内容 */
     const [hand_buttons, setHandButtons] = useState(null);
 
+    const [handData, setHandData] = useState([]);
+
+    let gridItems = handData.map((child, i) => {
+        let xy = [(300 / 6) * i, 0];
+        let opacity = 1;
+        if(i == props.index) {
+            xy = [200, -200];
+            opacity = 0;
+        }else if(i > props.index){
+            i -= 1;
+            xy = [(300 / 6) * i, 0];
+        }
+        return { filename: child.filename, xy, width: 300 / 6, height: 150 / 2, opacity : opacity}
+    })
+    // Hook5: Turn the static grid values into animated transitions, any addition, removal or change will be animated
+    const transitions = useTransition(gridItems, item => item.filename, {
+        from: ({ xy, width, height }) => ({ xy, width, height, opacity: 0 }),
+        enter: ({ xy, width, height }) => ({ xy, width, height, opacity: 1 }),
+        update: ({ xy, width, height, opacity }) => ({ xy, width, height, opacity}),
+        leave: { height: 0, opacity: 0 },
+        config: { mass: 5, tension: 500, friction: 100, duration: 2000},
+        trail: 25
+    })
+
     useEffect(() => {
+        const update_hand_data = (data) => {
+            setHandData(data.handData);
+        }
         /** 手札の表示 */
         const hand_selection = (data) => {
             setShowHand(true);
             // リセット
             setHandButtons(
-                data.player.hand._array.map((card, index) => {
+                // data.player.hand._array.map((card, index) => {
+                //     var id_btn = 'eachHandButton' + index;
+                //     var id_img = 'eachHandImage' + index;
+                //     var hand_src = "../images/default/" + card.filename;
+                //     const handButton = data.player.isMaster? (
+                //         <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)} data-toggle="modal" data-target="#exampleModalCenter">
+                //             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                //         </p> 
+                //     ) : (
+                //         <p className='eachHandButton' id={ id_btn } type='button'>
+                //             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                //         </p>
+                //     );
+                //     return (<Card button={ handButton } kind={ 'Hand' }/>);
+                // })
+                transitions.map(({ item, props: { xy, ...rest }, key }, index) => {
                     var id_btn = 'eachHandButton' + index;
                     var id_img = 'eachHandImage' + index;
-                    var hand_src = "../images/default/" + card.filename;
+                    var hand_src = "../images/default/" + item.filename;
                     const handButton = data.player.isMaster? (
                         <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)} data-toggle="modal" data-target="#exampleModalCenter">
-                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ item.filename }></img>
                         </p> 
                     ) : (
                         <p className='eachHandButton' id={ id_btn } type='button'>
-                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ item.filename }></img>
                         </p>
                     );
-                    return (<Card button={ handButton } kind={ 'Hand' }/>);
+                    return(
+                    <a.div key={key} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`), ...rest }}>
+                        <Card button={ handButton } kind={ 'Hand' }/>
+                    </a.div>);
                 })
             );
             if(data.player.isMaster){ //語り部の場合
@@ -64,7 +110,8 @@ export default function HandSelection(props) {
             } else {
                 props.setMessage('あなたは子です(ﾟ∀ﾟ)お題に沿ったカードを選択してください(=^▽^)σ');
                 setHandButtons(
-                    data.player.hand._array.map((card, index) => {
+                    // data.player.hand._array.map((card, index) => {
+                    transitions.map(({ card, props: { xy, ...rest }, key }, index) => {
                         var id_btn = 'eachHandButton' + index;
                         var id_img = 'eachHandImage' + index;
                         var hand_src = "../images/default/" + card.filename;
@@ -73,7 +120,10 @@ export default function HandSelection(props) {
                                 <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                             </p>
                         );
-                        return (<Card button={ handButton } kind={ 'Hand' }/>);
+                        return (
+                        <a.div key={key} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`), ...rest }}>
+                            <Card button={ handButton } kind={ 'Hand' }/>
+                        </a.div>);
                     })
                 );
             }
@@ -92,25 +142,30 @@ export default function HandSelection(props) {
         /** 手札の更新 */
         const update_hand = (player) => {
             setHandButtons(
-                player.hand._array.map((card, index) => {
+                // player.hand._array.map((card, index) => {
+                transitions.map(({ item, props: { xy, ...rest }, key }, index) => {
                     var id_btn = 'eachHandButton' + index;
                     var id_img = 'eachHandImage' + index;
-                    var hand_src = "../images/default/" + card.filename;
+                    var hand_src = "../images/default/" + item.filename;
                     const handButton = (
                         <p className='eachHandButton' id={ id_btn } type='button'>
-                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ item.filename }></img>
                         </p>
                     );
-                    return (<Card button={ handButton } kind={ 'Hand' }/>);
+                    return (
+                    <a.div key={key} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`), ...rest }}>
+                        <Card button={ handButton } kind={ 'Hand' }/>
+                    </a.div>);
                 })
             );
         };
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
+        props.socket.on('update_hand_data' ,(data) => update_hand_data(data));
         props.socket.on('hand_selection' ,(data) => hand_selection(data));
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
         props.socket.on('update_hand',(data) => update_hand(data.player));
         props.socket.on('restart',() => setShowHand(false));
-    }, [ props ]);
+    }, [ props, handData, transitions, gridItems ]);
 
 
     return (

@@ -14,7 +14,7 @@ class MasterHandSelection {
         });
         let card = player.hand.pop();
         game.field.add(card, game);
-        socket.emit('update_hand',{player:player});
+        // socket.emit('update_hand',{player:player});
     }
 }
 
