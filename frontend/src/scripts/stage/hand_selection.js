@@ -38,13 +38,13 @@ export default function HandSelection(props) {
 
     useEffect(() => {
         const update_hand_data = (data) => {
+            props.setIndex(10);
             setHandData(data.handData);
         }
         /** 手札の表示 */
         const hand_selection = (data) => {
             setShowHand(true);
-            console.log(gridItems);
-            console.log(handData);
+            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             // リセット
             setHandButtons(
                 // data.player.hand._array.map((card, index) => {

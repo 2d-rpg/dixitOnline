@@ -39,8 +39,8 @@ export default function StoryModal(props) {
         props.setStory(data.story);
         // サーバーに'story_selection'を送信
         props.setIndex(props.masterIndex);
-        setInterval(
-            props.socket.emit('story_selection', { message : data.story, masterIndex : props.masterIndex }),
+        setTimeout(
+            () => props.socket.emit('story_selection', { message : data.story, masterIndex : props.masterIndex }),
             200
         )
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
