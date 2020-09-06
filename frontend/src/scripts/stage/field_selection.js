@@ -1,7 +1,6 @@
 // field_selectionステージ
 
 import React, { useEffect, useState } from 'react';
-import $ from 'jquery';
 import '../../css/field_selection.css';
 import Card from '../card';
 

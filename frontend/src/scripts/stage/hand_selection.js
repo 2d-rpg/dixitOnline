@@ -91,6 +91,7 @@ export default function HandSelection(props) {
 
         /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
         const others_select = (socket, data, index) => {
+            $(".toField").removeClass("toField");
             $("#eachHandButton" + index).addClass("toField");
             var card_x = $("#eachHandButton" + index).offset().left;
             var field_x = ($("#eachHandButton" + 2).offset().left + $("#eachHandButton" + 3).offset().left) / 2;
