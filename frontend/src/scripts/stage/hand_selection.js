@@ -14,6 +14,13 @@ export default function HandSelection(props) {
     useEffect(() => {
         /** 手札の表示 */
         const hand_selection = (data) => {
+
+            //var field_x = $(".eachFieldContainer").offset().left;
+            //var field_y = $(".eachFieldContainer").offset().top;
+            //var field_x = document.documentElement.offsetWidth;
+            //console.log(field_x);
+            //console.log(field_y);
+
             setShowHand(true);
             // リセット
             setHandButtons(
@@ -59,6 +66,8 @@ export default function HandSelection(props) {
         };
         /** 語り部以外のプレイヤーの手札の表示 */
         const others_hand_selection = (data) => {
+
+
             if(data.player.isMaster){
                 props.setMessage('あなたは親です(ﾟ∀ﾟ)待機中( ´Д`)y━･~~');
                 props.socket.emit('wait');
@@ -79,16 +88,21 @@ export default function HandSelection(props) {
                 );
             }
         };
+
         /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
         const others_select = (socket, data, index) => {
             $("#eachHandButton" + index).addClass("toField");
+            var card_x = $("#eachHandButton" + index).offset().left;
+            var field_x = ($("#eachHandButton" + 2).offset().left + $("#eachHandButton" + 3).offset().left) / 2;
+            var card_y = $("#eachHandButton" + index).offset().top;
+            var field_y = $(".eachFieldContainer").offset().top;
             document.getElementsByClassName("toField")[0].animate([
                 // keyframes
-                { transform: 'translateY(0px)' }, 
-                { transform: 'translateY(-200px)', opacity: 0 }
+                { transform: 'translateY(0px)'}, 
+                { transform: 'translateX(' + (field_x - card_x).toString() + 'px) translateY(' + (field_y - card_y).toString() + 'px)' , opacity: 0},
               ], { 
                 // timing options
-                duration: 2000,
+                duration: 800,
             });
             props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
             const selectedSrc = "../images/default/" + data.player.hand._array[index].filename;
@@ -98,7 +112,7 @@ export default function HandSelection(props) {
                 </p> );
             setTimeout(
                 () => socket.emit('others_hand_selection', {index : index}),
-                2000,
+                800,
             );
         };
         /** 手札の更新 */

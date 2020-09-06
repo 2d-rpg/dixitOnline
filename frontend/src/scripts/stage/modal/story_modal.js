@@ -37,10 +37,29 @@ export default function StoryModal(props) {
         setShowErrMsg(false);
         $('#exampleModalCenter').modal('toggle');
         props.setStory(data.story);
+
+        var card_x = $("#eachHandButton" + props.masterIndex).offset().left;
+        var field_x = ($("#eachHandButton" + 2).offset().left + $("#eachHandButton" + 3).offset().left) / 2;
+        //var card_y = $("#eachHandButton" + props.masterIndex).offset().top;
+        //var field_y = $(".eachFieldContainer").offset().top;
+        var move_y = - $(".game-core-wrapper").height() / 3;
+        console.log(move_y);
+
+        $("#eachHandButton" + props.masterIndex).addClass("toField");
+        document.getElementsByClassName("toField")[0].animate([
+            // keyframes
+            { transform: 'translateY(0px)'}, 
+            { transform: 'translateX(' + (field_x - card_x).toString() + 'px) translateY(' + (move_y).toString() + 'px)', opacity: 0 },
+        ], { 
+            // timing options
+            duration: 800,
+        });
+
+
         // サーバーに'story_selection'を送信
         setTimeout(
             () => props.socket.emit('story_selection', { message : data.story, masterIndex : props.masterIndex }),
-            200
+            800
         )
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
         reset();
