@@ -25,16 +25,16 @@ export default function Card(props) {
 
     const isField = (props.kind === 'Field');
     const isAnswer = (props.kind === 'answer');
-    const [style, setStyle] = setStyle({});
+    // const [style, setStyle] = setStyle({});
 
     const resultComponent = isField ? (
-        <div className={ className } display='inline-flex' style={style}>
+        <div className={ className } display='inline-flex'>
             { props.radio }
             { props.button }
         </div>
     ) : isAnswer && props.isMaster ? (
-        <div className={ className } display='inline-flex' style={style}>
-            <div className="innnderAnswerContainer" style={style}>
+        <div className={ className } display='inline-flex'>
+            <div className="innnderAnswerContainer">
                 { props.button }
             </div>
             <span></span>
