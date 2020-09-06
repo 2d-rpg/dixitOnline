@@ -9,7 +9,7 @@ const fs = require('fs');
 
 class RoomManager {
     constructor() {
-        this.roomList = [new Room("あいうえお")];
+        this.roomList = [];
         this.players = [];
     }
 

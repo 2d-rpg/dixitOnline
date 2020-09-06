@@ -94,13 +94,13 @@ class Game {
         if (this.stageIndex != Game.STAGE_NUM) {
             this.stageIndex += 1;
         } else {
-            this.stageIndex = 1; // hand_selectionへ
+            this.stageIndex = status.indexOf('hand_selection'); // hand_selectionへ
             if(this.checkScore()) { // 終了条件
                 this.stageIndex = 5; // result画面へ
             }
         }
         // 更新後
-        if (this.stageIndex === 1) { // hand_selection
+        if (this.stageIndex === status.indexOf('hand_selection')) { // hand_selection
             this.updateMaster(); // 語り部更新
             this.fieldToDiscard();
             if(this.stock._array.length < this.players.length) {
@@ -109,15 +109,15 @@ class Game {
             this.players.forEach(player => player.draw(this.stock));
             this.resetAnswers();
         } 
-        if (this.stageIndex === 3) { // field_selection
+        if (this.stageIndex === status.indexOf('field_selection')) { // field_selection
             this.field.shuffle(); // 場札をシャッフル
         }
-        if (this.stageIndex === 4) { // show_answer
+        if (this.stageIndex === status.indexOf('show_answer')) { // show_answer
             this.calcScore();
         }
-        this.stageIndex = this.stageIndex % 6; // restart用
+        this.stageIndex = this.stageIndex % status.length; // restart用
         this.stage = status[this.stageIndex];
-        if (this.stageIndex !== 0) {
+        if (this.stageIndex !== status.indexOf('entry')) {
             this.players.forEach(player => { // 全プレイヤーの状態リセット
                 player.reset(); // 状態リセット
             });
@@ -139,7 +139,7 @@ class Game {
     }
 
     isFinished() {
-        return this.players.filter(player => player == null).length === this.players.length && this.stageIndex === 6;
+        return this.players.filter(player => player == null).length === this.players.length && this.stageIndex === status.length;
     }
 
     /** 語り部の更新 */
