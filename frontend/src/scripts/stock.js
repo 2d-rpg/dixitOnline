@@ -24,8 +24,6 @@ export default function Stock(props) {
                         <img className='eachStockImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                     </p>
                 );
-
-
                 // const StockButton = (
                 //     <img className='eachStock' style={{transform: `rotate(${sigma}deg) translate(200,200)` }} src={ stock_src } alt={ card.filename }></img>
                 // );
@@ -39,6 +37,6 @@ export default function Stock(props) {
     }, [ props ]);
 
     return (
-        <div id="stock" style={ {display: showStock ? 'inline-flex' : 'none'} }> 山場 { stock }</div>
+        <div id="stock" style={ {display: showStock ? 'inline-flex' : 'none'} }>{ stock }</div>
     );
 }
