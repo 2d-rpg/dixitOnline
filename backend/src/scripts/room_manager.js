@@ -38,6 +38,11 @@ class RoomManager {
         return this.roomList.filter(room => room.players.some(player => player.socketId === socket.id))[0];
     }
 
+    deleteRoom(name) {
+        this.roomList.splice(this.roomList.indexOf(name), 1);
+        console.log("deleteおぱやぱえf");
+    }
+
 }
 
 module.exports = RoomManager;

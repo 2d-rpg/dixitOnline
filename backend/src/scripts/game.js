@@ -96,7 +96,7 @@ class Game {
         } else {
             this.stageIndex = status.indexOf('hand_selection'); // hand_selectionへ
             if(this.checkScore()) { // 終了条件
-                this.stageIndex = 5; // result画面へ
+                this.stageIndex = status.indexOf('result'); // result画面へ
             }
         }
         // 更新後

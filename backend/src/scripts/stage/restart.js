@@ -9,11 +9,13 @@ class Restart {
     constructor() {}
 
     static do(io, socket, roomManager) {
-        let game = roomManager.findRoomBySocket(socket).game;
-        game.deletePlayer(socket.id);
-        io.sockets.emit('update_number_of_player', { num: game.players.length });
-        console.log('delete');
-        socket.emit('restart', { game: game });
+        let room = roomManager.findRoomBySocket(socket);
+        room.game.deletePlayer(socket.id);
+        if(room.game.players.length === 0){
+            roomManager.deleteRoom(room.name);
+        }
+        io.sockets.emit('update_number_of_player', { num: room.game.players.length });
+        socket.emit('restart', { game: room.game });
     }
 }
 
