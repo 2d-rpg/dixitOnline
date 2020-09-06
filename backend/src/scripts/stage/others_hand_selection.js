@@ -18,9 +18,9 @@ class OthersHandSelection {
             socket.emit('update_hand',{ player: player });
             // フィールドの更新
             game.players.forEach(player => io.to(player.socketId).emit('update_field_with_back', { game: game }));
-            console.log(game.players);
+            // console.log(game.players);
             player.done();
-            console.log(game.players);
+            // console.log(game.players);
         }
     }
 }

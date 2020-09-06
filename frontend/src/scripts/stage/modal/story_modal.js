@@ -45,7 +45,6 @@ export default function StoryModal(props) {
         var move_y = - $(".game-core-wrapper").height() / 3;
         console.log(move_y);
 
-
         $(".toField").removeClass("toField");
         $("#eachHandButton" + props.masterIndex).addClass("toField");
         document.getElementsByClassName("toField")[0].animate([
