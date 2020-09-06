@@ -57,7 +57,7 @@ export default function StoryModal(props) {
                         </button>
                     </div>
                         <div className="modal-body">
-                            {/* <Card button={ props.src } kind={ 'selected' }/> */}
+                            <Card button={ props.src } kind={ 'selected' }/>
                             <form className="form-group" id="masterForm" onSubmit={ handleSubmit(onSubmit) }>
                                 <span className="invalid-feedback" style={ {display: showErrMsg ? 'inline' : 'none'} }>入力されたお題は不適切です</span>
                                 <label htmlFor="claim"></label>

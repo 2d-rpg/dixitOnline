@@ -22,11 +22,11 @@ import Result from './scripts/stage/result';
 import Upload from './scripts/upload';
 import Status from './scripts/status';
 import PlayerList from './scripts/player_list';
-import CardRender from './scripts/card_render'
 
 import './App.css';
 import './css/game.css';
 import Help from './scripts/help';
+import Test from './test';
 
 
 // const ENDPOINT = "http://34.83.112.24:3000/";
@@ -80,8 +80,8 @@ function App() {
             <Room socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
-            <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc }/>
-            <StoryModal socket={ socket } setStory={ setStory } masterIndex={ masterIndex } src={ src }/>
+            <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc } index={ index } setIndex={ setIndex }/>
+            <StoryModal socket={ socket } setStory={ setStory } masterIndex={ masterIndex } src={ src } setIndex={ setIndex }/>
             <FieldSelection socket={ socket } setMessage={ setMessage }/>
             <ShowAnswer socket={ socket } setMessage={ setMessage }/>
             <Result socket={ socket } setMessage={ setMessage }/>
