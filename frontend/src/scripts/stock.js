@@ -30,6 +30,20 @@ export default function Stock(props) {
                 return (<Card button={ stockButton } style={style} kind={ 'Stock' }/>);
             })
         );
+        var len = data.game.stock._array.length-1;
+        console.log(len);
+        document.getElementById(`eachStockButton${len}`).animate([
+            // keyframes
+            { transform: 'translate(0px,0px)'}, 
+            { transform: 'translate(-300px,300px)' , opacity: 0.5 },
+        ], { 
+            // timing options
+            duration: 2000,
+        });
+
+        setTimeout(() => {
+            document.getElementById(`eachStockButton${len}`).style.display="none";
+        }, 2000);
     }
 
     useEffect(() => {

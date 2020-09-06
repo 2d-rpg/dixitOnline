@@ -17,16 +17,6 @@ export default function HandSelection(props) {
         /** 手札の表示 */
         const draw_card = (data) => {
             setShowHand(true);
-            setDrawCard(
-                () =>{
-                    var hand_src = "../images/back/" + "card_back.png";
-                    const handButton = 
-                    (<p className='drawCardButton' type='button'>
-                        <img id='drawCard' className='drawCardImage' src={ hand_src } width='100px' height='150px'></img>
-                    </p>); 
-                    return(<Card button={ handButton }/>);
-                }
-            );
             setHandButtons(
                 data.player.hand._array.map((card, index) => {
                     if(index==5){
@@ -48,14 +38,6 @@ export default function HandSelection(props) {
                     }
                 })
             );
-            document.getElementById('drawCard').animate([
-                // keyframes
-                { transform: 'translate(400px,-400px)'}, 
-                { transform: 'translate(-1200px,800px)' , opacity: 1 },
-              ], { 
-                // timing options
-                duration: 10000,
-            });
 
 
             setTimeout(() => {
@@ -66,12 +48,6 @@ export default function HandSelection(props) {
 
         const hand_selection = (data) => {
 
-            //var field_x = $(".eachFieldContainer").offset().left;
-            //var field_y = $(".eachFieldContainer").offset().top;
-            //var field_x = document.documentElement.offsetWidth;
-            //console.log(field_x);
-            //console.log(field_y);
-            // リセット
             setHandButtons(
                 data.player.hand._array.map((card, index) => {
                     var id_btn = 'eachHandButton' + index;
@@ -193,7 +169,6 @@ export default function HandSelection(props) {
         <div className="hand-wrapper" style={ {display: showhand ? 'block' : 'none'} }>
             <div className="hand-content">
                 <div id="hand">{ hand_buttons }</div>
-                <div id="draw-card">{ draw_card }</div>
             </div>
         </div>
     );
