@@ -78,7 +78,7 @@ class Game {
             player.draw(this.stock);
         }
         this.players.push(player);
-        this.players[this.currentNum].done(); //エントリー完了
+        // this.players[this.currentNum].done(); //エントリー完了
         this.currentNum += 1;
         return this.players[this.currentNum-1];
     }
@@ -132,9 +132,10 @@ class Game {
 
     /** 全員done状態かどうか */
     isAllDone() {
-        return this.players
+        return this.players.length >= 3 && // ゲームプレイ最低人数：３人
+            this.players
             .filter(player => player != null)
-            .filter(player => player.isDone()).length === 3;
+            .filter(player => player.isDone()).length === this.players.length;
     }
 
     isFinished() {
@@ -175,7 +176,6 @@ class Game {
     deletePlayer(id) {
         this.players.forEach((player, index) => {
             if (player != null && player.socketId == id) {
-                // this.players[index] = null;
                 this.players.splice(index, 1);
                 this.currentNum -= 1;
             }    
@@ -190,7 +190,7 @@ class Game {
         this.players.forEach(player => {
             let card = player.hand.pop();
             this.field.add(card, this);
-            this.field.shuffle();
+            // this.field.shuffle();
         });
     }
 

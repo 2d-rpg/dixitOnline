@@ -16,9 +16,7 @@ class RoomManager {
     /** プレイヤーの追加 */
     addPlayer(name, socket) {
         let player = new Player({socketId: socket.id, username: name, socket: socket});
-
         this.players.push(player);
-        player.done(); //エントリー完了
         return player;
     }
 
