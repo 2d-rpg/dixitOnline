@@ -12,10 +12,10 @@ export default function HandSelection(props) {
     const [hand_buttons, setHandButtons] = useState(null);
 
     useEffect(() => {
-        const update_hand_data = (data) => {
-            // props.setIndex(10);
-            setHandData(data.handData);
-        }
+        // const update_hand_data = (data) => {
+        //     // props.setIndex(10);
+        //     setHandData(data.handData);
+        // }
         /** 手札の表示 */
         const hand_selection = (data) => {
             setShowHand(true);
