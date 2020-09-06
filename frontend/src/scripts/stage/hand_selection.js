@@ -11,8 +11,49 @@ export default function HandSelection(props) {
     /** 手札の内容 */
     const [hand_buttons, setHandButtons] = useState(null);
 
+    const [draw_card,setDrawCard] = useState(null);
+
     useEffect(() => {
         /** 手札の表示 */
+        const draw_card = (data) => {
+            setShowHand(true);
+            setDrawCard(
+                () =>{
+                    var hand_src = "../images/back/" + "card_back.png";
+                    const handButton = 
+                    (<p className='drawCardButton' type='button'>
+                        <img className='drawCardImage' src={ hand_src } width='100px' height='150px'></img>
+                    </p>); 
+                    return(<Card button={ handButton }/>);
+                }
+            );
+            setHandButtons(
+                data.player.hand._array.map((card, index) => {
+                    if(index==5){
+                        return;
+                    }else{
+                        var id_btn = 'eachHandButton' + index;
+                        var id_img = 'eachHandImage' + index;
+                        var hand_src = "../images/default/" + card.filename;
+                        const handButton = data.player.isMaster ? (
+                            <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)} data-toggle="modal" data-target="#exampleModalCenter">
+                                <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                            </p> 
+                        ) : (
+                            <p className='eachHandButton' id={ id_btn } type='button'>
+                                <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                            </p>
+                        );
+                        return(<Card button={ handButton } kind={ 'Hand' }/>);
+                    }
+                })
+            );
+            setTimeout(() => {
+                setDrawCard(false);
+                hand_selection(data);
+            }, 2000);
+        }
+
         const hand_selection = (data) => {
 
             //var field_x = $(".eachFieldContainer").offset().left;
@@ -20,8 +61,6 @@ export default function HandSelection(props) {
             //var field_x = document.documentElement.offsetWidth;
             //console.log(field_x);
             //console.log(field_y);
-
-            setShowHand(true);
             // リセット
             setHandButtons(
                 data.player.hand._array.map((card, index) => {
@@ -40,6 +79,7 @@ export default function HandSelection(props) {
                     return(<Card button={ handButton } kind={ 'Hand' }/>);
                 })
             );
+
             if(data.player.isMaster){ //語り部の場合
                 props.setMessage('あなたは親です(ﾟ∀ﾟ)カードを選択してください(=^▽^)σ');
             } else { // 語り部以外のプレイヤーの場合
@@ -133,7 +173,7 @@ export default function HandSelection(props) {
             );
         };
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
-        props.socket.on('hand_selection' ,(data) => hand_selection(data));
+        props.socket.on('hand_selection' ,(data) => draw_card(data));
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
         props.socket.on('update_hand',(data) => update_hand(data.player));
         props.socket.on('restart',() => setShowHand(false));
@@ -143,6 +183,7 @@ export default function HandSelection(props) {
         <div className="hand-wrapper" style={ {display: showhand ? 'block' : 'none'} }>
             <div className="hand-content">
                 <div id="hand">{ hand_buttons }</div>
+                <div id="draw-card">{ draw_card }</div>
             </div>
         </div>
     );
