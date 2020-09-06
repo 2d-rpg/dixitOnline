@@ -22,7 +22,7 @@ export default function HandSelection(props) {
                     var hand_src = "../images/back/" + "card_back.png";
                     const handButton = 
                     (<p className='drawCardButton' type='button'>
-                        <img className='drawCardImage' src={ hand_src } width='100px' height='150px'></img>
+                        <img id='drawCard' className='drawCardImage' src={ hand_src } width='100px' height='150px'></img>
                     </p>); 
                     return(<Card button={ handButton }/>);
                 }
@@ -48,6 +48,16 @@ export default function HandSelection(props) {
                     }
                 })
             );
+            document.getElementById('drawCard').animate([
+                // keyframes
+                { transform: 'translate(400px,-400px)'}, 
+                { transform: 'translate(-1200px,800px)' , opacity: 1 },
+              ], { 
+                // timing options
+                duration: 10000,
+            });
+
+
             setTimeout(() => {
                 setDrawCard(false);
                 hand_selection(data);
