@@ -40,7 +40,6 @@ class RoomManager {
 
     deleteRoom(name) {
         this.roomList.splice(this.roomList.indexOf(name), 1);
-        console.log("deleteおぱやぱえf");
     }
 
 }
