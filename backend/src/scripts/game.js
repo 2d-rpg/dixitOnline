@@ -82,16 +82,6 @@ class Game {
         this.currentNum += 1;
         return this.players[this.currentNum-1];
     }
-    // addPlayer(data, socket) {
-    //     let player = new Player({socketId: socket.id, username: data.username});
-    //     for (var i = 0; i < 5; i++) { 
-    //         player.draw(this.stock);
-    //     }
-    //     this.players.push(player);
-    //     this.players[this.currentNum].done(); //エントリー完了
-    //     this.currentNum += 1;
-    //     return this.players[this.currentNum-1];
-    // }
 
     /** 現在のプレイヤー数を確認 */
     // getLength() {
@@ -148,12 +138,12 @@ class Game {
     }
 
     isFinished() {
-        return this.players.filter(player => player == null).length === 3 && this.stageIndex === 6;
+        return this.players.filter(player => player == null).length === this.players.length && this.stageIndex === 6;
     }
 
     /** 語り部の更新 */
     updateMaster() {
-        this.master = (this.master + 1) % 3; // 0 ~ 2 でループ
+        this.master = (this.master + 1) % this.players.length;
         this.players.forEach((player, index) => {
             player.isMaster = this.master === index;
         });
@@ -162,17 +152,6 @@ class Game {
     /** 語り部によるお題の設定 */
     setStory(message){
         this.story = message;
-    }
-
-    /** 終了条件 */
-    isEndGame() {
-        let flag = false
-        this.players.forEach(player => {
-            if (player.score >= 30) {
-                flag = true
-            }
-        });
-        return flag;
     }
 
     /** socket idによるプレイヤー検索 */
