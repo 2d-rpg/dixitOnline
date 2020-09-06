@@ -211,6 +211,7 @@ class Game {
         this.players.forEach(player => {
             let card = player.hand.pop();
             this.field.add(card, this);
+            this.field.shuffle();
         });
     }
 
