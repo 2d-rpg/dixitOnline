@@ -89,6 +89,7 @@ export default function FieldSelection(props) {
                     return (<Card button={ fieldButton } kind={ 'Field' }/>);
                 })
             );
+            console.log($('.eachFieldContainer').offset());
         };
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
         props.socket.on('field_selection' ,(data) => field_selection(data));

@@ -42,7 +42,7 @@ export default function HandSelection(props) {
             );
             if(data.player.isMaster){ //語り部の場合
                 props.setMessage('あなたは親です(ﾟ∀ﾟ)カードを選択してください(=^▽^)σ');
-            }else{ // 語り部以外のプレイヤーの場合
+            } else { // 語り部以外のプレイヤーの場合
                 props.setMessage('あなたは子です(ﾟ∀ﾟ)待機中( ´Д`)y━･~~');
             }
         };
@@ -91,6 +91,7 @@ export default function HandSelection(props) {
 
         /**語り部以外のプレイヤーが手札からカードを選んだときの動作 */
         const others_select = (socket, data, index) => {
+            $(".toField").removeClass("toField");
             $("#eachHandButton" + index).addClass("toField");
             var card_x = $("#eachHandButton" + index).offset().left;
             var field_x = ($("#eachHandButton" + 2).offset().left + $("#eachHandButton" + 3).offset().left) / 2;
@@ -99,7 +100,7 @@ export default function HandSelection(props) {
             document.getElementsByClassName("toField")[0].animate([
                 // keyframes
                 { transform: 'translateY(0px)'}, 
-                { transform: 'translateX(' + (field_x - card_x).toString() + 'px) translateY(' + (field_y - card_y).toString() + 'px)' , opacity: 0},
+                { transform: `translate(${field_x - card_x}px, ${field_y - card_y}px)` , opacity: 0 },
               ], { 
                 // timing options
                 duration: 800,

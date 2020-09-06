@@ -30,8 +30,13 @@ export default function Card(props) {
 
     const isField = (props.kind === 'Field');
     const isAnswer = (props.kind === 'answer');
+    const isDiscardOrStack = (props.kind === 'Discard' || props.kind === 'Stack');
 
-    const resultComponent = isField ? (
+    const resultComponent = isDiscardOrStack ? (
+        <div className={ className } display='inline-flex' style={ props.style }>
+            { props.button }
+        </div>
+    ) : isField ? (
         <div className={ className } display='inline-flex'>
             { props.radio }
             { props.button }
