@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChessPawn, faCrown } from "@fortawesome/free-solid-svg-icons";
+import { faChessPawn, faChessRook } from "@fortawesome/free-solid-svg-icons";
 
 import '../../css/show_role.css';
 
@@ -35,7 +35,7 @@ export default function ShowRole(props) {
 
     return(
     <div className="role-wrapper" style={ { textAlign: "center", display: showrole ? 'block' : 'none', padding: "50" } } >
-      <FontAwesomeIcon className="role-figure" style={ iconStyle }  icon={ isMaster ? faCrown : faChessPawn } color={ isMaster ? "gold" : "seashell" }/>
+      <FontAwesomeIcon className="role-figure" style={ iconStyle }  icon={ isMaster ? faChessRook : faChessPawn } color={ isMaster ? "gold" : "seashell" }/>
       <span className="text">{ isMaster ? "語り部" : "聞き手" }</span>
     </div>
     );
