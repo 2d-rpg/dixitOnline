@@ -22,10 +22,12 @@ import Result from './scripts/stage/result';
 import Upload from './scripts/upload';
 import Status from './scripts/status';
 import PlayerList from './scripts/player_list';
+import Stock from './scripts/stock'
 
 import './App.css';
 import './css/game.css';
 import Help from './scripts/help';
+import Discard from './scripts/discard';
 
 
 // const ENDPOINT = "http://34.83.112.24:3000/";
@@ -82,12 +84,14 @@ function App() {
             <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc }/>
             <StoryModal socket={ socket } setStory={ setStory } masterIndex={ masterIndex } src={ src }/>
             <FieldSelection socket={ socket } setMessage={ setMessage }/>
-            <ShowAnswer socket={ socket } setMessage={ setMessage }/>
+            <ShowAnswer socket={ socket } setMessage={ setMessage } setDiscard/>
             <Result socket={ socket } setMessage={ setMessage }/>
             <Status socket={ socket } name={ name } showStatus={ showStatus } setShowStatus={ setShowStatus }/>
             <PlayerList socket={ socket } name={ name }/>
             <ShowRole socket={ socket } setMessage={ setMessage } />
             <Upload socket={ socket }/>
+            <Discard socket={ socket }/>
+            <Stock socket={ socket }/>
           </div>
         </div>
         <div className="game-chat">
