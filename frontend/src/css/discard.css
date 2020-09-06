@@ -26,3 +26,10 @@
     height: 100%;
     /* transition-duration: 20s; */
 }
+
+.discard
+{
+    position: absolute;
+    top: 30%;
+    left: 2%;
+}
