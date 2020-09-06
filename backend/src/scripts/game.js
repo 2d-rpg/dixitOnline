@@ -78,20 +78,10 @@ class Game {
             player.draw(this.stock);
         }
         this.players.push(player);
-        this.players[this.currentNum].done(); //エントリー完了
+        // this.players[this.currentNum].done(); //エントリー完了
         this.currentNum += 1;
         return this.players[this.currentNum-1];
     }
-    // addPlayer(data, socket) {
-    //     let player = new Player({socketId: socket.id, username: data.username});
-    //     for (var i = 0; i < 5; i++) { 
-    //         player.draw(this.stock);
-    //     }
-    //     this.players.push(player);
-    //     this.players[this.currentNum].done(); //エントリー完了
-    //     this.currentNum += 1;
-    //     return this.players[this.currentNum-1];
-    // }
 
     /** 現在のプレイヤー数を確認 */
     // getLength() {
@@ -104,13 +94,13 @@ class Game {
         if (this.stageIndex != Game.STAGE_NUM) {
             this.stageIndex += 1;
         } else {
-            this.stageIndex = 1; // hand_selectionへ
+            this.stageIndex = status.indexOf('hand_selection'); // hand_selectionへ
             if(this.checkScore()) { // 終了条件
-                this.stageIndex = 5; // result画面へ
+                this.stageIndex = status.indexOf('result'); // result画面へ
             }
         }
         // 更新後
-        if (this.stageIndex === 1) { // hand_selection
+        if (this.stageIndex === status.indexOf('hand_selection')) { // hand_selection
             this.updateMaster(); // 語り部更新
             this.fieldToDiscard();
             if(this.stock._array.length < this.players.length) {
@@ -119,15 +109,15 @@ class Game {
             this.players.forEach(player => player.draw(this.stock));
             this.resetAnswers();
         } 
-        if (this.stageIndex === 3) { // field_selection
+        if (this.stageIndex === status.indexOf('field_selection')) { // field_selection
             this.field.shuffle(); // 場札をシャッフル
         }
-        if (this.stageIndex === 4) { // show_answer
+        if (this.stageIndex === status.indexOf('show_answer')) { // show_answer
             this.calcScore();
         }
-        this.stageIndex = this.stageIndex % 6; // restart用
+        this.stageIndex = this.stageIndex % status.length; // restart用
         this.stage = status[this.stageIndex];
-        if (this.stageIndex !== 0) {
+        if (this.stageIndex !== status.indexOf('entry')) {
             this.players.forEach(player => { // 全プレイヤーの状態リセット
                 player.reset(); // 状態リセット
             });
@@ -142,18 +132,19 @@ class Game {
 
     /** 全員done状態かどうか */
     isAllDone() {
-        return this.players
+        return this.players.length >= 3 && // ゲームプレイ最低人数：３人
+            this.players
             .filter(player => player != null)
-            .filter(player => player.isDone()).length === 3;
+            .filter(player => player.isDone()).length === this.players.length;
     }
 
     isFinished() {
-        return this.players.filter(player => player == null).length === 3 && this.stageIndex === 6;
+        return this.players.filter(player => player == null).length === this.players.length && this.stageIndex === status.length;
     }
 
     /** 語り部の更新 */
     updateMaster() {
-        this.master = (this.master + 1) % 3; // 0 ~ 2 でループ
+        this.master = (this.master + 1) % this.players.length;
         this.players.forEach((player, index) => {
             player.isMaster = this.master === index;
         });
@@ -162,17 +153,6 @@ class Game {
     /** 語り部によるお題の設定 */
     setStory(message){
         this.story = message;
-    }
-
-    /** 終了条件 */
-    isEndGame() {
-        let flag = false
-        this.players.forEach(player => {
-            if (player.score >= 30) {
-                flag = true
-            }
-        });
-        return flag;
     }
 
     /** socket idによるプレイヤー検索 */
@@ -196,7 +176,6 @@ class Game {
     deletePlayer(id) {
         this.players.forEach((player, index) => {
             if (player != null && player.socketId == id) {
-                // this.players[index] = null;
                 this.players.splice(index, 1);
                 this.currentNum -= 1;
             }    
@@ -211,6 +190,7 @@ class Game {
         this.players.forEach(player => {
             let card = player.hand.pop();
             this.field.add(card, this);
+            // this.field.shuffle();
         });
     }
 

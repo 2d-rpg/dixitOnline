@@ -8,12 +8,8 @@ class RoomEntry {
         socket.join(data.roomname);
         let room = roomManager.findRoomByName(data.roomname);
         room.entry(player);
+        if (room.players.length > 1) player.done();
         io.to(data.roomname).emit('update_player_list', {game: room.game});
-        
-        // socket.emit('room', {roomManager : roomManager});
-        // game.players.forEach(player => {
-        //     io.to(player.socketId).emit('update_player_list',{game : game});
-        // });
     }
 }
 

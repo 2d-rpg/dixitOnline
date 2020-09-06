@@ -9,16 +9,14 @@ const fs = require('fs');
 
 class RoomManager {
     constructor() {
-        this.roomList = [new Room("あいうえお")];
+        this.roomList = [];
         this.players = [];
     }
 
     /** プレイヤーの追加 */
     addPlayer(name, socket) {
         let player = new Player({socketId: socket.id, username: name, socket: socket});
-
         this.players.push(player);
-        player.done(); //エントリー完了
         return player;
     }
 
@@ -38,6 +36,10 @@ class RoomManager {
 
     findRoomBySocket(socket) {
         return this.roomList.filter(room => room.players.some(player => player.socketId === socket.id))[0];
+    }
+
+    deleteRoom(name) {
+        this.roomList.splice(this.roomList.indexOf(name), 1);
     }
 
 }
