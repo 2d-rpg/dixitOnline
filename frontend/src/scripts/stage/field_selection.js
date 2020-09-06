@@ -42,7 +42,7 @@ export default function FieldSelection(props) {
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
-                    return (<Card radio={ fieldRadio } button={ fieldButton } kind={ 'Field' }/>);
+                    // return (<Card radio={ fieldRadio } button={ fieldButton } kind={ 'Field' }/>);
                 })
             );
             if(!data.player.isMaster){ // 語り部以外のプレイヤーの場合
@@ -85,7 +85,7 @@ export default function FieldSelection(props) {
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
-                    return (<Card button={ fieldButton } kind={ 'Field' }/>);
+                    // return (<Card button={ fieldButton } kind={ 'Field' }/>);
                 })
             );
         };

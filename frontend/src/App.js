@@ -22,6 +22,7 @@ import Result from './scripts/stage/result';
 import Upload from './scripts/upload';
 import Status from './scripts/status';
 import PlayerList from './scripts/player_list';
+import CardRender from './scripts/card_render'
 
 import './App.css';
 import './css/game.css';

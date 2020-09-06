@@ -7,7 +7,6 @@ class OthersHandSelection {
     constructor() {}
 
     static do(socket, io, index, roomManager) {
-        // console.log(roomManager.findRoomBySocket(socket));
         let game = roomManager.findRoomBySocket(socket).game;
         let player = game.findPlayer(socket.id);
         if(!player.isDone()){

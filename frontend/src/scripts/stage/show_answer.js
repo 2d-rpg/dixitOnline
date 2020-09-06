@@ -73,7 +73,7 @@ export default function ShowAnswer(props) {
                             <img className='eachSelectedFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
-                    return (<Card button={ fieldButton } kind={ 'answer' } isMaster={ index === data.game.field.masterCardIndex ? true : false }/>);
+                    // return (<Card button={ fieldButton } kind={ 'answer' } isMaster={ index === data.game.field.masterCardIndex ? true : false }/>);
                 })
             );
             // 投票結果の表示セット

@@ -9,11 +9,6 @@ class RoomEntry {
         let room = roomManager.findRoomByName(data.roomname);
         room.entry(player);
         io.to(data.roomname).emit('update_player_list', {game: room.game});
-        
-        // socket.emit('room', {roomManager : roomManager});
-        // game.players.forEach(player => {
-        //     io.to(player.socketId).emit('update_player_list',{game : game});
-        // });
     }
 }
 
