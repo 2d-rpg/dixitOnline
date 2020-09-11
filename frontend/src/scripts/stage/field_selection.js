@@ -20,7 +20,9 @@ export default function FieldSelection(props) {
     useEffect(() => {
         /** 初期化 */
         const initialize = (data) => {
-            setShowField(false);
+            setTimeout(() => {
+                setShowField(false);
+            }, 1000);
             setDecided(false);
             setShowfieldWrapper(true);
         };
