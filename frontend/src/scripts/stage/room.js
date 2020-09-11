@@ -31,7 +31,7 @@ export default function Room(props) {
                         <div className="room-list-content">
                             <div className="room-name">{ room.name }</div>
                             <div className="room-decision-button">
-                                <button className="btn btn-primary mb-2" onClick={ () => roomEntrySubmit(room.name)}>決定</button>
+                                <button className="btn btn-primary mb-2" onClick={ () => roomEntrySubmit(room.name)}>入室</button>
                             </div>
                         </div>
                     );
@@ -84,10 +84,10 @@ export default function Room(props) {
         <div className="room" style={ {display: showRoom ? 'block' : 'none'} }>
             <div className="room-content" style={ {display: showRoomContent ? 'block' : 'none'} }>
                 <div className="room-button">
-                    <button onClick={ clickRoomCreate }>
+                    <button onClick={ clickRoomCreate } className="btn btn-primary mb-2">
                         ルームを新規作成
                     </button>
-                    <button onClick={ clickRoomList }>
+                    <button onClick={ clickRoomList } className="btn btn-primary mb-2">
                         ルームに参加
                     </button>
                 </div>
@@ -104,7 +104,7 @@ export default function Room(props) {
                 </div>
             </div> 
             <div className="game-start" style={ {display: showStart ? 'block' : 'none'} }>
-                <button onClick={ () => clickStart() }>
+                <button onClick={ () => clickStart() } className="btn btn-primary mb-2">
                     このメンバーでゲーム開始
                 </button>
             </div>

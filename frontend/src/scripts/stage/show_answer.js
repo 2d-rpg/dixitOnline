@@ -24,6 +24,7 @@ export default function ShowAnswer(props) {
     });
     $('#answerModal').on('hidden.bs.modal', function (e) {
         $('.game-core').removeClass('modal-open');
+        props.socket.emit('confirm_answer');
     });
 
     useEffect(() => {
@@ -99,7 +100,6 @@ export default function ShowAnswer(props) {
 
     const handleclick = () => {
         $('#answerModal').modal('toggle');
-        props.socket.emit('confirm_answer');
     }
 
     return(

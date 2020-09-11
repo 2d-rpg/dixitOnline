@@ -72,10 +72,10 @@ function App() {
       <div className='header'>
         <h1>Dixit Online</h1>
       </div>
+      <Init socket={ socket }/>
       <div className="game-container">
         <div className='game-core-wrapper'>
           <div className='game-core'>
-            <Init socket={ socket }/>
             <Help message={ message }/>
             <Entry socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Room socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
