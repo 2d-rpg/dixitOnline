@@ -33,11 +33,6 @@ class Game {
     constructor() {
         /** 山札(stock) */
         this.stock = new Stock();
-        const files = fs.readdirSync('../frontend/public/images/default/');
-        for (var i = 0; i < files.length; i++) { 
-            this.stock.push(new Card(files[i]));
-        }
-        this.stock.shuffle();
         /** このゲームに参加しているプレイヤー */
         this.players = [];
         /** 現在のプレイヤー人数 */
@@ -55,6 +50,7 @@ class Game {
         this.story = "";
         /** 投票の結果 */
         this.answers = [];
+        this.round = 1;
     }
 
     reset() {
@@ -68,17 +64,39 @@ class Game {
         this.field = new Field();
         this.stage = status[0];
         this.stageIndex = 0;
-        this.master = -1;
+        this.master = 0;
+    }
+
+    createDeck(option) {
+        let files;
+        if (option) {
+            this.players.forEach((player) => {
+                files = fs.readdirSync('../frontend/public/images/uploaded/'+player.name+'/');
+                for (var i = 0; i < files.length; i++) { 
+                    this.stock.push(new Card(files[i]));
+                }
+            });
+        } else {
+            files = fs.readdirSync('../frontend/public/images/default/');
+            for (var i = 0; i < files.length; i++) { 
+                this.stock.push(new Card(files[i]));
+            }
+        }
+        this.stock.shuffle();
+        this.players.forEach((player) =>  {
+            for (var i = 0; i < 5; i++) { 
+                player.draw(this.stock);
+            }
+        });
     }
 
     /** プレイヤーの追加 */
     addPlayer(data) {
         let player = data.player;
-        for (var i = 0; i < 5; i++) { 
-            player.draw(this.stock);
-        }
+        // for (var i = 0; i < 5; i++) { 
+        //     player.draw(this.stock);
+        // }
         this.players.push(player);
-        // this.players[this.currentNum].done(); //エントリー完了
         this.currentNum += 1;
         return this.players[this.currentNum-1];
     }
@@ -101,7 +119,9 @@ class Game {
         }
         // 更新後
         if (this.stageIndex === status.indexOf('hand_selection')) { // hand_selection
-            this.updateMaster(); // 語り部更新
+            if(this.round !== 1){
+                this.updateMaster(); // 語り部更新
+            }
             this.fieldToDiscard();
             if(this.stock._array.length < this.players.length) {
                 this.discardToStock();
@@ -144,6 +164,7 @@ class Game {
 
     /** 語り部の更新 */
     updateMaster() {
+        this.round += 1;
         this.master = (this.master + 1) % this.players.length;
         this.players.forEach((player, index) => {
             player.isMaster = this.master === index;

@@ -19,6 +19,8 @@ export default function Room(props) {
 
     const [showStart, setShowStart] = useState(false);
 
+    const [option,setOption] = useState(false);
+
     const updateRoomList = (roomManager) => {
         if (roomManager.roomList.length === 0) {
             setRoomList(
@@ -67,7 +69,7 @@ export default function Room(props) {
     }
 
     const clickStart = () => {
-        props.socket.emit('wait');
+        props.socket.emit('start', {option: option});
         setShowStart(false);
     }
 
@@ -78,7 +80,9 @@ export default function Room(props) {
         });
         // props.socket.on('room_create', () => setShowRoom(false));
         props.socket.on('update_roomlist', (data) => updateRoomList(data.roomManager));
-        props.socket.on('show_start', () => setShowStart(true));
+        props.socket.on('entry_player', (data) => {
+            if (data.room.players.length > 2 && data.room.players[0].socketId === props.socket.id) setShowStart(true);
+        });
     });
 
     return(
@@ -89,7 +93,7 @@ export default function Room(props) {
                         ルームを新規作成
                     </button>
                     <button onClick={ clickRoomList }>
-                        ルームに参加
+                        既存ルームに参加
                     </button>
                 </div>
                 <div className="room-create" style={ {display: showRoomCreate ? 'block' : 'none'} }>
@@ -105,6 +109,16 @@ export default function Room(props) {
                 </div>
             </div> 
             <div className="game-start" style={ {display: showStart ? 'block' : 'none'} }>
+                <div className="deck-select">
+                    <div className="default-deck" onClick={() => setOption(false)}>
+                        <label for="default">デフォルトデッキ</label>
+                        <input type="radio" id="default" name="deck" value="default" checked="checked"/>
+                    </div>
+                    <div className="option-deck" onClick={() => setOption(true)}>
+                        <label for="option">みんなの寄せ集め<br/>（みんなが投稿した画像でデッキを作成）</label>
+                        <input type="radio" id="option" name="deck" value="option"/>
+                    </div>
+                </div>
                 <button onClick={ () => clickStart() }>
                     このメンバーでゲーム開始
                 </button>

@@ -44,3 +44,10 @@
     font-size: 130%;
 }
 
+.deck-select {
+    /* display: flex; */
+}
+
+.deck-select > * {
+    margin: auto;
+}
