@@ -48,6 +48,7 @@ export default function Stock(props) {
 
     useEffect(() => {
         props.socket.on('hand_selection' ,(data) => stock_update(data));
+        props.socket.on('restart',(data) => {setShowStock(false);})
     }, [ props ]);
 
     return (

@@ -15,7 +15,7 @@ export default function FieldSelection(props) {
     /** フィールドの表示内容 */
     const [field_buttons, setFieldButtons] = useState(null);
 
-    const [showfieldWrapper, setShowfieldWrapper] = useState(true);
+    const [showfieldWrapper, setShowfieldWrapper] = useState(false);
 
     useEffect(() => {
         /** 初期化 */

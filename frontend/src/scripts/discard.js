@@ -7,9 +7,12 @@ export default function Discard(props) {
     /** 墓地の表示 */
     const [discard, setDiscard] = useState(null);
 
+    const [showDiscard,setShowDiscard] = useState(false);
+
     useEffect(() => {
 
         const update_discard = (data) => {
+            setShowDiscard(true);
             setDiscard(
                 data.game.discard._array.map((card, index) => {
                     var id_btn = 'eachDiscardButton' + index;
@@ -29,7 +32,8 @@ export default function Discard(props) {
             )
         };
         props.socket.on('hand_selection', (data) => update_discard(data));
+        props.socket.on('restart', () => setShowDiscard(false));
     });
 
-    return(<div className="discard">{ discard }</div>)
+    return(<div className="discard" style={ {display: showDiscard ? 'block' : 'none'} }>{ discard }</div>)
 }
