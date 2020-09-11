@@ -50,6 +50,7 @@ export default function Room(props) {
     const roomCreateSubmit = (data, event) => {
         // サーバーに'entry'を送信
         setShowRoomContent(false);
+        props.setShowStatus(true);
         props.socket.emit('room_create', {username : data.username, roomname : data.roomname});
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
         props.setMessage('他のプレイヤーが参加するのを待っています( ´ ▽ ` )');
