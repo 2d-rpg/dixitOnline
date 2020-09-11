@@ -22,7 +22,7 @@ const status = [
 class Game {
 
     /** ゲーム終了基準点(MAX_SCORE) */
-    static MAX_SCORE = 5;
+    static MAX_SCORE = 8;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
     static STAGE_NUM = 4;
     /** カード枚数 */
@@ -103,10 +103,11 @@ class Game {
         if (this.stageIndex === status.indexOf('hand_selection')) { // hand_selection
             this.updateMaster(); // 語り部更新
             this.fieldToDiscard();
+            console.log(this.stock._array.length);
+            this.players.forEach(player => player.draw(this.stock));
             if(this.stock._array.length < this.players.length) {
                 this.discardToStock();
             }
-            this.players.forEach(player => player.draw(this.stock));
             this.resetAnswers();
         } 
         if (this.stageIndex === status.indexOf('field_selection')) { // field_selection

@@ -9,6 +9,7 @@ export default function Help(props) {
         <div id="progress">
             <div className="help"><FontAwesomeIcon icon={faQuestion} /></div>
             <div className="help-content">{ props.message }</div>
+            <div className="help-content-triangle"></div>
         </div>
     );
 }
