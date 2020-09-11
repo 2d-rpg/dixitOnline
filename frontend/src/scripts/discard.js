@@ -17,12 +17,12 @@ export default function Discard(props) {
                 var rotate = Math.random() * 20 - 10;
                 var card_x = element.getBoundingClientRect().left;
                 const animation = data.game.discard._array.length === 0 ? [
-                    { opacity: 1.0, offset: 0.0 },
-                    { transform: `translate(${discard_x - card_x}px) rotate(${rotate}deg)`, display: 'none', opacity: 1.0, offset: 0.5 },
-                    { transform: `translate(${stock_x - card_x}px) rotate(${rotate}deg)`, display: 'none', opacity: 1, offset: 1.0 }
+                    { opacity: 1.0 },
+                    { transform: `translate(${discard_x - card_x}px)` },
+                    { transform: `translate(${stock_x - card_x}px) rotate(${rotate}deg)`, opacity: 0.0 }
                 ] : [
-                    { opacity: 1.0, offset: 0.0 },
-                    { transform: `translate(${discard_x - card_x}px) rotate(${rotate}deg)`, display: 'none', opacity: 0, offset: 1.0 }
+                    { opacity: 1.0 },
+                    { transform: `translate(${discard_x - card_x}px) rotate(${rotate}deg)`, opacity: 0 }
                 ];
                 element.animate(animation, { duration: data.game.discard._array.length === 0 ? 2000 : 1000 });
             });
@@ -44,7 +44,7 @@ export default function Discard(props) {
                         return (<Card button={ discardButton } style={ style } kind={ "Discard" }/>)
                     })
                 )
-            }, 1000);
+            }, data.game.discard._array.length === 0 ? 2000 : 1000);
         };
         props.socket.on('hand_selection', (data) => update_discard(data));
     }, [ props, setDiscard ]);
