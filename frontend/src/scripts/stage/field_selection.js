@@ -15,12 +15,14 @@ export default function FieldSelection(props) {
     /** フィールドの表示内容 */
     const [field_buttons, setFieldButtons] = useState(null);
 
-    const [showfieldWrapper, setShowfieldWrapper] = useState(true);
+    const [showfieldWrapper, setShowfieldWrapper] = useState(false);
 
     useEffect(() => {
         /** 初期化 */
         const initialize = (data) => {
-            setShowField(false);
+            setTimeout(() => {
+                setShowField(false);
+            }, 1000);
             setDecided(false);
             setShowfieldWrapper(true);
         };

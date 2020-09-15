@@ -11,39 +11,32 @@ export default function HandSelection(props) {
     /** 手札の内容 */
     const [hand_buttons, setHandButtons] = useState(null);
 
-    const [draw_card,setDrawCard] = useState(null);
-
     useEffect(() => {
         /** 手札の表示 */
         const draw_card = (data) => {
             setShowHand(true);
             setHandButtons(
-                data.player.hand._array.map((card, index) => {
-                    if(index==5){
-                        return;
-                    }else{
-                        var id_btn = 'eachHandButton' + index;
-                        var id_img = 'eachHandImage' + index;
-                        var hand_src = "../images/" + card.filename;
-                        const handButton = data.player.isMaster ? (
-                            <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)} data-toggle="modal" data-target="#exampleModalCenter">
-                                <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
-                            </p> 
-                        ) : (
-                            <p className='eachHandButton' id={ id_btn } type='button'>
-                                <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
-                            </p>
-                        );
-                        return(<Card button={ handButton } kind={ 'Hand' }/>);
-                    }
+                data.player.hand._array.slice(0, 5).map((card, index) => {
+                    var id_btn = 'eachHandButton' + index;
+                    var id_img = 'eachHandImage' + index;
+                    var hand_src = "../images/" + card.filename;
+                    const handButton = data.player.isMaster ? (
+                        <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)} data-toggle="modal" data-target="#exampleModalCenter">
+                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                        </p> 
+                    ) : (
+                        <p className='eachHandButton' id={ id_btn } type='button'>
+                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                        </p>
+                    );
+                    return(<Card button={ handButton } kind={ 'Hand' }/>);
                 })
             );
 
 
             setTimeout(() => {
-                setDrawCard(false);
                 hand_selection(data);
-            }, 2000);
+            }, data.game.discard._array.length === 0 ? 3000 : 1000);
         }
 
         const hand_selection = (data) => {

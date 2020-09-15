@@ -5,13 +5,14 @@ import '../css/player_list.css';
 
 export default function PlayerList(props) {
 
-    const [showPlayerList, ] = useState(true);
+    const [showPlayerList, setShowPlayerList] = useState(true);
 
     const [playerList, setPlayerList] = useState(null);
 
     useEffect(() => {
         /** プレイヤーリストの更新 */
         const updatePlayerList = (players) => {
+            setShowPlayerList(true);
             setPlayerList(
                 players.sort((a,b) => {
                     if( a.score > b.score ) return -1;
@@ -44,7 +45,7 @@ export default function PlayerList(props) {
         props.socket.on('hand_selection', (data) => updatePlayerList(data.game.players));
         props.socket.on('show_answer', (data) => updatePlayerList(data.game.players));
         props.socket.on('update_player_list', (data) => updatePlayerList(data.game.players));
-        props.socket.on('restart', (data) => updatePlayerList(data.game.players));
+        props.socket.on('restart', (data) => {updatePlayerList(data.game.players);/*リスタート時のみ一時的に非表示*/setShowPlayerList(false);});
     }, [ props ]);
 
     return (

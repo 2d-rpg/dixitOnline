@@ -31,6 +31,11 @@
     padding-bottom: 2%;
 }
 
+.room-button > button
+{
+    margin: 1%;
+}
+
 .room-name {
     width: 65%;
     font-weight: 600;
@@ -50,4 +55,10 @@
 
 .deck-select > * {
     margin: auto;
+}
+.game-start
+{
+    position: absolute;
+    width: 100%;
+    top: 30%;
 }
