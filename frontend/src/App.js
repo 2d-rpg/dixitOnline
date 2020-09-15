@@ -79,6 +79,7 @@ function App() {
             <Help message={ message }/>
             <Entry socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
             <Room socket={ socket } setMessage={ setMessage } setName={ setName } setShowStatus={ setShowStatus }/>
+            <Upload socket={ socket }/>
             <Start socket={ socket } setMessage={ setMessage }/>
             <Story socket={ socket } story={ story }/>
             <HandSelection socket={ socket } setMessage={ setMessage } setMasterIndex={ setMasterIndex } setSrc={ setSrc }/>
@@ -89,7 +90,6 @@ function App() {
             <Status socket={ socket } name={ name } showStatus={ showStatus } setShowStatus={ setShowStatus }/>
             <PlayerList socket={ socket } name={ name }/>
             <ShowRole socket={ socket } setMessage={ setMessage } />
-            <Upload socket={ socket }/>
             <Discard socket={ socket }/>
             <Stock socket={ socket }/>
           </div>

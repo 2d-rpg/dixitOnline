@@ -41,7 +41,7 @@ io.on('connection', (socket) => {
     socket.on('room_create', (data) => room_create.do(data, io, socket, roomManager));
     socket.on('room_entry', (data) => room_entry.do(data, io, socket, roomManager));
     // クライアントからstartがemitされた時
-    socket.on('start', () => start.do(socket, roomManager));
+    socket.on('start', (data) => start.do(data, socket, roomManager));
     // クライアントからstory_selectionがemitされた時
     socket.on('story_selection', (data) => story_selection.do(socket, io, data.message,data.masterIndex, roomManager));
     // クライアントからstory_selectionがemitされた時
@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
         io.to(roomname).emit('chat_send_from_server', { name: name, value : data.value, socketId: socket.id });
     });
     // 画像のアップロード
-    socket.on('upload', (data) => utils.uploadFile(data.filename, data.image));
+    socket.on('upload', (data) => utils.uploadFile(data.filename, data.image, roomManager.findPlayer(socket).name));
 });
 
 setInterval(() => {

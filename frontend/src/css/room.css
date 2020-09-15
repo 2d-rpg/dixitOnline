@@ -49,6 +49,9 @@
     font-size: 130%;
 }
 
+.deck-select > * {
+    margin: auto;
+}
 .game-start
 {
     position: absolute;
