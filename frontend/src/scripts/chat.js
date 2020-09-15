@@ -80,11 +80,13 @@ export default function Chat(props) {
             <div className="chat-bottom">
                 <div className="input-msg-group">
                     <form className="form-inline chat-form-content" id="chatForm" ref={ chatFormElement } onSubmit={ handleSubmit(onSubmit) }>
+                        <div className="message-wrapper">
                         <input type="text" className="form-control chat-input" id="message" name="msg" ref={ register() } placeholder="メッセージ"/>
                         <div className="input-msg-group-append">
                             <span onClick={ handleSubmit(onSubmit) } form="chatForm" class="input-msg-group-text">
                                 <FontAwesomeIcon className="send-icon" icon={ faPaperPlane }/>
                             </span>
+                        </div>
                         </div>
                     </form>
                 </div>
