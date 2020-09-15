@@ -10,6 +10,7 @@ const rank_suffix = ["st", "nd", "rd", "th", "th", "th"];
 const iconStyle = [ { 'color': 'gold' }, { 'color': 'blue' }, { 'color': 'chocolate' } ];
 
 const audio = new Audio('../audio/decision29low.wav');
+audio.volume = 0.1;
 
 export default function Result(props) {
     /** 結果の内容 */

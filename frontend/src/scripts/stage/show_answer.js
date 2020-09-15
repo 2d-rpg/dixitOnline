@@ -6,6 +6,7 @@ import Card from '../card';
 import '../../css/show_answer.css';
 
 const audio = new Audio('../audio/decision29low.wav');
+audio.volume = 0.1;
 
 export default function ShowAnswer(props) {
     /** モーダルのタイトル */
