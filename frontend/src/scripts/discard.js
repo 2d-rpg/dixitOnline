@@ -33,7 +33,7 @@ export default function Discard(props) {
                     data.game.discard._array.map((card, index) => {
                         var id_btn = 'eachDiscardButton' + index;
                         var id_img = 'eachDiscardImage' + index;
-                        var field_src = "../images/default/" + card.filename;
+                        var field_src = "../images/" + card.filename;
                         var rotate = Math.random() * 20 - 10;
                         var shiftX = Math.random() * 10 - 5;
                         var shiftY = Math.random() * 10 - 5;

@@ -33,7 +33,7 @@ export default function FieldSelection(props) {
                 data.game.field.cards.map((card, index) => {
                     var id_btn = 'eachFieldButton' + index;
                     var id_img = 'eachFieldImage' + index;
-                    var field_src = "../images/default/" + card.filename;
+                    var field_src = "../images/" + card.filename;
                     const fieldRadio = <input className="eachFieldRadio" name="field-cb" id={"cb" +  id_btn } type="radio" value={id_btn}></input>;
                     const fieldButton = card.player === props.socket.id ? (
                         <p className='eachFieldButton' id={ id_btn } type='button'>

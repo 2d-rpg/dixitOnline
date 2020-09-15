@@ -9,6 +9,7 @@ class RoomEntry {
         let room = roomManager.findRoomByName(data.roomname);
         room.entry(player);
         if (room.players.length > 1) player.done();
+        io.to(data.roomname).emit('entry_player', {room: room});
         io.to(data.roomname).emit('update_player_list', {game: room.game});
     }
 }

@@ -22,6 +22,10 @@ class Room {
         return player;
     }
 
+    findPlayer(socket) {
+        return this.players.filter(player => player.socketId === socket.id)[0];
+    }
+
 }
 
 
