@@ -99,7 +99,7 @@ export default function Room(props) {
                     <button onClick={ clickRoomCreate } className="btn btn-primary mb-2">
                         ルームを新規作成
                     </button>
-                    <button onClick={ clickRoomList }>
+                    <button onClick={ clickRoomList } className="btn btn-primary mb-2">
                         既存ルームに参加
                     </button>
                 </div>
@@ -117,14 +117,14 @@ export default function Room(props) {
             </div> 
             <div className="game-start" style={ {display: showStart ? 'block' : 'none'} }>
                 <div className="deck-select">
-                    <div className="default-deck" onClick={() => setOption(false)}>
-                        <label for="default">デフォルトデッキ</label>
-                        <input type="radio" id="default" name="deck" value="default" checked="checked"/>
-                    </div>
-                    <div className="option-deck" onClick={() => setOption(true)}>
-                        <label for="option">みんなの寄せ集め<br/>（みんなが投稿した画像でデッキを作成）</label>
-                        <input type="radio" id="option" name="deck" value="option"/>
-                    </div>
+                    <input type="radio" id="default" name="deck" value="default" checked={!option}/>
+                    <label className="deck-select-content" onClick={() => setOption(false)} for='default'>
+                        デフォルトデッキ
+                    </label>
+                    <input type="radio" id="option" name="deck" value="option" checked={option}/>
+                    <label className="deck-select-content" onClick={() => setOption(true)} for='option'>
+                        みんなの寄せ集め<br/>（みんなが投稿した　<br/>　画像でデッキを作成）
+                    </label>
                 </div>
                 <button onClick={ () => clickStart() } className="btn btn-primary mb-2">
                     このメンバーでゲーム開始
