@@ -22,7 +22,7 @@ const status = [
 class Game {
 
     /** ゲーム終了基準点(MAX_SCORE) */
-    static MAX_SCORE = 8;
+    static MAX_SCORE = 2;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
     static STAGE_NUM = 4;
     /** カード枚数 */
@@ -143,7 +143,7 @@ class Game {
         this.stage = status[this.stageIndex];
         if (this.stageIndex !== status.indexOf('entry')) {
             this.players.forEach(player => { // 全プレイヤーの状態リセット
-                player.reset(); // 状態リセット
+                player.undone(); // 状態リセット
             });
             this.players.forEach(player => { // ステージ移行
                 io.to(player.socketId).emit(this.stage, { player : player, game : this }); // ステージ移行
@@ -197,9 +197,9 @@ class Game {
     }
 
     /** socket idによるプレイヤー削除 */
-    deletePlayer(id) {
+    deletePlayer(socket) {
         this.players.forEach((player, index) => {
-            if (player != null && player.socketId == id) {
+            if (player != null && player.socketId == socket.id) {
                 this.players.splice(index, 1);
                 this.currentNum -= 1;
             }    

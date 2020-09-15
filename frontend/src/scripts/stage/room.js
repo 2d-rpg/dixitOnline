@@ -4,6 +4,7 @@ import '../../css/room.css';
 
 
 const audio = new Audio('../audio/decision29low.wav');
+audio.volume = 0.1;
 
 export default function Room(props) {
 
@@ -90,6 +91,12 @@ export default function Room(props) {
         props.socket.on('entry_player', (data) => {
             if (data.room.players.length > 2 && data.room.players[0].socketId === props.socket.id) setShowStart(true);
         });
+        props.socket.on('restart', () => {
+            setShowRoomContent(true);
+            setShowRoomCreate(false);
+            setShowRoomList(true);
+            setShowRoom(false);
+        })
     });
 
     return(

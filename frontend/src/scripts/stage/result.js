@@ -10,21 +10,11 @@ const rank_suffix = ["st", "nd", "rd", "th", "th", "th"];
 const iconStyle = [ { 'color': 'gold' }, { 'color': 'blue' }, { 'color': 'chocolate' } ];
 
 const audio = new Audio('../audio/decision29low.wav');
+audio.volume = 0.1;
 
 export default function Result(props) {
     /** 結果の内容 */
     const [result, setResult] = useState(null);
-
-    // モーダルの表示の中心をbodyではなく.game-coreに変更
-    $('#resultModalWindow').on('shown.bs.modal', function (e) {
-        $('body').removeClass('modal-open');
-        $('.game-core').addClass('modal-open');
-    });
-    $('#resultModalWindow').on('hidden.bs.modal', function (e) {
-        audio.play();
-        $('.game-core').removeClass('modal-open');
-        props.socket.emit('restart');
-    });
 
     useEffect(() => {
         /** result画面の表示 */
@@ -50,10 +40,20 @@ export default function Result(props) {
                 })
             );
             $('#resultModalWindow').modal('toggle');
+            // モーダルの表示の中心をbodyではなく.game-coreに変更
+            $('#resultModalWindow').on('shown.bs.modal', function (e) {
+                $('body').removeClass('modal-open');
+                $('.game-core').addClass('modal-open');
+            });
+            $('#resultModalWindow').on('hidden.bs.modal', function (e) {
+                audio.play();
+                $('.game-core').removeClass('modal-open');
+                props.socket.emit('restart');
+            });
         }
 
         props.socket.on('result' ,(data) => show_result(data));
-    }, [ props, result ]);
+    }, [ props.socket, result ]);
 
     const handleclick = () => {
         $('#resultModalWindow').modal('toggle');

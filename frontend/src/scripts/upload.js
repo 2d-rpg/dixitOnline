@@ -22,6 +22,9 @@ export default function Upload(props) {
             //     })
             // );
         }
+        props.socket.on('restart',() => {
+            
+        });
         props.socket.on('show_start', (data) => {
             setShow(true);
             update(data);

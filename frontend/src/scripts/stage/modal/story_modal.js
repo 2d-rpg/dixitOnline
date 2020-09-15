@@ -57,7 +57,7 @@ export default function StoryModal(props) {
         });
 
         const audio = new Audio("../audio/draw.mp3");
-        audio.volume = 1;
+        audio.volume = 0.3;
         audio.play() // 再生
 
 

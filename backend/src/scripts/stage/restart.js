@@ -10,7 +10,9 @@ class Restart {
 
     static do(io, socket, roomManager) {
         let room = roomManager.findRoomBySocket(socket);
-        room.game.deletePlayer(socket.id);
+        let player = roomManager.findPlayer(socket);
+        player.reset();
+        room.game.deletePlayer(socket);
         if(room.game.players.length === 0){
             roomManager.deleteRoom(room.name);
         }
