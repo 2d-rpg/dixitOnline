@@ -130,6 +130,9 @@ export default function HandSelection(props) {
                 <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper">
                     <img id="selected-hand-card" src={ selectedSrc } alt="あなたが選んだカード"/> 
                 </p> );
+            const audio = new Audio("../audio/draw.mp3");
+            audio.volume = 1;
+            audio.play() // 再生
             setTimeout(
                 () => socket.emit('others_hand_selection', {index : index}),
                 800,
