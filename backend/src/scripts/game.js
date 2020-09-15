@@ -45,12 +45,12 @@ class Game {
         this.stage = status[0];
         this.stageIndex = 0;
         /** 語り部(最初に入ってきた人から) */
-        this.master = -1;
+        this.master = 0;
         /** お題 */
         this.story = "";
         /** 投票の結果 */
         this.answers = [];
-        this.round = 1;
+        this.round = 0;
         this.option = false;
     }
 
@@ -121,6 +121,7 @@ class Game {
         }
         // 更新後
         if (this.stageIndex === status.indexOf('hand_selection')) { // hand_selection
+            this.round += 1
             if(this.round !== 1){
                 this.updateMaster(); // 語り部更新
             }
@@ -167,7 +168,6 @@ class Game {
 
     /** 語り部の更新 */
     updateMaster() {
-        this.round += 1;
         this.master = (this.master + 1) % this.players.length;
         this.players.forEach((player, index) => {
             player.isMaster = this.master === index;
