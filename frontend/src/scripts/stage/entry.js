@@ -6,6 +6,7 @@ import '../../css/entry.css';
 const REGEX = /( |　)+/g;
 
 const audio = new Audio('../audio/decision29low.wav');
+audio.volume = 0.1;
 
 export default function Entry(props) {
     /** エントリーフォーム */

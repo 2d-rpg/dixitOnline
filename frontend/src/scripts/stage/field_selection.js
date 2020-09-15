@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import '../../css/field_selection.css';
 import Card from '../card';
 
+const audio = new Audio('../audio/decision29low.wav');
+audio.volume = 0.1;
+
 export default function FieldSelection(props) {
 
     /** フィールドを表示するか否か */
@@ -99,6 +102,7 @@ export default function FieldSelection(props) {
     }, [ props, decided, setFieldButtons, setShowButton ]);
 
     const handleclick = () => {
+        audio.play();
         props.socket.emit('confirm_field_selection');
         setDecided(true);
         setShowButton(false);
