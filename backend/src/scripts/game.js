@@ -51,6 +51,7 @@ class Game {
         /** 投票の結果 */
         this.answers = [];
         this.round = 1;
+        this.option = false;
     }
 
     reset() {
@@ -70,16 +71,17 @@ class Game {
     createDeck(option) {
         let files;
         if (option) {
+            this.option = true;
             this.players.forEach((player) => {
                 files = fs.readdirSync('../frontend/public/images/uploaded/'+player.name+'/');
                 for (var i = 0; i < files.length; i++) { 
-                    this.stock.push(new Card(files[i]));
+                    this.stock.push(new Card('uploaded/'+player.name+'/'+files[i]));
                 }
             });
         } else {
             files = fs.readdirSync('../frontend/public/images/default/');
             for (var i = 0; i < files.length; i++) { 
-                this.stock.push(new Card(files[i]));
+                this.stock.push(new Card('default/'+files[i]));
             }
         }
         this.stock.shuffle();

@@ -24,7 +24,7 @@ export default function HandSelection(props) {
                     }else{
                         var id_btn = 'eachHandButton' + index;
                         var id_img = 'eachHandImage' + index;
-                        var hand_src = "../images/default/" + card.filename;
+                        var hand_src = "../images/" + card.filename;
                         const handButton = data.player.isMaster ? (
                             <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)} data-toggle="modal" data-target="#exampleModalCenter">
                                 <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
@@ -52,7 +52,7 @@ export default function HandSelection(props) {
                 data.player.hand._array.map((card, index) => {
                     var id_btn = 'eachHandButton' + index;
                     var id_img = 'eachHandImage' + index;
-                    var hand_src = "../images/default/" + card.filename;
+                    var hand_src = "../images/" + card.filename;
                     const handButton = data.player.isMaster ? (
                         <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index)} data-toggle="modal" data-target="#exampleModalCenter">
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
@@ -84,7 +84,7 @@ export default function HandSelection(props) {
         /** 語り部が手札から選んだカードの表示と手札の非表示及びお題フォームの表示 */
         const story_selection = (data, index) => {
             props.setMessage('あなたは親です(ﾟ∀ﾟ)カードのお題を入力してください⊂((・x・))⊃');
-            const selectedSrc = "../images/default/" + data.player.hand._array[index].filename;
+            const selectedSrc = "../images/" + data.player.hand._array[index].filename;
             props.setSrc(
                 <p className="selectedButton" id="selected-hand-card-wrapper">
                     <img className="selectedImage" src={ selectedSrc } alt="あなたが選んだカード"/> 
@@ -103,7 +103,7 @@ export default function HandSelection(props) {
                     data.player.hand._array.map((card, index) => {
                         var id_btn = 'eachHandButton' + index;
                         var id_img = 'eachHandImage' + index;
-                        var hand_src = "../images/default/" + card.filename;
+                        var hand_src = "../images/" + card.filename;
                         const handButton = (
                             <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => others_select(props.socket ,data, index)}>
                                 <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
@@ -132,7 +132,7 @@ export default function HandSelection(props) {
                 duration: 800,
             });
             props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
-            const selectedSrc = "../images/default/" + data.player.hand._array[index].filename;
+            const selectedSrc = "../images/" + data.player.hand._array[index].filename;
             props.setSrc(
                 <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper">
                     <img id="selected-hand-card" src={ selectedSrc } alt="あなたが選んだカード"/> 
@@ -148,7 +148,7 @@ export default function HandSelection(props) {
                 player.hand._array.map((card, index) => {
                     var id_btn = 'eachHandButton' + index;
                     var id_img = 'eachHandImage' + index;
-                    var hand_src = "../images/default/" + card.filename;
+                    var hand_src = "../images/" + card.filename;
                     const handButton = (
                         <p className='eachHandButton' id={ id_btn } type='button'>
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>

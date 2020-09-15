@@ -67,7 +67,7 @@ export default function ShowAnswer(props) {
                 data.game.field.cards.map((card, index) => {
                     var id_btn = 'eachFieldButton' + index;
                     var id_img = 'eachFieldImage' + index;
-                    var field_src = "../images/default/" + card.filename;
+                    var field_src = "../images/" + card.filename;
                     const fieldButton = (
                         <p className='eachSelectedFieldButton' id={ id_btn }>
                             <img className='eachSelectedFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
