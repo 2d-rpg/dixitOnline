@@ -48,13 +48,40 @@
     color: white;
     font-size: 130%;
 }
-
-.deck-select > * {
-    margin: auto;
-}
 .game-start
 {
     position: absolute;
     width: 100%;
-    top: 30%;
+    top: 23%;
 }
+.deck-select {
+    display: flex;
+    width: 70%;
+    margin: auto;
+}
+.deck-select-content {
+    width: 50%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px;
+    color: white;
+    font-weight: 500;
+    background-color: #45A1CF;
+    border: 5px solid transparent;
+    border-radius: 20px;
+    box-shadow: 3px 3px 1px #005A97;
+}
+.deck-select input {
+    display: none;
+}
+.deck-select-content:hover {
+    border: 5px solid #007AB7;
+}
+.deck-select input:checked + .deck-select-content {
+    border: 5px solid #007AB7;
+    box-shadow: none;
+}
+
+
