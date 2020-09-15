@@ -100,7 +100,7 @@ export default function Room(props) {
                     <button onClick={ clickRoomCreate } id="create-room-button" className="btn btn-primary mb-2">
                         ルームを新規作成
                     </button>
-                    <button onClick={ clickRoomList } className="btn btn-primary mb-2">
+                    <button onClick={ clickRoomList } id="join-room-button" className="btn btn-primary mb-2">
                         既存ルームに参加
                     </button>
                 </div>

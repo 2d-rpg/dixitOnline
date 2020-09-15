@@ -6,7 +6,7 @@ import Card from '../card';
 import '../../css/hand_selection.css';
 
 const audio = new Audio("../audio/draw.mp3");
-audio.volume = 0.1;
+audio.volume = 0.3;
 
 export default function HandSelection(props) {
     /** 手札を表示するか否か */
