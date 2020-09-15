@@ -110,11 +110,11 @@ export default function Room(props) {
             </div> 
             <div className="game-start" style={ {display: showStart ? 'block' : 'none'} }>
                 <div className="deck-select">
-                    <input type="radio" id="default" name="deck" value="default" checked="checked"/>
+                    <input type="radio" id="default" name="deck" value="default" checked={!option}/>
                     <label className="deck-select-content" onClick={() => setOption(false)} for='default'>
                         デフォルトデッキ
                     </label>
-                    <input type="radio" id="option" name="deck" value="option"/>
+                    <input type="radio" id="option" name="deck" value="option" checked={option}/>
                     <label className="deck-select-content" onClick={() => setOption(true)} for='option'>
                         みんなの寄せ集め<br/>（みんなが投稿した　<br/>　画像でデッキを作成）
                     </label>
