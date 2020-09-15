@@ -46,12 +46,12 @@ export default function Stock(props) {
         };
         /** 墓地から山札へのアニメーション */
         const stock_update = (data) => {
+            var card_x = $("#discard").offset().left;
             setShowStock(true);
             if (data.game.discard._array.length === 0) {
                 const stock_x = $("#stock").offset().left;
                 setTimeout(() => {
                     Array.from(document.getElementsByClassName('eachDiscardContainer')).forEach(element => {
-                        var card_x = element.getBoundingClientRect().left;
                         element.animate([
                             { opacity: 1.0, offset: 0.0 },
                             { transform: `translate(${stock_x - card_x}px)`, display: 'none', opacity: 0, offset: 1.0 }

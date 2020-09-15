@@ -53,5 +53,5 @@ export default function Discard(props) {
         props.socket.on('restart', () => setShowDiscard(false));
     }, [ props, setDiscard ]);
 
-    return(<div className="discard" style={ {display: showDiscard ? 'block' : 'none'} }>{ discard }</div>)
+    return(<div id="discard" className="discard" style={ {display: showDiscard ? 'block' : 'none'} }>{ discard }</div>)
 }

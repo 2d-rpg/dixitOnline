@@ -20,6 +20,7 @@ export default function Result(props) {
     });
     $('#resultModalWindow').on('hidden.bs.modal', function (e) {
         $('.game-core').removeClass('modal-open');
+        props.socket.emit('restart');
     });
 
     useEffect(() => {
@@ -53,7 +54,6 @@ export default function Result(props) {
 
     const handleclick = () => {
         $('#resultModalWindow').modal('toggle');
-        props.socket.emit('restart');
     }
 
     return(
