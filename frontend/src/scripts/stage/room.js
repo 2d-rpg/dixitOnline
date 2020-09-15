@@ -4,6 +4,7 @@ import '../../css/room.css';
 
 
 const audio = new Audio('../audio/decision29low.wav');
+audio.volume = 0.1;
 
 export default function Room(props) {
 
@@ -96,10 +97,10 @@ export default function Room(props) {
         <div className="room" style={ {display: showRoom ? 'block' : 'none'} }>
             <div className="room-content" style={ {display: showRoomContent ? 'block' : 'none'} }>
                 <div className="room-button">
-                    <button onClick={ clickRoomCreate } className="btn btn-primary mb-2">
+                    <button onClick={ clickRoomCreate } id="create-room-button" className="btn btn-primary mb-2">
                         ルームを新規作成
                     </button>
-                    <button onClick={ clickRoomList }>
+                    <button onClick={ clickRoomList } id="join-room-button" className="btn btn-primary mb-2">
                         既存ルームに参加
                     </button>
                 </div>
