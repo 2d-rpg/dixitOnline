@@ -21,19 +21,19 @@ export default function ShowAnswer(props) {
     const [ownerNames, setOwnerNames] = useState(null);
 
 
-    // モーダルの表示の中心をbodyではなく.game-coreに変更
-    $('#answerModal').on('shown.bs.modal', function (e) {
-        $('body').removeClass('modal-open');
-        $('.game-core').addClass('modal-open');
-    });
-    $('#answerModal').on('hidden.bs.modal', function (e) {
-        audio.play();
-        $('.game-core').removeClass('modal-open');
-        props.socket.emit('confirm_answer');
-    });
-
     useEffect(() => {
         const iconStyle =  { 'margin-right': 20,'margin-left': 20 };
+
+        // モーダルの表示の中心をbodyではなく.game-coreに変更
+        $('#answerModal').on('shown.bs.modal', function (e) {
+            $('body').removeClass('modal-open');
+            $('.game-core').addClass('modal-open');
+        });
+        $('#answerModal').on('hidden.bs.modal', function (e) {
+            audio.play();
+            $('.game-core').removeClass('modal-open');
+            props.socket.emit('confirm_answer');
+        });
 
         /** モーダルの表示 */
         const open_modal = (data) => {

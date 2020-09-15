@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import '../../css/field_selection.css';
 import Card from '../card';
 
+const audio = new Audio('../audio/decision29low.wav');
+audio.volume = 0.1;
+
 export default function FieldSelection(props) {
 
     /** フィールドを表示するか否か */
@@ -96,9 +99,10 @@ export default function FieldSelection(props) {
         props.socket.on('hand_selection' ,(data) => initialize(data));
         props.socket.on('result' ,() => field_reset());
         props.socket.on('update_field_with_back', (data) => update_field_with_back(data.game));
-    }, [ props, decided, setFieldButtons, setShowButton ]);
+    }, [ props.socket, props.setMessage, decided, setFieldButtons, setShowButton ]);
 
     const handleclick = () => {
+        audio.play();
         props.socket.emit('confirm_field_selection');
         setDecided(true);
         setShowButton(false);

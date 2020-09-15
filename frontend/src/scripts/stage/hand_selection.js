@@ -5,6 +5,9 @@ import $ from 'jquery';
 import Card from '../card';
 import '../../css/hand_selection.css';
 
+const audio = new Audio("../audio/draw.mp3");
+audio.volume = 0.3;
+
 export default function HandSelection(props) {
     /** 手札を表示するか否か */
     const [showhand, setShowHand] = useState(false);
@@ -130,8 +133,6 @@ export default function HandSelection(props) {
                 <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper">
                     <img id="selected-hand-card" src={ selectedSrc } alt="あなたが選んだカード"/> 
                 </p> );
-            const audio = new Audio("../audio/draw.mp3");
-            audio.volume = 0.3;
             audio.play() // 再生
             setTimeout(
                 () => socket.emit('others_hand_selection', {index : index}),
@@ -159,7 +160,7 @@ export default function HandSelection(props) {
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
         props.socket.on('update_hand',(data) => update_hand(data.player));
         props.socket.on('restart',() => setShowHand(false));
-    }, [ props ]);
+    }, [ props.socket, props.setMessage, props.setSrc ]);
 
     return (
         <div className="hand-wrapper" style={ {display: showhand ? 'block' : 'none'} }>

@@ -7,7 +7,7 @@ export default function Status(props) {
 
     useEffect(() => {
         props.socket.on('restart',() => props.setShowStatus(false));
-    }, [ props ]);
+    }, [ props.socket, props.setShowStatus ]);
 
     return (
         <div className="player-status" style={ {display: props.showStatus ? 'block' : 'none'} }>
