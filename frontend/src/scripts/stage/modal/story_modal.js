@@ -56,6 +56,10 @@ export default function StoryModal(props) {
             duration: 800,
         });
 
+        const audio = new Audio("../audio/draw.mp3");
+        audio.volume = 1;
+        audio.play() // 再生
+
 
         // サーバーに'story_selection'を送信
         setTimeout(

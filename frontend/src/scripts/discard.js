@@ -48,9 +48,10 @@ export default function Discard(props) {
                 )
             }, data.game.discard._array.length === 0 ? 2000 : 1000);
         };
+        
         props.socket.on('hand_selection', (data) => update_discard(data));
         props.socket.on('restart', () => setShowDiscard(false));
     }, [ props, setDiscard ]);
 
-    return(<div className="discard" style={ {display: showDiscard ? 'block' : 'none'} }>{ discard }</div>)
+    return(<div id="discard" className="discard" style={ {display: showDiscard ? 'block' : 'none'} }>{ discard }</div>)
 }
