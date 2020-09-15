@@ -24,27 +24,6 @@ export default function Room(props) {
 
     const [option,setOption] = useState(false);
 
-    const updateRoomList = (roomManager) => {
-        if (roomManager.roomList.length === 0) {
-            setRoomList(
-                <div>現在ルームは存在しません m9(^Д^)</div>
-            );
-        } else {
-            setRoomList(
-                roomManager.roomList.map((room) => {
-                    return(
-                        <div className="room-list-content">
-                            <div className="room-name">{ room.name }</div>
-                            <div className="room-decision-button">
-                                <button className="btn btn-primary mb-2" onClick={ () => roomEntrySubmit(room.name)}>入室</button>
-                            </div>
-                        </div>
-                    );
-                })
-            );
-        }
-    }
-
     const roomEntrySubmit = (roomname) => {
         audio.play();
         setShowRoom(false);
@@ -82,6 +61,27 @@ export default function Room(props) {
     }
 
     useEffect(() => {
+        const updateRoomList = (roomManager) => {
+            if (roomManager.roomList.length === 0) {
+                setRoomList(
+                    <div>現在ルームは存在しません m9(^Д^)</div>
+                );
+            } else {
+                setRoomList(
+                    roomManager.roomList.map((room) => {
+                        return(
+                            <div className="room-list-content">
+                                <div className="room-name">{ room.name }</div>
+                                <div className="room-decision-button">
+                                    <button className="btn btn-primary mb-2" onClick={ () => roomEntrySubmit(room.name)}>入室</button>
+                                </div>
+                            </div>
+                        );
+                    })
+                );
+            }
+        }
+
         props.socket.on('room', (data) => {
             updateRoomList(data.roomManager);
             setShowRoom(true);
@@ -91,7 +91,7 @@ export default function Room(props) {
         props.socket.on('entry_player', (data) => {
             if (data.room.players.length > 2 && data.room.players[0].socketId === props.socket.id) setShowStart(true);
         });
-    });
+    }, [ props.socket, setShowRoom, setRoomList ]);
 
     return(
         <div className="room" style={ {display: showRoom ? 'block' : 'none'} }>

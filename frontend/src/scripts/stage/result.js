@@ -16,20 +16,20 @@ export default function Result(props) {
     /** 結果の内容 */
     const [result, setResult] = useState(null);
 
-    // モーダルの表示の中心をbodyではなく.game-coreに変更
-    $('#resultModalWindow').on('shown.bs.modal', function (e) {
-        $('body').removeClass('modal-open');
-        $('.game-core').addClass('modal-open');
-    });
-    $('#resultModalWindow').on('hidden.bs.modal', function (e) {
-        audio.play();
-        $('.game-core').removeClass('modal-open');
-        props.socket.emit('restart');
-    });
-
     useEffect(() => {
         /** result画面の表示 */
         const show_result = (data) => {
+            // モーダルの表示の中心をbodyではなく.game-coreに変更
+            $('#resultModalWindow').on('shown.bs.modal', function (e) {
+                $('body').removeClass('modal-open');
+                $('.game-core').addClass('modal-open');
+            });
+            $('#resultModalWindow').on('hidden.bs.modal', function (e) {
+                audio.play();
+                $('.game-core').removeClass('modal-open');
+                props.socket.emit('restart');
+            });
+
             props.setMessage('結果発表ですわぁ(⌒,_ゝ⌒)');
             setResult(
                 data.game.players.sort((a, b) => { // 降順ソート
@@ -54,7 +54,7 @@ export default function Result(props) {
         }
 
         props.socket.on('result' ,(data) => show_result(data));
-    }, [ props, result ]);
+    }, [ props.socket, result ]);
 
     const handleclick = () => {
         $('#resultModalWindow').modal('toggle');

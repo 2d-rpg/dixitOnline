@@ -9,7 +9,7 @@ export default function Story(props) {
         props.socket.on('hand_selection', () => setShowStory(false));
         props.socket.on('others_hand_selection', () => setShowStory(true));
         props.socket.on('result', () => setShowStory(false));
-    });
+    }, [ props.socket ]);
 
     return(
         <div id="story" style={ {display: showStory ? 'block' : 'none'} }>

@@ -68,7 +68,7 @@ export default function Stock(props) {
 
         props.socket.on('hand_selection' ,(data) => stock_update(data));
         props.socket.on('restart',(data) => {setShowStock(false);})
-    }, [ props, setShowStock, setStock ]);
+    }, [ props.socket, setShowStock, setStock ]);
 
     return (
         <div id="stock" style={ {display: showStock ? 'inline-flex' : 'none'} }>{ stock }</div>
