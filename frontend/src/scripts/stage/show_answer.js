@@ -5,6 +5,8 @@ import $ from 'jquery';
 import Card from '../card';
 import '../../css/show_answer.css';
 
+const audio = new Audio('../audio/decision29low.wav');
+
 export default function ShowAnswer(props) {
     /** モーダルのタイトル */
     const [message, setMessage] = useState(null);
@@ -17,12 +19,14 @@ export default function ShowAnswer(props) {
     /** フィールドを選んだプレイヤーの表示内容 */
     const [ownerNames, setOwnerNames] = useState(null);
 
+
     // モーダルの表示の中心をbodyではなく.game-coreに変更
     $('#answerModal').on('shown.bs.modal', function (e) {
         $('body').removeClass('modal-open');
         $('.game-core').addClass('modal-open');
     });
     $('#answerModal').on('hidden.bs.modal', function (e) {
+        audio.play();
         $('.game-core').removeClass('modal-open');
         props.socket.emit('confirm_answer');
     });

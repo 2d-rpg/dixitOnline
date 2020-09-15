@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import '../../css/room.css';
 
 
+const audio = new Audio('../audio/decision29low.wav');
+
 export default function Room(props) {
 
     const { register, handleSubmit } = useForm();
@@ -43,6 +45,7 @@ export default function Room(props) {
     }
 
     const roomEntrySubmit = (roomname) => {
+        audio.play();
         setShowRoom(false);
         props.setShowStatus(true);
         props.socket.emit('room_entry', {roomname : roomname});
@@ -51,6 +54,7 @@ export default function Room(props) {
 
     const roomCreateSubmit = (data, event) => {
         // サーバーに'entry'を送信
+        audio.play();
         setShowRoomContent(false);
         props.setShowStatus(true);
         props.socket.emit('room_create', {username : data.username, roomname : data.roomname});
@@ -59,16 +63,19 @@ export default function Room(props) {
     }
 
     const clickRoomCreate = () => {
+        audio.play();
         setShowRoomList(false);
         setShowRoomCreate(true);
     }
 
     const clickRoomList = () => {
+        audio.play();
         setShowRoomCreate(false);
         setShowRoomList(true);
     }
 
     const clickStart = () => {
+        audio.play();
         props.socket.emit('start', {option: option});
         setShowStart(false);
     }

@@ -5,6 +5,8 @@ import '../../css/entry.css';
 
 const REGEX = /( |　)+/g;
 
+const audio = new Audio('../audio/decision29low.wav');
+
 export default function Entry(props) {
     /** エントリーフォーム */
     const { register, handleSubmit, reset } = useForm();
@@ -12,6 +14,7 @@ export default function Entry(props) {
     const [show, setShow] = useState(true);
     /** cookieの設定 */
     const [, setCookie] = useCookies(['client-id']);
+
     useEffect(() => {
         // props.socket.on('hand_selection', () => setShow(false));
         props.socket.on('restart', () => setShow(true));
@@ -23,6 +26,7 @@ export default function Entry(props) {
             reset();
             return;
         }
+        audio.play();
         // サーバーに'entry'を送信
         setShow(false);
         setCookie('client-id', data.username, {path: '/', secure: true});

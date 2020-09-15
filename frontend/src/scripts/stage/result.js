@@ -9,6 +9,8 @@ const rank_suffix = ["st", "nd", "rd", "th", "th", "th"];
 
 const iconStyle = [ { 'color': 'gold' }, { 'color': 'blue' }, { 'color': 'chocolate' } ];
 
+const audio = new Audio('../audio/decision29low.wav');
+
 export default function Result(props) {
     /** 結果の内容 */
     const [result, setResult] = useState(null);
@@ -19,6 +21,7 @@ export default function Result(props) {
         $('.game-core').addClass('modal-open');
     });
     $('#resultModalWindow').on('hidden.bs.modal', function (e) {
+        audio.play();
         $('.game-core').removeClass('modal-open');
         props.socket.emit('restart');
     });
