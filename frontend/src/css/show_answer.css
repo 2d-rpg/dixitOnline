@@ -161,7 +161,7 @@ span.score-diff-name
     background-color: #00BFFF;
     border-color: #00BFFF;
     border-radius: 10px;
-    font-size: 0.1vw;
+    font-size: 10px;
     font-weight: bold;
     color: white;
     /* margin: 10%; */
@@ -186,7 +186,7 @@ span.score-diff-name
     background-color: blueviolet;
     border-color: blueviolet;
     border-radius: 10px;
-    font-size: 0.1vw;
+    font-size: 10px;
     font-weight: bold;
     color: white;
     /* margin: 10%; */

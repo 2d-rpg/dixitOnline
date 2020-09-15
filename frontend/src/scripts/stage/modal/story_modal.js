@@ -12,19 +12,19 @@ export default function StoryModal(props) {
     /** お題入力のエラーメッセージ */
     const [showErrMsg, setShowErrMsg] = useState(false);
 
-    // モーダルの表示の中心をbodyではなく.game-coreに変更
-    $('#exampleModalCenter').on('shown.bs.modal', function (e) {
-        $('body').removeClass('modal-open');
-        $('.game-core').addClass('modal-open');
-    });
-    $('#exampleModalCenter').on('hidden.bs.modal', function (e) {
-        setShowErrMsg(false);
-        $('.game-core').removeClass('modal-open');
-    });
-
     useEffect(() => {
+        // モーダルの表示の中心をbodyではなく.game-coreに変更
+        $('#exampleModalCenter').on('shown.bs.modal', function (e) {
+            $('body').removeClass('modal-open');
+            $('.game-core').addClass('modal-open');
+        });
+        $('#exampleModalCenter').on('hidden.bs.modal', function (e) {
+            setShowErrMsg(false);
+            $('.game-core').removeClass('modal-open');
+        });
+
         props.socket.on('others_hand_selection', (data) => props.setStory(data.game.story));
-    }, [ props ]);
+    }, [ props.socket, props.setStory, $('#exampleModalCenter') ]);
 
     /** お題のフォーム送信ボタンを押したときの動作 */
     const onSubmit = (data, event) => {

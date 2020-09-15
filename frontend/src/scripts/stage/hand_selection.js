@@ -133,7 +133,6 @@ export default function HandSelection(props) {
                 <p className="selected-handcard-wrapper" id="selected-hand-card-wrapper">
                     <img id="selected-hand-card" src={ selectedSrc } alt="あなたが選んだカード"/> 
                 </p> );
-            audio.volume = 1;
             audio.play() // 再生
             setTimeout(
                 () => socket.emit('others_hand_selection', {index : index}),
@@ -161,7 +160,7 @@ export default function HandSelection(props) {
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
         props.socket.on('update_hand',(data) => update_hand(data.player));
         props.socket.on('restart',() => setShowHand(false));
-    }, [ props ]);
+    }, [ props.socket, props.setMessage, props.setSrc ]);
 
     return (
         <div className="hand-wrapper" style={ {display: showhand ? 'block' : 'none'} }>

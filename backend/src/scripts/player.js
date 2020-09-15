@@ -11,7 +11,6 @@ class Player {
     
     constructor(obj){
         // 初期化
-        this.game = null;
         this.socketId = obj.socketId;
         this.hand = new Hand();
         this.isMaster = false;
@@ -54,12 +53,19 @@ class Player {
         this.state = 'done';
     }
     // 行動中
-    reset() {
+    undone() {
         this.state = 'undone';
     }    
     // 行動が終わっているか
     isDone() {
         return this.state === 'done';
+    }
+    reset() {
+        this.hand = new Hand();
+        this.isMaster = false;
+        this.score = 0;
+        this.prescore = 0;
+        this.state = 'undone';
     }
 }
 

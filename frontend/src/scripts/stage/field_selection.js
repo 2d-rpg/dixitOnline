@@ -99,7 +99,7 @@ export default function FieldSelection(props) {
         props.socket.on('hand_selection' ,(data) => initialize(data));
         props.socket.on('result' ,() => field_reset());
         props.socket.on('update_field_with_back', (data) => update_field_with_back(data.game));
-    }, [ props, decided, setFieldButtons, setShowButton ]);
+    }, [ props.socket, props.setMessage, decided, setFieldButtons, setShowButton ]);
 
     const handleclick = () => {
         audio.play();

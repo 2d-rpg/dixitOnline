@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import '../css/upload.css';
-import { fs } from 'fs';
 
 export default function Upload(props) {
     /** エントリーフォーム */
@@ -22,6 +21,9 @@ export default function Upload(props) {
             //     })
             // );
         }
+        props.socket.on('restart',() => {
+            
+        });
         props.socket.on('show_start', (data) => {
             setShow(true);
             update(data);
