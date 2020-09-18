@@ -21,7 +21,14 @@ class RoomManager {
     }
 
     findPlayer(socket) {
-        return this.players.filter( player => player.socketId === socket.id )[0];
+        let array = this.players.filter( player => player.socketId === socket.id );
+        return array.length === 0 ? null : array[0];
+    }
+
+    /** name(client-id)によるプレイヤー検索 */
+    findPlayerByName(name) {
+        let array = this.players.filter( player => player.name === name );
+        return array.length === 0 ? null : array[0];
     }
 
     createRoom(name) {
@@ -35,12 +42,20 @@ class RoomManager {
     }
 
     findRoomBySocket(socket) {
-        return this.roomList.filter(room => room.players.some(player => player.socketId === socket.id))[0];
+        let array = this.roomList.filter(room => room.players.some(player => player.socketId === socket.id));
+        return array.length === 0 ? null : array[0];
+    }
+
+    // playerのname
+    findRoomByPlayerName(playerName) {
+        let array = this.roomList.filter(room => room.players.some(player => player.name === playerName));
+        return array.length === 0 ? null : array[0];
     }
 
     deleteRoom(name) {
         this.roomList.splice(this.roomList.indexOf(name), 1);
     }
+
 
 }
 

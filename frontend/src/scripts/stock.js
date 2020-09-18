@@ -67,7 +67,11 @@ export default function Stock(props) {
         };
 
         props.socket.on('hand_selection' ,(data) => stock_update(data));
-        props.socket.on('restart',(data) => {setShowStock(false);})
+        props.socket.on('others_hand_selection' ,(data) => setShowStock(true));
+        props.socket.on('field_selection' ,(data) => setShowStock(true));
+        props.socket.on('show_answer' ,(data) => setShowStock(true));
+        props.socket.on('result' ,(data) => setShowStock(true));
+        props.socket.on('restart',(data) => setShowStock(false));
     }, [ props.socket, setShowStock, setStock ]);
 
     return (

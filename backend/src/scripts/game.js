@@ -11,18 +11,19 @@ const fs = require('fs');
 // プレイヤーの状態
 // ここに遷移状態を追加
 const status = [
-    'entry',                 // 0
-    'hand_selection',        // 1
-    'others_hand_selection', // 2
-    'field_selection',       // 3
-    'show_answer',           // 4
-    'result'                 // 5
+    // 'entry',               // 0
+    'in_room',                // 1
+    'hand_selection',        // 2
+    'others_hand_selection', // 3
+    'field_selection',       // 4
+    'show_answer',           // 5
+    'result'                 // 6
 ];
 
 class Game {
 
     /** ゲーム終了基準点(MAX_SCORE) */
-    static MAX_SCORE = 5;
+    static MAX_SCORE = 2;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
     static STAGE_NUM = 4;
     /** カード枚数 */
@@ -190,16 +191,10 @@ class Game {
         return target;
     }
 
-    /** name(client-id)によるプレイヤー検索 */
-    findPlayerByName(name) {
-        return this.players.filter(player => player != null)
-                           .find(player => player.name == name);
-    }
-
-    /** socket idによるプレイヤー削除 */
+    /** socketによるプレイヤー削除 */
     deletePlayer(socket) {
         this.players.forEach((player, index) => {
-            if (player != null && player.socketId == socket.id) {
+            if (player != null && player.socketId === socket.id) {
                 this.players.splice(index, 1);
                 this.currentNum -= 1;
             }    
@@ -246,7 +241,7 @@ class Game {
     }
 
     /** ゲームへの復帰 */
-    comeback(player, socket) {
+    comeback(player, socket, roomManager) {
         // socket id更新
         player.socketId = socket.id;
         player.hand._array.forEach(card => card.player = socket.id);
@@ -256,7 +251,7 @@ class Game {
                 others.push(other);
             }
         });
-        socket.emit(this.stage, {others : others, player : player, game : this});
+        socket.emit(this.stage, {others : others, player : player, game : this, roomManager : roomManager});
         console.log("復帰" + this.stage);
     }
 

@@ -31,10 +31,33 @@ const io = socketIO(server);
 let roomManager = new RoomManager();
 // 接続が完了したときに呼び出す関数
 io.on('connection', (socket) => {
+    // console.log(socket.id);
+    setTimeout(() => socket.emit('connect2'),3000);
     // 行動する必要がない時
     socket.on('wait', () => wait.do(socket, roomManager));
     // クライアント接続時
-    socket.on('init', (config) => init.do(config, io, socket, roomManager));
+    setTimeout(() => {
+        let username = socket.handshake.query['client-id'];
+        let player = roomManager.findPlayerByName(username);
+        let room = roomManager.findRoomByPlayerName(username);
+        if (player != null) {
+            if (room != null) {
+                room.game.comeback(player, socket, roomManager);
+                socket.join(room.name);
+                // ToDo : もとのsocket削除
+            } else {
+                // entryはしているがroomには入っていない
+                player.socketId = socket.id;
+                socket.emit('room',{roomManager:roomManager});
+            }
+        } else {
+            // entryもしていない
+        }
+        io.sockets.emit('update_number_of_player', { num: roomManager.players.length });
+        // init.do(io, socket, roomManager);
+    },100);
+
+    // socket.on('init', (config) => init.do(config, io, socket, roomManager));
     // クライアントからentryがemitされた時
     socket.on('entry', (data) =>  entry.do(data, io, socket, roomManager));
 
@@ -74,6 +97,8 @@ io.on('connection', (socket) => {
     // 画像のアップロード
     socket.on('upload', (data) => utils.uploadFile(data.filename, data.image, roomManager.findPlayer(socket).name));
 });
+
+//　削除したらroomにいるなら復帰いないなら削除
 
 setInterval(() => {
     // 全プレイヤーがステージ移行可能ならば移行する

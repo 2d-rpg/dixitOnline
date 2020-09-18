@@ -86,6 +86,11 @@ export default function Room(props) {
             updateRoomList(data.roomManager);
             setShowRoom(true);
         });
+        props.socket.on('in_room', (data) => {
+            setShowRoomContent(false);
+            setShowRoom(true);
+            if (data.others.length >= 2 && data.player.isMaster) setShowStart(true);
+        });
         // props.socket.on('room_create', () => setShowRoom(false));
         props.socket.on('update_roomlist', (data) => updateRoomList(data.roomManager));
         props.socket.on('entry_player', (data) => {
@@ -93,9 +98,9 @@ export default function Room(props) {
         });
         props.socket.on('restart', () => {
             setShowRoomContent(true);
-            setShowRoomCreate(false);
+            setShowRoomCreate(true);
             setShowRoomList(true);
-            setShowRoom(false);
+            setShowRoom(true);
         })
     }, [ props.socket, setShowRoom, setRoomList ]);
 

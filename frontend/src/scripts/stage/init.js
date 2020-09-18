@@ -10,7 +10,9 @@ function Init(props) {
             socket.emit('init');
         };
         /** サーバ接続時のイベントハンドラ登録 */
-        props.socket.on('connect', () => init(props.socket));
+        props.socket.on('connect2', () => {
+            init(props.socket);
+        });
         props.socket.on('disconnect', (reason) => {
             if(reason === 'io server disconnect') {
                 props.socket.open();
