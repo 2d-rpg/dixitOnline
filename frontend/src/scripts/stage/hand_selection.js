@@ -88,10 +88,10 @@ export default function HandSelection(props) {
         };
         /** 語り部以外のプレイヤーの手札の表示 */
         const others_hand_selection = (data) => {
-
-
+            setShowHand(true);
             if(data.player.isMaster){
                 props.setMessage('あなたは親です(ﾟ∀ﾟ)待機中( ´Д`)y━･~~');
+                update_hand(data.player);
                 props.socket.emit('wait');
             } else {
                 props.setMessage('あなたは子です(ﾟ∀ﾟ)お題に沿ったカードを選択してください(=^▽^)σ');
@@ -141,6 +141,7 @@ export default function HandSelection(props) {
         };
         /** 手札の更新 */
         const update_hand = (player) => {
+            setShowHand(true);
             setHandButtons(
                 player.hand._array.map((card, index) => {
                     var id_btn = 'eachHandButton' + index;
@@ -156,9 +157,12 @@ export default function HandSelection(props) {
             );
         };
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
+        props.socket.on('update_hand',(data) => update_hand(data.player));
         props.socket.on('hand_selection' ,(data) => draw_card(data));
         props.socket.on('others_hand_selection',(data) => others_hand_selection(data));
-        props.socket.on('update_hand',(data) => update_hand(data.player));
+        props.socket.on('field_selection',(data) => update_hand(data.player));
+        props.socket.on('show_answer',(data) => update_hand(data.player));
+        props.socket.on('result',(data) => update_hand(data.player));
         props.socket.on('restart',() => setShowHand(false));
     }, [ props.socket, props.setMessage, props.setSrc ]);
 

@@ -34,11 +34,12 @@ import Discard from './scripts/discard';
 const ENDPOINT = "localhost:4001/";
 // const socket = socketIOClient(ENDPOINT);
 const socket = io(ENDPOINT, {
-  query: { 'client-id': cookieVal('client-id') },
-  transports: ['websocket'],
-  upgrade: false,
-  timeout: 1800000 // タイムアウト時間を30分に(デフォルトは20秒)
-});
+  query: { 
+    'client-id': cookieVal('client-id') },
+    transports: ['websocket'],
+    upgrade: false,
+    timeout: 1800000 // タイムアウト時間を30分に(デフォルトは20秒)
+  });
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 });

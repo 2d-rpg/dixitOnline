@@ -32,6 +32,10 @@ export default function Upload(props) {
             setShow(true);
             update(data);
         });
+        props.socket.on('in_room', (data) => {
+            setShow(true);
+            update(data);
+        });
         props.socket.on('hand_selection', () => setShow(false));
     }, [ props.socket, setShow ]);
 

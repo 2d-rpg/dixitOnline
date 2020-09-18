@@ -80,6 +80,7 @@ export default function FieldSelection(props) {
         /** フィールドの更新(裏面の状態) */
         const update_field_with_back = (game) => {
             setShowField(true);
+            setShowfieldWrapper(true);
             setFieldButtons(
                 game.field.cards.map((card, index) => {
                     var id_btn = 'eachFieldButton' + index;
@@ -95,8 +96,10 @@ export default function FieldSelection(props) {
             );
         };
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
-        props.socket.on('field_selection' ,(data) => field_selection(data));
         props.socket.on('hand_selection' ,(data) => initialize(data));
+        props.socket.on('others_hand_selection' ,(data) => update_field_with_back(data.game));
+        props.socket.on('field_selection' ,(data) => field_selection(data));
+        props.socket.on('show_answer' ,(data) => update_field_with_back(data));
         props.socket.on('result' ,() => field_reset());
         props.socket.on('update_field_with_back', (data) => update_field_with_back(data.game));
     }, [ props.socket, props.setMessage, decided, setFieldButtons, setShowButton ]);

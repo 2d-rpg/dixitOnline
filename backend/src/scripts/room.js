@@ -26,6 +26,15 @@ class Room {
         return this.players.filter(player => player.socketId === socket.id)[0];
     }
 
+    deletePlayer(socket) {
+        this.game.deletePlayer(socket);
+        this.players.forEach((player, index) => {
+            if (player != null && player.socketId === socket.id) {
+                this.players.splice(index, 1);
+                this.currentNum -= 1;
+            }    
+        });
+    }
 }
 
 

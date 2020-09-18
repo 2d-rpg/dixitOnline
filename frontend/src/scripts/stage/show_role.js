@@ -30,7 +30,11 @@ export default function ShowRole(props) {
         }
         /** サーバからemitされたときのイベントハンドラ一覧 */
         props.socket.on('hand_selection' ,(data) => show_role(data));
-        props.socket.on('restart' ,() => reset_role());
+        props.socket.on('others_hand_selection',(data) => show_role(data));
+        props.socket.on('field_selection',(data) => show_role(data));
+        props.socket.on('show_answer',(data) => show_role(data));
+        props.socket.on('result',(data) => show_role(data));
+        props.socket.on('restart',() => reset_role());
     }, [ props.socket ]);
 
     return(

@@ -17,8 +17,14 @@ export default function Entry(props) {
     const [, setCookie] = useCookies(['client-id']);
 
     useEffect(() => {
-        // props.socket.on('hand_selection', () => setShow(false));
-        props.socket.on('restart', () => setShow(true));
+        props.socket.on('room', () => setShow(false));
+        props.socket.on('in_room', () => setShow(false));
+        props.socket.on('hand_selection', () => setShow(false));
+        props.socket.on('others_hand_selection', () => setShow(false));
+        props.socket.on('field_selection', () => setShow(false));
+        props.socket.on('show_answer', () => setShow(false));
+        props.socket.on('result', () => setShow(false));
+        // props.socket.on('restart', () => setShow(true));
     }, [ props.socket ]);
 
     /** エントリーフォーム入力時の動作 */
@@ -30,7 +36,7 @@ export default function Entry(props) {
         audio.play();
         // サーバーに'entry'を送信
         setShow(false);
-        setCookie('client-id', data.username, {path: '/', secure: true});
+        setCookie('client-id', data.username, {path: '/'});
         // props.setShowStatus(true);
         props.setName(data.username);
         props.socket.emit('entry', {username : data.username});
