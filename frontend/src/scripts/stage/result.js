@@ -31,17 +31,15 @@ export default function Result(props) {
         /** result画面の表示 */
         const show_result = (data) => {
             props.setMessage('結果発表ですわぁ(⌒,_ゝ⌒)');
-            var rank_index = -1;
-            var pre_score = -1;
+            let rank_index = -1;
+            let pre_score = -1;
             setResult(
                 data.game.players.sort((a, b) => { // 降順ソート
                     if( a.score > b.score ) return -1;
                     if( a.score < b.score ) return 1;
                     return 0;
                 }).map((player, index) => {
-                    if(player.score === pre_score){
-                        //同点は同じ順位にする
-                    }else{
+                    if(player.score !== pre_score){ //同点は同じ順位にする
                         rank_index = index;
                     }
                     pre_score = player.score;
