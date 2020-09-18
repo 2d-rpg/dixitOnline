@@ -31,8 +31,6 @@ const io = socketIO(server);
 let roomManager = new RoomManager();
 // 接続が完了したときに呼び出す関数
 io.on('connection', (socket) => {
-    // console.log(socket.id);
-    setTimeout(() => socket.emit('connect2'),3000);
     // 行動する必要がない時
     socket.on('wait', () => wait.do(socket, roomManager));
     // クライアント接続時
@@ -123,9 +121,9 @@ app.get('/', (request, response) => {
 });
 
 
-server.listen(4001, () => {
-  utils.log('Starting server on port 4001');
-});
-// server.listen(3000, () => {
-//     utils.log('Starting server on port 3000');
-//   });
+// server.listen(4001, () => {
+//   utils.log('Starting server on port 4001');
+// });
+server.listen(3000, () => {
+    utils.log('Starting server on port 3000');
+  });
