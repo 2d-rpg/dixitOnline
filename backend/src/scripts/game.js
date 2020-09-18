@@ -11,19 +11,18 @@ const fs = require('fs');
 // プレイヤーの状態
 // ここに遷移状態を追加
 const status = [
-    // 'entry',               // 0
-    'in_room',                // 1
-    'hand_selection',        // 2
-    'others_hand_selection', // 3
-    'field_selection',       // 4
-    'show_answer',           // 5
-    'result'                 // 6
+    'in_room',                // 0
+    'hand_selection',        // 1
+    'others_hand_selection', // 2
+    'field_selection',       // 3
+    'show_answer',           // 4
+    'result'                 // 5
 ];
 
 class Game {
 
     /** ゲーム終了基準点(MAX_SCORE) */
-    static MAX_SCORE = 2;
+    static MAX_SCORE = 30;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
     static STAGE_NUM = 4;
     /** カード枚数 */
