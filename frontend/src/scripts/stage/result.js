@@ -31,19 +31,25 @@ export default function Result(props) {
             });
 
             props.setMessage('結果発表ですわぁ(⌒,_ゝ⌒)');
+            let rank_index = -1;
+            let pre_score = -1;
             setResult(
                 data.game.players.sort((a, b) => { // 降順ソート
                     if( a.score > b.score ) return -1;
                     if( a.score < b.score ) return 1;
                     return 0;
                 }).map((player, index) => {
-                    var id_result = 'eachResult' + index;
-                    const icon = index < 4 ? <FontAwesomeIcon style={ iconStyle[index] }  icon={ faMedal }/> : null; 
+                    if(player.score !== pre_score){ //同点は同じ順位にする
+                        rank_index = index;
+                    }
+                    pre_score = player.score;
+                    var id_result = 'eachResult' + rank_index;
+                    const icon = rank_index < 4 ? <FontAwesomeIcon style={ iconStyle[rank_index] }  icon={ faMedal }/> : null; 
                     return(
                         <tr className='eachResult' id={ id_result }>
                             <td className="eachResultIcon">{ icon }</td>
-                            <td className="eachResultRank">{ rank[index] }</td>
-                            <td className="eachResultRank">{ rank_suffix[index] }</td>
+                            <td className="eachResultRank">{ rank[rank_index] }</td>
+                            <td className="eachResultRank">{ rank_suffix[rank_index] }</td>
                             <td className="eachResultName">{ player.name }</td>
                             <td className="eachResutScore">{ player.score }</td>
                         </tr>
