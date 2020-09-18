@@ -1,3 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One');
+@import url('https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1');
+
+.header
+{
+    font-family: "Fredoka One";
+}
+
+#numOfPeople
+{
+    font-family: "M PLUS Rounded 1c";
+}
+
 .game-container
 {
     display: flex;
@@ -9,6 +22,7 @@
     margin-right: 1%;
     width: 80%;
     text-align: center;
+    background-image: url(./wood-texture.jpg);
 }
 
 .game-core-wrapper::before
@@ -36,4 +50,9 @@
 {
     margin-left: 1%;
     width: 20%;
+}
+
+.form-control
+{
+    border-radius: 20px !important;
 }

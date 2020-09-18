@@ -15,6 +15,7 @@ class Player {
         this.hand = new Hand();
         this.isMaster = false;
         this.score = 0;
+        this.prescore = 0;
         this.name = obj.username;
         this.state = 'undone';
         Player.count += 1;
@@ -52,12 +53,19 @@ class Player {
         this.state = 'done';
     }
     // 行動中
-    reset() {
+    undone() {
         this.state = 'undone';
     }    
     // 行動が終わっているか
     isDone() {
         return this.state === 'done';
+    }
+    reset() {
+        this.hand = new Hand();
+        this.isMaster = false;
+        this.score = 0;
+        this.prescore = 0;
+        this.state = 'undone';
     }
 }
 

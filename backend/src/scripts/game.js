@@ -11,21 +11,20 @@ const fs = require('fs');
 // プレイヤーの状態
 // ここに遷移状態を追加
 const status = [
-    'entry',                 // 0
+    'in_room',                // 0
     'hand_selection',        // 1
     'others_hand_selection', // 2
     'field_selection',       // 3
     'show_answer',           // 4
-    'show_score',            // 5
-    'result'                 // 6
+    'result'                 // 5
 ];
 
 class Game {
 
     /** ゲーム終了基準点(MAX_SCORE) */
-    static MAX_SCORE = 5;
+    static MAX_SCORE = 30;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
-    static STAGE_NUM = 5;
+    static STAGE_NUM = 4;
     /** カード枚数 */
     static CARD_NUM = 20;
     /** プレイヤー人数 */
@@ -34,13 +33,8 @@ class Game {
     constructor() {
         /** 山札(stock) */
         this.stock = new Stock();
-        const files = fs.readdirSync('../frontend/public/images/default/');
-        utils.shuffle(files);
-        for (var i = 0; i < files.length; i++) { 
-            this.stock.push(new Card(files[i]));
-        }
         /** このゲームに参加しているプレイヤー */
-        this.players = new Array(Game.PLAYER_NUM).fill(null);
+        this.players = [];
         /** 現在のプレイヤー人数 */
         this.currentNum = 0;
         /** 墓地(discard) */
@@ -51,43 +45,68 @@ class Game {
         this.stage = status[0];
         this.stageIndex = 0;
         /** 語り部(最初に入ってきた人から) */
-        this.master = -1;
+        this.master = 0;
         /** お題 */
-        this.masterClaim = "";
+        this.story = "";
         /** 投票の結果 */
         this.answers = [];
+        this.round = 0;
+        this.option = false;
     }
 
     reset() {
         this.stock = new Stock();
         const files = fs.readdirSync('../frontend/public/images/default/');
-        utils.shuffle(files);
         for (var i = 0; i < files.length; i++) { 
             this.stock.push(new Card(files[i]));
         }
+        this.stock.shuffle();
         this.discard = new Discard();
         this.field = new Field();
         this.stage = status[0];
         this.stageIndex = 0;
-        this.master = -1;
+        this.master = 0;
+    }
+
+    createDeck(option) {
+        let files;
+        if (option) {
+            this.option = true;
+            this.players.forEach((player) => {
+                files = fs.readdirSync('../frontend/public/images/uploaded/'+player.name+'/');
+                for (var i = 0; i < files.length; i++) { 
+                    this.stock.push(new Card('uploaded/'+player.name+'/'+files[i]));
+                }
+            });
+        } else {
+            files = fs.readdirSync('../frontend/public/images/default/');
+            for (var i = 0; i < files.length; i++) { 
+                this.stock.push(new Card('default/'+files[i]));
+            }
+        }
+        this.stock.shuffle();
+        this.players.forEach((player) =>  {
+            for (var i = 0; i < 5; i++) { 
+                player.draw(this.stock);
+            }
+        });
     }
 
     /** プレイヤーの追加 */
-    addPlayer(data, socket) {
-        let player = new Player({socketId: socket.id, username: data.username});
-        for (var i = 0; i < 5; i++) { 
-            player.draw(this.stock);
-        }
-        this.players[this.currentNum] = player;
-        this.players[this.currentNum].done(); //エントリー完了
+    addPlayer(data) {
+        let player = data.player;
+        // for (var i = 0; i < 5; i++) { 
+        //     player.draw(this.stock);
+        // }
+        this.players.push(player);
         this.currentNum += 1;
         return this.players[this.currentNum-1];
     }
 
     /** 現在のプレイヤー数を確認 */
-    getLength() {
-        return this.players.filter(player => player != null).length;
-    }
+    // getLength() {
+    //     return this.players.filter(player => player != null).length;
+    // }
 
     /** 次のステージへ移行 */
     nextStage(io) {
@@ -95,37 +114,39 @@ class Game {
         if (this.stageIndex != Game.STAGE_NUM) {
             this.stageIndex += 1;
         } else {
-            this.stageIndex = 1; // hand_selectionへ
+            this.stageIndex = status.indexOf('hand_selection'); // hand_selectionへ
             if(this.checkScore()) { // 終了条件
-                this.stageIndex = 6; // result画面へ
+                this.stageIndex = status.indexOf('result'); // result画面へ
             }
         }
         // 更新後
-        if (this.stageIndex == 1) { // hand_selection
-            this.updateMaster(); // 語り部更新
+        if (this.stageIndex === status.indexOf('hand_selection')) { // hand_selection
+            this.round += 1
+            if(this.round !== 1){
+                this.updateMaster(); // 語り部更新
+            }
             this.fieldToDiscard();
-            if(this.stock._array.length < this.getLength()) {
+            console.log(this.stock._array.length);
+            this.players.forEach(player => player.draw(this.stock));
+            if(this.stock._array.length < this.players.length) {
                 this.discardToStock();
             }
-            this.players.forEach(player => player.draw(this.stock));
             this.resetAnswers();
         } 
-        this.stageIndex = this.stageIndex % 7;
+        if (this.stageIndex === status.indexOf('field_selection')) { // field_selection
+            this.field.shuffle(); // 場札をシャッフル
+        }
+        if (this.stageIndex === status.indexOf('show_answer')) { // show_answer
+            this.calcScore();
+        }
+        this.stageIndex = this.stageIndex % status.length; // restart用
         this.stage = status[this.stageIndex];
-        if (this.stageIndex !== 0) {
+        if (this.stageIndex !== status.indexOf('entry')) {
             this.players.forEach(player => { // 全プレイヤーの状態リセット
-                player.reset(); // 状態リセット
+                player.undone(); // 状態リセット
             });
             this.players.forEach(player => { // ステージ移行
-                // ディープコピー (何段階もコピーするのでObject.createは不可)
-                // TODO: もっといい方法あるかも
-                var others = new Array();
-                this.players.forEach(other => {
-                    if (player != other) {
-                        others.push(other);
-                    }
-                });
-                io.to(player.socketId).emit(this.stage, {others : others, player : player, game : this}); // ステージ移行
+                io.to(player.socketId).emit(this.stage, { player : player, game : this }); // ステージ移行
             });
         } else {
             this.reset();
@@ -135,37 +156,27 @@ class Game {
 
     /** 全員done状態かどうか */
     isAllDone() {
-        return this.players
+        return this.players.length >= 3 && // ゲームプレイ最低人数：３人
+            this.players
             .filter(player => player != null)
-            .filter(player => player.isDone()).length === 3;
+            .filter(player => player.isDone()).length === this.players.length;
     }
 
     isFinished() {
-        return this.players.filter(player => player == null).length === 3 && this.stageIndex === 6;
+        return this.players.filter(player => player == null).length === this.players.length && this.stageIndex === status.length;
     }
 
     /** 語り部の更新 */
     updateMaster() {
-        this.master = (this.master + 1) % 3; // 0 ~ 2 でループ
+        this.master = (this.master + 1) % this.players.length;
         this.players.forEach((player, index) => {
             player.isMaster = this.master === index;
         });
     }
 
     /** 語り部によるお題の設定 */
-    setMasterClaim(message){
-        this.masterClaim = message;
-    }
-
-    /** 終了条件 */
-    isEndGame() {
-        let flag = false
-        this.players.forEach(player => {
-            if (player.score >= 30) {
-                flag = true
-            }
-        });
-        return flag;
+    setStory(message){
+        this.story = message;
     }
 
     /** socket idによるプレイヤー検索 */
@@ -179,28 +190,25 @@ class Game {
         return target;
     }
 
-    /** name(client-id)によるプレイヤー検索 */
-    findPlayerByName(name) {
-        return this.players.filter(player => player != null)
-                           .find(player => player.name == name);
-    }
-
-    /** socket idによるプレイヤー削除 */
-    deletePlayer(id) {
+    /** socketによるプレイヤー削除 */
+    deletePlayer(socket) {
         this.players.forEach((player, index) => {
-            if (player != null && player.socketId == id) {
-                this.players[index] = null;
+            if (player != null && player.socketId === socket.id) {
+                this.players.splice(index, 1);
                 this.currentNum -= 1;
             }    
         });
     }
 
-    /** 手札のカードをフィールドに移動 */
-    // TODO
+    /** 
+     * 手札のカードをフィールドに移動
+     * @deprecated
+     */
     handToField() {
         this.players.forEach(player => {
             let card = player.hand.pop();
             this.field.add(card, this);
+            // this.field.shuffle();
         });
     }
 
@@ -218,7 +226,7 @@ class Game {
         for (let i = 0; i < len; i++) {
             this.stock.push(this.discard.pop());
         }
-        utils.shuffle(this.stock._array);
+        this.stock.shuffle();
     }
 
     /** 最大スコアをチェックし，終了条件確認 */
@@ -232,7 +240,7 @@ class Game {
     }
 
     /** ゲームへの復帰 */
-    comeback(player, socket) {
+    comeback(player, socket, roomManager) {
         // socket id更新
         player.socketId = socket.id;
         player.hand._array.forEach(card => card.player = socket.id);
@@ -242,8 +250,41 @@ class Game {
                 others.push(other);
             }
         });
-        socket.emit(this.stage, {others : others, player : player, game : this});
+        socket.emit(this.stage, {others : others, player : player, game : this, roomManager : roomManager});
         console.log("復帰" + this.stage);
+    }
+
+    /** スコア計算 */
+    calcScore() {
+        const answerIndex = this.field.masterCardIndex;
+        this.players.forEach(player => {
+            player.prescore = player.score;
+            console.log('[debug] BEFORE ' + player.name + ': ' + player.score);
+            if(this.answers.every(value => value.cardIndex === answerIndex)) {// 全員正解の場合
+                if(!player.isMaster) {// 子
+                    player.score += 2;
+                }
+            } else if (this.answers.every(value => value.cardIndex !== answerIndex)) {// 全員不正解の場合
+                if(!player.isMaster) {// 子
+                    player.score += 2;
+                    // 間違えさせた分
+                    const count = this.answers.filter(answer => this.field.cards[answer.cardIndex].player === player.socketId).length;
+                    player.score += count; //
+                }
+            } else {// 正解したが全員でない場合
+                if(player.isMaster) {
+                    player.score += 3;
+                } else {
+                    if(this.answers.filter(item => item.id === player.socketId)[0].cardIndex === answerIndex) {
+                        player.score += 3;
+                    }
+                    // 間違えさせた分
+                    const count = this.answers.filter(answer => this.field.cards[answer.cardIndex].player === player.socketId).length;
+                    player.score += count; //
+                }
+            }
+            console.log('[debug] AFTER ' + player.name + ': ' + player.score);
+        });
     }
 }
 

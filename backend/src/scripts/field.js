@@ -6,24 +6,31 @@ class Field {
     constructor(size) {
         this.cards = new Array();
         this.masterCard = null;
+        this.masterCardIndex = 0;
     }
+    /** フィールドにカードを追加 */
     add(card, game) {
         card.nextStatus();
         if(game.findPlayer(card.player).isMaster){
             this.masterCard = card;
         }
         this.cards.push(card);
-        utils.shuffle(this.cards);
-        // this.cards.shuffle();
     }
+    /** フィールドからカードを削除 */
     pop() {
         return this.cards.pop();
     }
-    new(){
-        this.cards.splice(0);
+    /** フィールドのカードをシャッフル */
+    shuffle() {
+        this.cards = utils.shuffle(this.cards);
+        this.updateMasterCardIndex();
     }
-    masterCardIndex(){
-        return this.cards[this.masterCard];
+    /** 
+     * フィールドの内の正解のカードのインデックスを更新.
+     * 主にシャッフルが終わった後に行う．
+     */
+    updateMasterCardIndex(){
+        this.masterCardIndex = this.cards.indexOf(this.masterCard);
     }
 }
 

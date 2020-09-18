@@ -1,18 +1,28 @@
-.hand-container
+.hand-wrapper
 {
-    margin: 0;
-    padding-left: 0;
     position: absolute;
-    margin-top: 50%;
-    height: 26%; /* TODO: game-coreに収まるように設定必要 */
     width: 100%;
+    top: 70%;
+}
+
+.hand-content {
+    position: relative;
+}
+
+#hand {
+    /* margin-top: 50%; */
+    display: inline-flex;
+}
+
+#draw-card{
+    z-index: 1000;
 }
 
 .eachHandContainer{
-    padding-left: 0;
     width: 100px;
     height: 150px;
     position: relative;
+    padding: 0.3%;
 }
 
 .eachHandButton
@@ -45,14 +55,12 @@
     top: -10%;
 }
 
-.master-wrapper
-{
-    position: absolute;
-    top: -150%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
+.modal, .modal-backdrop {
+    position: absolute !important;
+}
+
+.modal-baackdrop {
+    width: 100%;
 }
 
 /* .selected-handcard-wrapper

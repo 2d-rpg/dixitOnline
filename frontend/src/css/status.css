@@ -1,0 +1,14 @@
+.player-status
+{
+    position: absolute;
+    top: 75%;
+    width: 13%;
+    color: #666666; /*文字色*/
+    border: 2px solid #996633; /*線の太さ・色*/
+    background-color: #fff; /*背景色*/
+    box-shadow: -2px 5px 5px #e8d3c7; /*影*/
+    border-radius: 20px; /*角の丸み*/ 
+    margin: 1%;
+    padding: 1%;
+    font-size: small;
+}

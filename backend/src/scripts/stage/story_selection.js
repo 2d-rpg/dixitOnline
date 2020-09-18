@@ -6,8 +6,9 @@ class StorySelection {
 
     constructor() {}
 
-    static do(socket, io, message, masterIndex, game) {
-        game.setMasterClaim(message);
+    static do(socket, io, message, masterIndex, roomManager) {
+        let game = roomManager.findRoomBySocket(socket).game;
+        game.setStory(message);
         let player = game.findPlayer(socket.id);
         player.selectFromHand(masterIndex);
         // 手札の更新
@@ -15,7 +16,7 @@ class StorySelection {
         game.field.add(card, game);
         socket.emit('update_hand',{player:player});
         // フィールドの更新
-        game.players.forEach(player => io.to(player.socketId).emit('update_field', { game: game }));
+        game.players.forEach(player => io.to(player.socketId).emit('update_field_with_back', { game: game }));
 
         game.players.forEach(eachPlayer => {
 	        eachPlayer.done();

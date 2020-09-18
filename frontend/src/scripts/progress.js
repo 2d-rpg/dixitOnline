@@ -20,7 +20,7 @@ export default function Progress(props) {
         // props.socket.on('entry' ,(data) => setMassage());
         props.socket.on('hand_selection' ,() => setMassage());
         props.socket.on('others_hand_selection' ,() => setMassage(others_hand_selection));
-    });
+    }, [ props.socket ]);
 
     return (
         <div id="progress">

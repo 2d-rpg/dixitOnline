@@ -1,0 +1,39 @@
+.result-wrapper
+{
+    position: absolute;
+    width: 100%;
+}
+
+table#result-table
+{
+    margin-left: auto;
+    margin-right: auto;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0px 0.5vw;
+}
+
+#result-table tr
+{
+    height: 10%;
+    background-color: #f4f6f6;
+    /* margin: 1%; */
+}
+
+#result-table tr td
+{
+    /* background-color: darkgray; */
+}
+
+#result-table tr td.eachResultIcon
+{
+    width: 10%;
+}
+#result-table tr td.eachResultRank
+{
+    width: 1%;
+}
+/* #result-table tr td:nth-child(4)
+{
+    width: 10%;
+} */
