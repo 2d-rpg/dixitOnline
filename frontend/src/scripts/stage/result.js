@@ -40,7 +40,7 @@ export default function Result(props) {
                     return 0;
                 }).map((player, index) => {
                     if(player.score === pre_score){
-                        //
+                        //同点は同じ順位にする
                     }else{
                         rank_index = index;
                     }
