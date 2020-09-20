@@ -63,13 +63,13 @@ export default function Room(props) {
 
     useEffect(() => {
         const updateRoomList = (roomManager) => {
-            if (roomManager.roomList.length === 0) {
+            if (roomManager.roomList.length === 0 || roomManager.roomList.filter(room => room.game.stageIndex === 0).length === 0) {
                 setRoomList(
                     <div>現在ルームは存在しません m9(^Д^)</div>
                 );
             } else {
                 setRoomList(
-                    roomManager.roomList.map((room) => {
+                    roomManager.roomList.filter(room => room.game.stageIndex === 0).map((room) => {
                         return(
                             <div className="room-list-content">
                                 <div className="room-name">{ room.name }</div>
