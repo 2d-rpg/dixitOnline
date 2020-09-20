@@ -56,7 +56,7 @@ class Game {
 
     reset() {
         this.stock = new Stock();
-        const files = fs.readdirSync('../frontend/public/images/default/');
+        const files = fs.readdirSync('./build/images/default/');
         for (var i = 0; i < files.length; i++) { 
             this.stock.push(new Card(files[i]));
         }
@@ -73,13 +73,25 @@ class Game {
         if (option) {
             this.option = true;
             this.players.forEach((player) => {
-                files = fs.readdirSync('../frontend/public/images/uploaded/'+player.name+'/');
+                if(!fs.existsSync(utils.path+'/uploaded/'+player.name)){
+                    fs.mkdirSync(utils.path+'/uploaded/'+player.name, { recursive: true }, (err)=>{
+                        if (err) throw err;
+                    });// recursiveは既に存在していてもerrorを吐かない
+                }
+                files = fs.readdirSync(utils.path+'/uploaded/'+player.name+'/');
                 for (var i = 0; i < files.length; i++) { 
                     this.stock.push(new Card('uploaded/'+player.name+'/'+files[i]));
                 }
             });
+            let lack = this.players.length * 6 - this.stock._array.length;
+            files = fs.readdirSync(utils.path+'/default/');
+            for (var i = 0; i < lack; i++) {
+                for (var i = 0; i < files.length; i++) { 
+                    this.stock.push(new Card('default/'+files[i]));
+                }
+            }
         } else {
-            files = fs.readdirSync('../frontend/public/images/default/');
+            files = fs.readdirSync(utils.path+'/default/');
             for (var i = 0; i < files.length; i++) { 
                 this.stock.push(new Card('default/'+files[i]));
             }
@@ -194,8 +206,14 @@ class Game {
     deletePlayer(socket) {
         this.players.forEach((player, index) => {
             if (player != null && player.socketId === socket.id) {
-                this.players.splice(index, 1);
+                if (player.isMaster) {
+                    this.players.splice(index, 1);
+                    this.players[0].isMaster = true;
+                } else {
+                    this.players.splice(index, 1);                    
+                }
                 this.currentNum -= 1;
+                player.inRoom = 0;
             }    
         });
     }

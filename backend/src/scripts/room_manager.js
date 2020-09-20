@@ -1,5 +1,5 @@
 const Player = require("./player");
-const Room = require("./Room")
+const Room = require("./room")
 const Stock = require('./stock');
 const Discard = require('./discard');
 const Field = require('./field');
@@ -17,6 +17,13 @@ class RoomManager {
     addPlayer(name, socket) {
         let player = new Player({socketId: socket.id, username: name, socket: socket});
         this.players.push(player);
+        if (this.players.length > 20) {
+            player = this.players[0];
+            if(fs.existsSync(utils.path+'/uploaded/'+player.name)){
+                fs.rmdir(utils.path+'/uploaded/'+player.name, { recursive: true },function(err){console.log(err);});
+            }
+            this.deletePlayer(player.socketId);
+        }
         return player;
     }
 
@@ -56,6 +63,17 @@ class RoomManager {
         this.roomList.splice(this.roomList.indexOf(name), 1);
     }
 
+    deletePlayer(id) {
+        let room = this.findRoomBySocket({id:id});
+        if (room != null) {
+            room.deletePlayer({id:id});
+        }
+        this.players.forEach((player, index) => {
+            if (player != null && player.socketId === id) {
+                this.players.splice(index, 1);
+            }    
+        });
+    }
 
 }
 

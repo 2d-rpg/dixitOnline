@@ -18,6 +18,8 @@ class Player {
         this.prescore = 0;
         this.name = obj.username;
         this.state = 'undone';
+        this.connect = true;
+        this.timer = 0;
         Player.count += 1;
     }
     // 山札からドロー
@@ -66,6 +68,12 @@ class Player {
         this.score = 0;
         this.prescore = 0;
         this.state = 'undone';
+    }
+    disconnect() {
+        this.connect = false;
+        // this.timer = setTimeout(() => {
+        //     this.inRoom = 2;
+        // }, 6000);
     }
 }
 

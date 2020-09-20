@@ -19,6 +19,7 @@ class Room {
     entry(player) {
         this.players.push(player);
         this.game.addPlayer({player: player});
+        player.inRoom = 1;
         return player;
     }
 
@@ -31,8 +32,9 @@ class Room {
         this.players.forEach((player, index) => {
             if (player != null && player.socketId === socket.id) {
                 this.players.splice(index, 1);
+                player.inRoom = 0;
                 this.currentNum -= 1;
-            }    
+            }
         });
     }
 }

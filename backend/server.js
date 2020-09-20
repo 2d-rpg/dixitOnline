@@ -26,6 +26,7 @@ const ConfirmFieldSelection = require('./src/scripts/stage/confirm_field_selecti
 const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
+const expire = 60;// 秒
 
 // ゲームオブジェクト作成
 let roomManager = new RoomManager();
@@ -39,6 +40,7 @@ io.on('connection', (socket) => {
         let player = roomManager.findPlayerByName(username);
         let room = roomManager.findRoomByPlayerName(username);
         if (player != null) {
+            player.connect = true;
             if (room != null) {
                 room.game.comeback(player, socket, roomManager);
                 socket.join(room.name);
@@ -98,14 +100,24 @@ io.on('connection', (socket) => {
 
 //　削除したらroomにいるなら復帰いないなら削除
 
+const interval = 30;
 setInterval(() => {
     // 全プレイヤーがステージ移行可能ならば移行する
-    roomManager.roomList.map(room => room.game).forEach(game => {
-        if (game.isAllDone() || game.isFinished()) { // 全てのプレイヤーが次のステージにいける状態
-            game.nextStage(io);
+    roomManager.roomList.forEach(room => {
+        if (room.game.isAllDone() || room.game.isFinished()) { // 全てのプレイヤーが次のステージにいける状態
+            room.game.nextStage(io);
         }
+        room.game.players.forEach(player => {
+            if(player.connect) {
+                player.timer = 0;
+            } else {
+                if (player.timer++ > expire * 1000 / interval) {
+                    room.deletePlayer({id: player.socketId});
+                }
+            }
+        });
     });
-}, 1000/30);
+}, interval);
 
 app.use('/', express.static(__dirname + '/build'));
 // io.use((socket, next) => {
@@ -121,9 +133,9 @@ app.get('/', (request, response) => {
 });
 
 
-// server.listen(4001, () => {
-//   utils.log('Starting server on port 4001');
-// });
-server.listen(3000, () => {
-    utils.log('Starting server on port 3000');
-  });
+server.listen(4001, () => {
+  utils.log('Starting server on port 4001');
+});
+// server.listen(3000, () => {
+//     utils.log('Starting server on port 3000');
+//   });

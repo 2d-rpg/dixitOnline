@@ -99,7 +99,7 @@ export default function FieldSelection(props) {
         props.socket.on('hand_selection' ,(data) => initialize(data));
         props.socket.on('others_hand_selection' ,(data) => update_field_with_back(data.game));
         props.socket.on('field_selection' ,(data) => field_selection(data));
-        props.socket.on('show_answer' ,(data) => update_field_with_back(data));
+        props.socket.on('show_answer' ,(data) => update_field_with_back(data.game));
         props.socket.on('result' ,() => field_reset());
         props.socket.on('update_field_with_back', (data) => update_field_with_back(data.game));
     }, [ props.socket, props.setMessage, decided, setFieldButtons, setShowButton ]);
