@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
 import $ from 'jquery';
 import '../../css/result.css';
+import Leave from '../leave';
 
 const rank = ["1", "2", "3", "4", "5", "6"];
 const rank_suffix = ["st", "nd", "rd", "th", "th", "th"];
@@ -57,16 +58,6 @@ export default function Result(props) {
                 })
             );
             $('#resultModalWindow').modal('toggle');
-            // モーダルの表示の中心をbodyではなく.game-coreに変更
-            $('#resultModalWindow').on('shown.bs.modal', function (e) {
-                $('body').removeClass('modal-open');
-                $('.game-core').addClass('modal-open');
-            });
-            $('#resultModalWindow').on('hidden.bs.modal', function (e) {
-                audio.play();
-                $('.game-core').removeClass('modal-open');
-                props.socket.emit('restart');
-            });
         }
 
         props.socket.on('result' ,(data) => show_result(data));
@@ -100,6 +91,7 @@ export default function Result(props) {
                     </div>
                     <div className="modal-footer">
                         <button id="backButton" onClick={ handleclick } type="button" className="btn btn-warning m-auto">戻る</button>
+                        <Leave socket= { props.socket } handle={ handleclick } className="result-leave"/>
                     </div>
                 </div>
             </div>

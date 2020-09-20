@@ -43,7 +43,6 @@ export default function StoryModal(props) {
         //var card_y = $("#eachHandButton" + props.masterIndex).offset().top;
         //var field_y = $(".eachFieldContainer").offset().top;
         var move_y = - $(".game-core-wrapper").height() / 3;
-        console.log(move_y);
 
         $(".toField").removeClass("toField");
         $("#eachHandButton" + props.masterIndex).addClass("toField");

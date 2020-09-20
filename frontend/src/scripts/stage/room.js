@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import Leave from '../leave';
 import '../../css/room.css';
 
 
@@ -84,6 +85,7 @@ export default function Room(props) {
 
         props.socket.on('room', (data) => {
             updateRoomList(data.roomManager);
+            setShowRoomContent(true);
             setShowRoom(true);
         });
         props.socket.on('in_room', (data) => {
@@ -94,14 +96,14 @@ export default function Room(props) {
         // props.socket.on('room_create', () => setShowRoom(false));
         props.socket.on('update_roomlist', (data) => updateRoomList(data.roomManager));
         props.socket.on('entry_player', (data) => {
-            if (data.room.players.length > 2 && data.room.players[0].socketId === props.socket.id) setShowStart(true);
+            if (data.room.game.players.length > 2 && data.room.game.players[0].socketId === props.socket.id) setShowStart(true);
         });
         props.socket.on('restart', () => {
-            setShowRoomContent(true);
-            setShowRoomCreate(true);
-            setShowRoomList(true);
+            setShowRoomContent(false);
+            setShowRoomCreate(false);
+            setShowRoomList(false);
             setShowRoom(true);
-        })
+        });
     }, [ props.socket, setShowRoom, setRoomList ]);
 
     return(
@@ -142,6 +144,7 @@ export default function Room(props) {
                     このメンバーでゲーム開始
                 </button>
             </div>
+            <Leave className="room-leave" socket= { props.socket }/>
         </div>
     );
 }

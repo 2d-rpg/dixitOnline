@@ -22,7 +22,7 @@ const status = [
 class Game {
 
     /** ゲーム終了基準点(MAX_SCORE) */
-    static MAX_SCORE = 30;
+    static MAX_SCORE = 2;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
     static STAGE_NUM = 4;
     /** カード枚数 */
@@ -56,16 +56,17 @@ class Game {
 
     reset() {
         this.stock = new Stock();
-        const files = fs.readdirSync('../frontend/public/images/default/');
-        for (var i = 0; i < files.length; i++) { 
-            this.stock.push(new Card(files[i]));
-        }
-        this.stock.shuffle();
         this.discard = new Discard();
         this.field = new Field();
         this.stage = status[0];
         this.stageIndex = 0;
         this.master = 0;
+        this.story = "";
+        this.answers = [];
+        this.round = 0;
+        this.option = false;
+        this.currentNum = 0;
+        this.players = [];
     }
 
     createDeck(option) {
@@ -141,7 +142,7 @@ class Game {
         }
         this.stageIndex = this.stageIndex % status.length; // restart用
         this.stage = status[this.stageIndex];
-        if (this.stageIndex !== status.indexOf('entry')) {
+        if (this.stageIndex !== status.indexOf('in_room')) {
             this.players.forEach(player => { // 全プレイヤーの状態リセット
                 player.undone(); // 状態リセット
             });
@@ -150,6 +151,10 @@ class Game {
             });
         } else {
             this.reset();
+        }
+        if (this.stageIndex === status.indexOf('result')){
+            this.reset();
+            utils.log("game-reset!!");
         }
         utils.log('Move to stage [' + this.stage + ']');
     }

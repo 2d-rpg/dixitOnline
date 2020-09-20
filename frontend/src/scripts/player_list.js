@@ -43,16 +43,16 @@ export default function PlayerList(props) {
             );
         }
         props.socket.on('in_room', (data) => {
-            console.log('inr');
             updatePlayerList(data.game.players);
         });
+        props.socket.on('room', () => setShowPlayerList(false));
         props.socket.on('hand_selection', (data) => updatePlayerList(data.game.players));
         props.socket.on('others_hand_selection', (data) => updatePlayerList(data.game.players));
         props.socket.on('field_selection', (data) => updatePlayerList(data.game.players));
         props.socket.on('show_answer', (data) => updatePlayerList(data.game.players));
         props.socket.on('result', (data) => updatePlayerList(data.game.players));
         props.socket.on('update_player_list', (data) => updatePlayerList(data.game.players));
-        props.socket.on('restart', (data) => {updatePlayerList(data.game.players);/*リスタート時のみ一時的に非表示*/setShowPlayerList(false);});
+        props.socket.on('restart', (data) => updatePlayerList(data.game.players));
     }, [ props.socket ]);
 
     return (

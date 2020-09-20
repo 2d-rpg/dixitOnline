@@ -35,6 +35,7 @@ export default function ShowRole(props) {
         props.socket.on('show_answer',(data) => show_role(data));
         props.socket.on('result',(data) => show_role(data));
         props.socket.on('restart',() => reset_role());
+        props.socket.on('room',() => setShowRole(false));
     }, [ props.socket ]);
 
     return(

@@ -90,11 +90,28 @@ export default function FieldSelection(props) {
                 })
             );
         };
+        const update_field_with_front = (game) => {
+            setShowField(true);
+            setShowfieldWrapper(true);
+            setFieldButtons(
+                game.field.cards.map((card, index) => {
+                    var id_btn = 'eachFieldButton' + index;
+                    var id_img = 'eachFieldImage' + index;
+                    var field_src = "../images/" + card.filename;
+                    const fieldButton = (
+                        <p className='eachFieldButton' id={ id_btn } type='button'>
+                            <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
+                        </p>
+                    );
+                    return (<Card button={ fieldButton } kind={ 'Field' }/>);
+                })
+            );
+        }
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
         props.socket.on('hand_selection' ,(data) => initialize(data));
         props.socket.on('others_hand_selection' ,(data) => update_field_with_back(data.game));
         props.socket.on('field_selection' ,(data) => field_selection(data));
-        props.socket.on('show_answer' ,(data) => update_field_with_back(data.game));
+        props.socket.on('show_answer' ,(data) => update_field_with_front(data.game));
         props.socket.on('result' ,() => field_reset());
         props.socket.on('update_field_with_back', (data) => update_field_with_back(data.game));
     }, [ props.socket, props.setMessage, setFieldButtons, setShowButton ]);

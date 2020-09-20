@@ -72,6 +72,7 @@ export default function Stock(props) {
         props.socket.on('show_answer' ,(data) => setShowStock(true));
         props.socket.on('result' ,(data) => setShowStock(true));
         props.socket.on('restart',(data) => setShowStock(false));
+        props.socket.on('room',() => setShowStock(false));
     }, [ props.socket, setShowStock, setStock ]);
 
     return (

@@ -84,4 +84,8 @@
     box-shadow: none;
 }
 
-
+.room-leave{
+    margin-top: 63%;
+    margin-left: 80%;
+    border: 2px solid grey;
+}
