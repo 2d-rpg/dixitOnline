@@ -15,8 +15,8 @@ class RoomEntry {
             player.isMaster = true;
         }
         // room.players.forEach(player => console.log(player.socketId));
-        io.to(data.roomname).emit('entry_player', {room: room});
-        io.to(data.roomname).emit('update_player_list', {game: room.game});
+        io.to(data.roomname).emit('entry_player', { room: room });
+        io.to(data.roomname).emit('update_player_list', { game: room.game });
     }
 }
 

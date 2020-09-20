@@ -32,6 +32,9 @@ export default function Upload(props) {
             setShow(true);
             update(data);
         });
+        props.socket.on('room', () => {
+            setShow(false);
+        });
         props.socket.on('in_room', (data) => {
             setShow(true);
             update(data);

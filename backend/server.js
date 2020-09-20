@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
             } else {
                 // entryはしているがroomには入っていない
                 player.socketId = socket.id;
-                socket.emit('room',{roomManager:roomManager});
+                socket.emit('room', { roomManager: roomManager });
             }
         } else {
             // entryもしていない

@@ -152,7 +152,7 @@ class Game {
         } else {
             this.reset();
         }
-        if (this.stageIndex === status.indexOf('result')){
+        if (this.stageIndex === status.indexOf('result')) {
             this.reset();
             utils.log("game-reset!!");
         }
@@ -168,7 +168,7 @@ class Game {
     }
 
     isFinished() {
-        return this.players.filter(player => player == null).length === this.players.length && this.stageIndex === status.length;
+        return this.players.lenght >= 3 && this.players.filter(player => player == null).length === this.players.length && this.stageIndex === status.length;
     }
 
     /** 語り部の更新 */

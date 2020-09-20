@@ -89,3 +89,8 @@
     margin-left: 80%;
     border: 2px solid grey;
 }
+
+.matching {
+    position: absolute;
+    width: 100%;
+}

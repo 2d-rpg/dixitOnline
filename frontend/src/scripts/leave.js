@@ -1,10 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import '../css/upload.css';
 
 export default function Upload(props) {
-    /** エントリーフォームの表示 */
+    /** 退室ボタンの表示 */
     const [showLeave, setShowLeave] = useState(false);
 
     const className = "btn btn-warning mb-2 " + props.className;
@@ -16,7 +15,7 @@ export default function Upload(props) {
         props.socket.on('entry_player', (data) => setShowLeave(true));
         props.socket.on('in_room', (data) => setShowLeave(true));
         props.socket.on('result' ,(data) => setShowLeave(true));
-        props.socket.on('restart' ,(data) => setShowLeave(false));
+        props.socket.on('restart' ,(data) => setShowLeave(true));
     }, [ props.socket, setShowLeave ]);
 
     const handleleave = () => {
