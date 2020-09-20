@@ -32,6 +32,7 @@ class Restart {
                 player.isMaster = true;
             } else {
                 console.log("bbb");
+                player.done();
                 io.to(room.game.players[0].socketId).emit('entry_player', {room : room});
             }
             console.log(room.game.players.length);

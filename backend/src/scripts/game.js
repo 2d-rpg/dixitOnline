@@ -154,6 +154,7 @@ class Game {
         }
         if (this.stageIndex === status.indexOf('result')){
             this.reset();
+            utils.log("game-reset!!");
         }
         utils.log('Move to stage [' + this.stage + ']');
     }
