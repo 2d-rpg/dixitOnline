@@ -12,6 +12,7 @@
     height: 150px;
     position: relative;
     animation-fill-mode: both;
+    padding: 0.5%;
 }
 
 .eachFieldButton
@@ -59,12 +60,14 @@
 
 #field
 {
-    /* margin: 3%; */
+    margin: 1%;
 }
 
 .fieldSelectButton
 {
     /* width: 20%; */
+    padding-top: 1%;
     margin: auto;
+    margin-top: 2%;
 }
 

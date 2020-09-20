@@ -11,8 +11,6 @@ export default function FieldSelection(props) {
 
     /** フィールドを表示するか否か */
     const [showfield, setShowField] = useState(true);
-    /** 決定済みかどうか */
-    const [decided, setDecided] = useState(false);
     /** フィールド決定ボタン表示するか否か */
     const [showButton, setShowButton] = useState(false);
     /** フィールドの表示内容 */
@@ -26,7 +24,6 @@ export default function FieldSelection(props) {
             setTimeout(() => {
                 setShowField(false);
             }, 1000);
-            setDecided(false);
             setShowfieldWrapper(true);
         };
         /** フィールドの表示 */
@@ -50,7 +47,7 @@ export default function FieldSelection(props) {
                     return (<Card radio={ fieldRadio } button={ fieldButton } kind={ 'Field' }/>);
                 })
             );
-            if(!data.player.isMaster){ // 語り部以外のプレイヤーの場合
+            if (!data.player.isMaster) { // 語り部以外のプレイヤーの場合
                 props.setMessage('あなたは子です(ﾟ∀ﾟ)親が出したと思うカードを選択してください(=^▽^)σ');
             } else { // 語り部の場合
                 props.setMessage('あなたは親です(ﾟ∀ﾟ)子の選択を待ちましょう( ´Д`)y━･~~');
@@ -58,11 +55,9 @@ export default function FieldSelection(props) {
             }
         };
         const selected = (data, index, id_btn) => {
-            if (!decided) {
-                others_field_select(props.socket, data, index);
-                // TODO: getElementByIdを使っている
-                document.getElementById("cb" +  id_btn).checked = !document.getElementById("cb" +  id_btn).checked;
-            }
+            others_field_select(props.socket, data, index);
+            // TODO: getElementByIdを使っている
+            document.getElementById("cb" +  id_btn).checked = !document.getElementById("cb" +  id_btn).checked;
         };
         /** 語り部以外のプレイヤーがフィールド上のカードを選んだときの動作 */
         const others_field_select = (socket, data, index) => {
@@ -99,15 +94,14 @@ export default function FieldSelection(props) {
         props.socket.on('hand_selection' ,(data) => initialize(data));
         props.socket.on('others_hand_selection' ,(data) => update_field_with_back(data.game));
         props.socket.on('field_selection' ,(data) => field_selection(data));
-        props.socket.on('show_answer' ,(data) => update_field_with_back(data));
+        props.socket.on('show_answer' ,(data) => update_field_with_back(data.game));
         props.socket.on('result' ,() => field_reset());
         props.socket.on('update_field_with_back', (data) => update_field_with_back(data.game));
-    }, [ props.socket, props.setMessage, decided, setFieldButtons, setShowButton ]);
+    }, [ props.socket, props.setMessage, setFieldButtons, setShowButton ]);
 
     const handleclick = () => {
         audio.play();
         props.socket.emit('confirm_field_selection');
-        setDecided(true);
         setShowButton(false);
     }
 
