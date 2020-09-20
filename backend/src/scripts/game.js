@@ -22,7 +22,7 @@ const status = [
 class Game {
 
     /** ゲーム終了基準点(MAX_SCORE) */
-    static MAX_SCORE = 30;
+    static MAX_SCORE = 2;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
     static STAGE_NUM = 4;
     /** カード枚数 */
@@ -213,7 +213,6 @@ class Game {
                     this.players.splice(index, 1);                    
                 }
                 this.currentNum -= 1;
-                player.inRoom = 0;
             }    
         });
     }

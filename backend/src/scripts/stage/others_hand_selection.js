@@ -7,7 +7,6 @@ class OthersHandSelection {
     constructor() {}
 
     static do(socket, io, index, roomManager) {
-        // console.log(roomManager.findRoomBySocket(socket));
         let game = roomManager.findRoomBySocket(socket).game;
         let player = game.findPlayer(socket.id);
         if(!player.isDone()){
@@ -18,9 +17,11 @@ class OthersHandSelection {
             socket.emit('update_hand',{ player: player });
             // フィールドの更新
             game.players.forEach(player => io.to(player.socketId).emit('update_field_with_back', { game: game }));
-            // console.log(game.players);
-            player.done();
-            // console.log(game.players);
+            if (game.players.length == 3 && game.field.cards.filter(card => card.player === player.socketId).length < 2) {
+                socket.emit('others_hand_selection',{player: player, game: game});
+            } else {
+                player.done();
+            }
         }
     }
 }

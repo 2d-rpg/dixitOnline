@@ -71,9 +71,6 @@ class Player {
     }
     disconnect() {
         this.connect = false;
-        // this.timer = setTimeout(() => {
-        //     this.inRoom = 2;
-        // }, 6000);
     }
 }
 
