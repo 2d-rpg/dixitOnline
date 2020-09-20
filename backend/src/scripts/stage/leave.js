@@ -7,7 +7,7 @@ class Leave {
         let room = roomManager.findRoomBySocket(socket);
         room.deletePlayer(socket);
         socket.leave(room.name);
-        player.undone();
+        player.reset();
         if (room.players.length > 0) {
             if(!player.isMaster){
             }else{

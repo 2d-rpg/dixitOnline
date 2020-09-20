@@ -11,14 +11,8 @@ class Restart {
     static do(io, socket, roomManager) {
         let room = roomManager.findRoomBySocket(socket);
         let player = roomManager.findPlayer(socket);
-        if (room !== null) {
+        if (room !== null && !room.game.players.some((each_player) => each_player.socketId === player.socketId)) {
             player.reset();
-            // room.deletePlayer(socket);
-            // if(room.game.players.length === 0){
-            //     roomManager.deleteRoom(room.name);
-            //     console.log('delete player');
-            // }
-            // console.log(room);
             io.sockets.emit('update_number_of_player', { num: room.game.players.length });
             room.game.addPlayer({player : player});
             var others = new Array();
@@ -35,7 +29,7 @@ class Restart {
                 player.done();
                 io.to(room.game.players[0].socketId).emit('entry_player', {room : room});
             }
-            console.log(room.game.players.length);
+            console.log("room_length: " + room.game.players.length);
             room.game.players.forEach(player => io.to(player.socketId).emit('update_player_list', {game : room.game}));
             socket.emit('restart', {others : others, player : player, game : room.game });
         }
