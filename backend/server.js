@@ -26,7 +26,7 @@ const ConfirmFieldSelection = require('./src/scripts/stage/confirm_field_selecti
 const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
-const expire = 60;// 秒
+const expire = 6;// 切断後,部屋から追放するまでの猶予時間(秒)
 
 // ゲームオブジェクト作成
 let roomManager = new RoomManager();
@@ -42,6 +42,9 @@ io.on('connection', (socket) => {
         if (player != null) {
             player.connect = true;
             if (room != null) {
+                if (room.game == null) {
+                    // 
+                }
                 room.game.comeback(player, socket, roomManager);
                 socket.join(room.name);
                 // ToDo : もとのsocket削除
@@ -133,9 +136,9 @@ app.get('/', (request, response) => {
 });
 
 
-server.listen(4001, () => {
-  utils.log('Starting server on port 4001');
-});
-// server.listen(3000, () => {
-//     utils.log('Starting server on port 3000');
-//   });
+// server.listen(4001, () => {
+//   utils.log('Starting server on port 4001');
+// });
+server.listen(3000, () => {
+    utils.log('Starting server on port 3000');
+  });
