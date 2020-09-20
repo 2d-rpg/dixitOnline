@@ -6,6 +6,7 @@ class RoomEntry {
     static do(data, io, socket, roomManager) {
         let player = roomManager.findPlayer(socket);
         if (player != null) {
+            player.isMaster = false;
             socket.join(data.roomname);
             let room = roomManager.findRoomByName(data.roomname);
             room.entry(player);

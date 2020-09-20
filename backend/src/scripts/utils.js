@@ -35,15 +35,28 @@ exports.shuffle = ([...array]) => {
 exports.uploadFile = (filename, image, playername) => {
     var data = image.replace(/^data:image\/\w+;base64,/, "");
     var buf = new Buffer.from(data, 'base64');
-    fs.mkdirSync(this.path+'/uploaded/'+playername+'/', { recursive: true }, (err)=>{
+    fs.mkdirSync(this.path + '/uploaded/' + playername + '/', { recursive: true }, (err)=>{
         if (err) throw err;
     });// recursiveは既に存在していてもerrorを吐かない
-    if (fs.readdirSync(this.path+'/uploaded/'+playername).indexOf(filename) == -1) {
-        fs.writeFileSync(this.path+'/uploaded/'+playername+'/' + filename, buf, (err) => {
+    if (fs.readdirSync(this.path + '/uploaded/' + playername).indexOf(filename) == -1) {
+        fs.writeFileSync(this.path + '/uploaded/' + playername + '/' + filename, buf, (err) => {
             if (err) {
                 console.log('err');
             }
         });
+    }
+    // ファイルの削除
+    const MAX_FILE = 20; // 1プレイヤー20まで
+    const files = fs.readdirSync(this.path + '/uploaded/' + playername);
+    if (files.length > MAX_FILE) {
+        const sortedFiles = files.sort((a, b) => { // ファイルを新しい順にソート
+            const aStat = fs.statSync(this.path + '/uploaded/' + playername + '/' + a).ctime;
+            const bStat = fs.statSync(this.path + '/uploaded/' + playername + '/' + b).ctime;
+            if( aStat > bStat ) return -1;
+            if( aStat < bStat ) return 1;
+            return 0;
+        });
+        sortedFiles.slice(MAX_FILE).forEach(file => fs.unlinkSync(this.path + '/uploaded/' + playername + '/' + file)); // 古いファイルは削除
     }
 };
 
