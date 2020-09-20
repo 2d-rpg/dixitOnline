@@ -13,6 +13,7 @@ export default function Status(props) {
         props.socket.on('field_selection',() => props.setShowStatus(true));
         props.socket.on('show_answer',() => props.setShowStatus(true));
         props.socket.on('result',() => props.setShowStatus(true));
+        props.socket.on('room',() => props.setShowStatus(false));
     }, [ props.socket, props.setShowStatus ]);
 
     return (

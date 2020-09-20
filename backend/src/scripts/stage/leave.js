@@ -10,14 +10,11 @@ class Leave {
         player.undone();
         if (room.players.length > 0) {
             if(!player.isMaster){
-                console.log("a");
             }else{
-                console.log("b");
                 // 親の変更
                 room.players[0].isMaster = true;
             }
         } else {
-            console.log("c");
             // ルームの削除
             roomManager.deleteRoom(room.name);
             io.sockets.emit('update_roomlist', {roomManager:roomManager});

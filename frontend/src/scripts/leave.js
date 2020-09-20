@@ -14,10 +14,14 @@ export default function Upload(props) {
         props.socket.on('entry_player', (data) => setShowLeave(true));
         props.socket.on('in_room', (data) => setShowLeave(true));
         props.socket.on('result' ,(data) => setShowLeave(true));
+        props.socket.on('restart' ,(data) => setShowLeave(false));
     }, [ props.socket, setShowLeave ]);
 
     const handleleave = () => {
         console.log("leave");
+        if(typeof props.handle !== 'undefined') {
+            props.handle();
+        }
         props.socket.emit('leave');
     }
 
