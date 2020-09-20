@@ -28,8 +28,8 @@ export default function Upload(props) {
     }
 
     return (
-        <button onClick={ handleleave } id="create-room-button" style={ {display: showLeave ? 'block' : 'none' } } className={ className } >
-            ルームを退出
+        <button onClick={ handleleave } id="leave-room-button" style={ {display: showLeave ? 'block' : 'none' } } className={ className } >
+            ルーム退室
         </button>
     );
 }

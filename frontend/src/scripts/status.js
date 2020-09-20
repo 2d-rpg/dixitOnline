@@ -18,7 +18,19 @@ export default function Status(props) {
 
     return (
         <div className="player-status" style={ {display: props.showStatus ? 'block' : 'none'} }>
-            <PlayerName name={ props.name }/>
-            <ShowScore socket={ props.socket }/>
+            <div className="outer-border">
+                <div className="mid-border">
+                    <div className="inner-border">
+                        <img className="corner-decoration corner-left-top" src="https://i.ibb.co/4mKvK3N/corner-decoration.jpg"/> 
+                        <img className="corner-decoration corner-right-top" src="https://i.ibb.co/4mKvK3N/corner-decoration.jpg"/>
+                        <img className="corner-decoration corner-right-bottom" src="https://i.ibb.co/4mKvK3N/corner-decoration.jpg"/>
+                        <img className="corner-decoration corner-left-bottom" src="https://i.ibb.co/4mKvK3N/corner-decoration.jpg"/>
+                        <div className="player-status-container">
+                            <PlayerName name={ props.name }/>
+                            <ShowScore socket={ props.socket }/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>);
 }

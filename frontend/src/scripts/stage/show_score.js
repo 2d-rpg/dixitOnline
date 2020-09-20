@@ -16,7 +16,7 @@ export default function ShowScore(props) {
     return(
         <div id="score">
             <div>SCORE</div>
-            <div>{ score }点</div>
+            <div>{ score }</div>
         </div>
     );
 }
