@@ -7,6 +7,8 @@ export default function Upload(props) {
     /** エントリーフォームの表示 */
     const [showLeave, setShowLeave] = useState(false);
 
+    const className = "btn btn-warning mb-2 " + props.className;
+
     useEffect(() => {
         props.socket.on('room', () => setShowLeave(false));
         props.socket.on('show_start', () => setShowLeave(true));
@@ -26,7 +28,7 @@ export default function Upload(props) {
     }
 
     return (
-        <button onClick={ handleleave } id="create-room-button" style={ {display: showLeave ? 'block' : 'none' } } className="btn btn-primary mb-2">
+        <button onClick={ handleleave } id="create-room-button" style={ {display: showLeave ? 'block' : 'none' } } className={ className } >
             ルームを退出
         </button>
     );

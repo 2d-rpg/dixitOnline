@@ -144,7 +144,7 @@ export default function Room(props) {
                     このメンバーでゲーム開始
                 </button>
             </div>
-            <Leave socket= { props.socket }/>
+            <Leave className="room-leave" socket= { props.socket }/>
         </div>
     );
 }

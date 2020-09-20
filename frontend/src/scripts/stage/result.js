@@ -91,7 +91,7 @@ export default function Result(props) {
                     </div>
                     <div className="modal-footer">
                         <button id="backButton" onClick={ handleclick } type="button" className="btn btn-warning m-auto">戻る</button>
-                        <Leave socket= { props.socket } handle={ handleclick } />
+                        <Leave socket= { props.socket } handle={ handleclick } className="result-leave"/>
                     </div>
                 </div>
             </div>
