@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
 import $ from 'jquery';
 import '../../css/result.css';
+import Leave from '../leave';
 
 const rank = ["1", "2", "3", "4", "5", "6"];
 const rank_suffix = ["st", "nd", "rd", "th", "th", "th"];
@@ -100,6 +101,7 @@ export default function Result(props) {
                     </div>
                     <div className="modal-footer">
                         <button id="backButton" onClick={ handleclick } type="button" className="btn btn-warning m-auto">戻る</button>
+                        <Leave socket= { props.socket }/>
                     </div>
                 </div>
             </div>

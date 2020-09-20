@@ -43,9 +43,9 @@ export default function PlayerList(props) {
             );
         }
         props.socket.on('in_room', (data) => {
-            console.log('inr');
             updatePlayerList(data.game.players);
         });
+        props.socket.on('room', () => setShowPlayerList(false));
         props.socket.on('hand_selection', (data) => updatePlayerList(data.game.players));
         props.socket.on('others_hand_selection', (data) => updatePlayerList(data.game.players));
         props.socket.on('field_selection', (data) => updatePlayerList(data.game.players));

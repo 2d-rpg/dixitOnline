@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import Leave from '../leave';
 import '../../css/room.css';
 
 
@@ -84,6 +85,7 @@ export default function Room(props) {
 
         props.socket.on('room', (data) => {
             updateRoomList(data.roomManager);
+            setShowRoomContent(true);
             setShowRoom(true);
         });
         props.socket.on('in_room', (data) => {
@@ -142,6 +144,7 @@ export default function Room(props) {
                     このメンバーでゲーム開始
                 </button>
             </div>
+            <Leave socket= { props.socket }/>
         </div>
     );
 }
