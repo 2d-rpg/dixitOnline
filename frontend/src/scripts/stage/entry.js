@@ -61,7 +61,7 @@ export default function Entry(props) {
     /**
      * エントリーフォーム入力時の動作
      * @param {{ username: string }} data 連想配列として，usernameをもつ
-     * @param {*} event 
+     * @param {Event} event イベント
      */
     const onSubmit = (data, event) => {
         if (data.username.length > 8) { // 9文字以上の場合

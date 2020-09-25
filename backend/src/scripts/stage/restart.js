@@ -1,14 +1,17 @@
-/**
- * restart
- */
-
-const utils = require('../utils');
+'use strict';
 const Game = require('../game');
 
+/**
+ * リザルト画面でもう一度ゲームをするときの操作
+ */
 class Restart {
 
-    constructor() {}
-
+    /**
+     * リザルト画面でもう一度ゲームをするときの操作
+     * @param {SocketIO.Server} io サーバのsocketIO
+     * @param {SocketIO.Socket} socket socket
+     * @param {RoomManager} roomManager ルームマネージャー
+     */
     static do(io, socket, roomManager) {
         let room = roomManager.findRoomBySocket(socket);
         let player = roomManager.findPlayer(socket);
@@ -35,7 +38,7 @@ class Restart {
                 room.game = room.nextGame;
                 room.nextGame = new Game();
                 io.to(room.game.players[0].socketId).emit('entry_player', { room : room });
-                io.sockets.emit('update_roomlist', { roomManager:roomManager });
+                io.sockets.emit('update_roomlist', { roomManager : roomManager });
             }
         }
     }

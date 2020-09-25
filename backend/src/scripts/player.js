@@ -40,7 +40,6 @@ class Player {
     }
     // 手札からカードを選択
     selectFromHand(index){
-        console.log(index);
         this.hand.select(index);
     }
 

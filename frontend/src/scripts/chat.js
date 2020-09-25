@@ -27,7 +27,7 @@ export default function Chat(props) {
     /**
      * メッセージを送信したときの動作
      * @param {{ msg: string }} data 連想配列として，msgをもつ
-     * @param {*} event 
+     * @param {Event} event イベント
      */
     const onSubmit = (data, event) => {
         if (data.msg === '') return;

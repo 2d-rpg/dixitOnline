@@ -47,7 +47,7 @@ export default function Room(props) {
     /**
      * ルーム作成フォームの登録ハンドラ
      * @param {{ username: string, roomname: string }} data 連想配列として，username, roomnameをもつ
-     * @param {*} event イベント
+     * @param {Event} event イベント
      */
     const roomCreateSubmit = (data, event) => {
         audio.play();

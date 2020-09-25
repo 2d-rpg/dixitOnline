@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
     // クライアントからothers_hand_selectionがemitされた時
     socket.on('others_hand_selection', (data) => others_hand_selection.do(socket, io, data.index, roomManager));
     // クライアントからfield_selecitonがemitされた時
-    socket.on('field_selection', (data) => field_selection.do(socket, io, data.index, roomManager));
+    socket.on('field_selection', (data) => field_selection.do(socket, data.index, roomManager));
     // クライアントからconfirm_field_selectionがemitされた時
     socket.on('confirm_field_selection', () => ConfirmFieldSelection.do(socket, roomManager));
     // クライアントからconfirm_answerがemitされた時

@@ -50,7 +50,7 @@ export default function Upload(props) {
     /** 
      * エントリーフォーム入力時の動作
      * @param {{ imageFile: Blob[] }} data 画像ファイルデータ
-     * @param {*} event イベント
+     * @param {Event} event イベント
      */
     const onSubmit = (data, event) => {
         // サーバーに'entry'を送信

@@ -1,3 +1,4 @@
+'use strict';
 /**
  * クライアントがサーバに接続したとき(ハンドシェイク時)の操作
  */
@@ -5,9 +6,9 @@ class Connect {
 
     /**
      * クライアントがサーバに接続したとき(ハンドシェイク時)の操作
-     * @param {SocketIO.Server} io 
-     * @param {SocketIO.Socket} socket 
-     * @param {RoomManager} roomManager 
+     * @param {SocketIO.Server} io サーバ側のsocketIO
+     * @param {SocketIO.Socket} socket socket
+     * @param {RoomManager} roomManager ルームマネージャー
      */
     static do(io, socket, roomManager) {
         const username = decodeURI(socket.handshake.query['client-id']);
