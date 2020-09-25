@@ -156,6 +156,8 @@ export default function HandSelection(props) {
                 })
             );
         };
+
+
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
         props.socket.on('update_hand',(data) => update_hand(data.player));
         props.socket.on('hand_selection' ,(data) => draw_card(data));
@@ -164,6 +166,8 @@ export default function HandSelection(props) {
         props.socket.on('show_answer',(data) => update_hand(data.player));
         props.socket.on('result',(data) => update_hand(data.player));
         props.socket.on('restart',() => setShowHand(false));
+        props.socket.on('room',() => setShowHand(false));
+        props.socket.on('in_room', () => setShowHand(false));
     }, [ props.socket, props.setMessage, props.setSrc ]);
 
     return (

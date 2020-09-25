@@ -76,6 +76,7 @@ export default function Discard(props) {
         props.socket.on('field_selection', (data) => show_discard(data));
         props.socket.on('show_answer', (data) => show_discard(data));
         props.socket.on('restart', () => setShowDiscard(false));
+        props.socket.on('room',() => setShowDiscard(false));
     }, [ props.socket, setDiscard ]);
 
     return(<div id="discard" className="discard" style={ {display: showDiscard ? 'block' : 'none'} }>{ discard }</div>)

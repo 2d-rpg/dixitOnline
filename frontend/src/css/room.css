@@ -84,4 +84,20 @@
     box-shadow: none;
 }
 
+.room-leave {
+    position: absolute;
+    top: 85%;
+    right: 5%;
+    border: 2px solid grey;
+}
 
+.matching {
+    position: absolute;
+    top: 85%;
+    width: 100%;
+}
+
+.overlap {
+    color: red;
+    font-weight: 500;
+}

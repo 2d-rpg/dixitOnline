@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import Leave from '../leave';
 import '../../css/room.css';
+import Matching from '../matching';
 
 
 const audio = new Audio('../audio/decision29low.wav');
@@ -8,7 +10,7 @@ audio.volume = 0.1;
 
 export default function Room(props) {
 
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
 
     const [showRoom, setShowRoom] = useState(false);
 
@@ -24,9 +26,11 @@ export default function Room(props) {
 
     const [option,setOption] = useState(false);
 
+    const [showOverlap, setShowOverlap] = useState(false);
+
     const roomEntrySubmit = (roomname) => {
         audio.play();
-        setShowRoom(false);
+        setShowRoomContent(false);
         props.setShowStatus(true);
         props.socket.emit('room_entry', {roomname : roomname});
         props.setMessage('他のプレイヤーが参加するのを待っています( ´ ▽ ` )');
@@ -38,6 +42,7 @@ export default function Room(props) {
         setShowRoomContent(false);
         props.setShowStatus(true);
         props.socket.emit('room_create', {username : data.username, roomname : data.roomname});
+        reset();
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
         props.setMessage('他のプレイヤーが参加するのを待っています( ´ ▽ ` )');
     }
@@ -62,13 +67,13 @@ export default function Room(props) {
 
     useEffect(() => {
         const updateRoomList = (roomManager) => {
-            if (roomManager.roomList.length === 0) {
+            if (roomManager.roomList.length === 0 || roomManager.roomList.filter(room => room.game.stageIndex === 0).length === 0) {
                 setRoomList(
                     <div>現在ルームは存在しません m9(^Д^)</div>
                 );
             } else {
                 setRoomList(
-                    roomManager.roomList.map((room) => {
+                    roomManager.roomList.filter(room => room.game.stageIndex === 0).map((room) => {
                         return(
                             <div className="room-list-content">
                                 <div className="room-name">{ room.name }</div>
@@ -84,7 +89,9 @@ export default function Room(props) {
 
         props.socket.on('room', (data) => {
             updateRoomList(data.roomManager);
+            setShowRoomContent(true);
             setShowRoom(true);
+            setShowStart(false);
         });
         props.socket.on('in_room', (data) => {
             setShowRoomContent(false);
@@ -94,14 +101,28 @@ export default function Room(props) {
         // props.socket.on('room_create', () => setShowRoom(false));
         props.socket.on('update_roomlist', (data) => updateRoomList(data.roomManager));
         props.socket.on('entry_player', (data) => {
-            if (data.room.players.length > 2 && data.room.players[0].socketId === props.socket.id) setShowStart(true);
+            if (data.room.game.players.length >= 3 && data.room.game.players[0].socketId === props.socket.id) {
+                setShowRoom(true);
+                setShowRoomContent(false);
+                setShowStart(true);
+            }
+        });
+        props.socket.on('update_player_list', (data) => {
+            if (data.game.players.length < 3) {
+                setShowStart(false);
+            }
         });
         props.socket.on('restart', () => {
-            setShowRoomContent(true);
-            setShowRoomCreate(true);
-            setShowRoomList(true);
+            setShowRoomContent(false);
+            setShowRoomCreate(false);
+            setShowRoomList(false);
             setShowRoom(true);
-        })
+        });
+        props.socket.on('room_name_overlap', () => {
+            setShowOverlap(true);
+            setShowRoomContent(true);
+            props.setShowStatus(false);
+        });
     }, [ props.socket, setShowRoom, setRoomList ]);
 
     return(
@@ -119,9 +140,10 @@ export default function Room(props) {
                     <div className="room-create-title">ルーム名を決めてください</div>
                     <form className="form-inline" id="roomCreateForm" onSubmit={ handleSubmit(roomCreateSubmit) }>
                         <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>
-                        <input type="text" className="form-control mb-2 mr-sm-2" name="roomname" ref={ register } placeholder="ルーム名"/>
+                        <input type="text" className="form-control mb-2 mr-sm-2" name="roomname" ref={ register() } placeholder="ルーム名"/>
                         <button type="submit" className="btn btn-primary mb-2">決定</button>
                     </form>
+                    <div className="overlap" style={ {display: showOverlap ? 'block' : 'none' } }>このルーム名は既に使用されています<br/>（17文字目以上は切り捨てられます)</div>
                 </div>
                 <div className="room-list" style={ {display: showRoomList ? 'block' : 'none'} }>
                     { roomList }
@@ -142,6 +164,8 @@ export default function Room(props) {
                     このメンバーでゲーム開始
                 </button>
             </div>
+            <Matching socket={ props.socket }/>
+            <Leave className="room-leave" socket= { props.socket }/>
         </div>
     );
 }

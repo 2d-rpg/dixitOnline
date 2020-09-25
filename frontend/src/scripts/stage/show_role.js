@@ -11,7 +11,7 @@ export default function ShowRole(props) {
     /** プレイヤーのロール */
     const [isMaster, setIsMaster] = useState(null);
 
-    const iconStyle =  { 'margin-right': 20,'margin-left': 20, 'width': 80, 'height': 80 };
+    const iconStyle =  { 'width': 60, 'height': 60 };
 
     useEffect(() => {
         /** スコアの表示 */
@@ -35,12 +35,15 @@ export default function ShowRole(props) {
         props.socket.on('show_answer',(data) => show_role(data));
         props.socket.on('result',(data) => show_role(data));
         props.socket.on('restart',() => reset_role());
+        props.socket.on('room',() => setShowRole(false));
     }, [ props.socket ]);
 
     return(
     <div className="role-wrapper" style={ { textAlign: "center", display: showrole ? 'block' : 'none', padding: "50" } } >
-      <FontAwesomeIcon className="role-figure" style={ iconStyle }  icon={ isMaster ? faChessRook : faChessPawn } color={ isMaster ? "gold" : "seashell" }/>
-      <span className="text">{ isMaster ? "語り部" : "聞き手" }</span>
+        <div className="role-container">
+            <FontAwesomeIcon className="role-figure" style={ iconStyle }  icon={ isMaster ? faChessRook : faChessPawn } color={ isMaster ? "gold" : "seashell" }/>
+            <span className="text">{ isMaster ? "語り部" : "聞き手" }</span>
+        </div>
     </div>
     );
 }

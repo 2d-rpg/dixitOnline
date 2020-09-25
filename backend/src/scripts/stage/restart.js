@@ -3,6 +3,7 @@
  */
 
 const utils = require('../utils');
+const Game = require('../game');
 
 class Restart {
 
@@ -11,16 +12,31 @@ class Restart {
     static do(io, socket, roomManager) {
         let room = roomManager.findRoomBySocket(socket);
         let player = roomManager.findPlayer(socket);
-        if (room !== null) {
+        if (room !== null && !room.nextGame.players.some((each_player) => each_player.socketId === player.socketId)) {
             player.reset();
-            room.deletePlayer(socket);
-            if(room.game.players.length === 0){
-                roomManager.deleteRoom(room.name);
-                console.log('delete player');
+            room.game.deletePlayer(socket); // 現在のゲームから削除
+            room.nextGame.addPlayer({ player: player }); // 次のゲームに追加
+            // room.game.players.forEach(player => io.to(player.socketId).emit('update_number_of_player', { num: room.game.players.length }));
+            var others = new Array();
+            room.nextGame.players.forEach(other => {
+                if (player != other) {
+                    others.push(other);
+                }
+            });
+            if(others.length === 0) {
+                player.isMaster = true;
+            } else {
+                player.done();
             }
-            console.log(room);
-            io.sockets.emit('update_number_of_player', { num: room.game.players.length });
-            socket.emit('restart', { game: room.game });
+            room.game.players.forEach(player => io.to(player.socketId).emit('update_player_list', {game : room.game}));
+            room.nextGame.players.forEach(player => io.to(player.socketId).emit('update_player_list', {game : room.nextGame}));
+            socket.emit('restart', {others : others, player : player, game : room.nextGame });
+            if (room.game.players.length === 0) {
+                room.game = room.nextGame;
+                room.nextGame = new Game();
+                io.to(room.game.players[0].socketId).emit('entry_player', {room : room});
+                io.sockets.emit('update_roomlist', {roomManager:roomManager});
+            }
         }
     }
 }

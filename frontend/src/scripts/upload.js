@@ -22,7 +22,7 @@ export default function Upload(props) {
             // );
         }
         props.socket.on('restart',() => {
-            
+            setShow(true);
         });
         props.socket.on('show_start', (data) => {
             setShow(true);
@@ -31,6 +31,9 @@ export default function Upload(props) {
         props.socket.on('entry_player', (data) => {
             setShow(true);
             update(data);
+        });
+        props.socket.on('room', () => {
+            setShow(false);
         });
         props.socket.on('in_room', (data) => {
             setShow(true);
