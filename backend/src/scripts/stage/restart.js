@@ -27,7 +27,6 @@ class Restart {
                 player.isMaster = true;
             } else {
                 player.done();
-                io.to(room.nextGame.players[0].socketId).emit('entry_player', {room : room});
             }
             room.game.players.forEach(player => io.to(player.socketId).emit('update_player_list', {game : room.game}));
             room.nextGame.players.forEach(player => io.to(player.socketId).emit('update_player_list', {game : room.nextGame}));
@@ -35,6 +34,7 @@ class Restart {
             if (room.game.players.length === 0) {
                 room.game = room.nextGame;
                 room.nextGame = new Game();
+                io.to(room.game.players[0].socketId).emit('entry_player', {room : room});
                 io.sockets.emit('update_roomlist', {roomManager:roomManager});
             }
         }
