@@ -1,3 +1,5 @@
+const Game = require("../game");
+
 class Leave {
 
     constructor() {}
@@ -9,8 +11,13 @@ class Leave {
         socket.leave(room.name);
         player.reset();
         if (room.players.length > 0) {
-            if(!player.isMaster){
-            }else{
+            if (room.game.players.length === 0) {
+                room.game = room.nextGame;
+                room.nextGame = new Game();
+                io.sockets.emit('update_roomlist', {roomManager:roomManager});
+            }
+            if(!player.isMaster) {
+            } else {
                 // 親の変更
                 room.players[0].isMaster = true;
             }

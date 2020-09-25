@@ -14,6 +14,7 @@ class Room {
         this.game = new Game();
         // this.chat = new Chat();
         this.players = [];
+        this.nextGame = new Game();
     }
 
     entry(player) {

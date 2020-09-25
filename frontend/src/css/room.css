@@ -85,12 +85,14 @@
 }
 
 .room-leave {
-    margin-top: 63%;
-    margin-left: 80%;
+    position: absolute;
+    top: 85%;
+    right: 5%;
     border: 2px solid grey;
 }
 
 .matching {
     position: absolute;
+    top: 85%;
     width: 100%;
 }

@@ -10,6 +10,7 @@ export default function Matching(props) {
         props.socket.on('update_player_list', (data) => {
             setShowMatching(true);
         });
+        props.socket.on('room', () => setShowMatching(false));
         props.socket.on('hand_selection', () => setShowMatching(false));
     });
 
