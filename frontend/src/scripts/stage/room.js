@@ -26,6 +26,8 @@ export default function Room(props) {
 
     const [option,setOption] = useState(false);
 
+    const [showOverlap, setShowOverlap] = useState(false);
+
     const roomEntrySubmit = (roomname) => {
         audio.play();
         setShowRoomContent(false);
@@ -115,6 +117,11 @@ export default function Room(props) {
             setShowRoomList(false);
             setShowRoom(true);
         });
+        props.socket.on('room_name_overlap', () => {
+            setShowOverlap(true);
+            setShowRoomContent(true);
+            props.setShowStatus(false);
+        });
     }, [ props.socket, setShowRoom, setRoomList ]);
 
     return(
@@ -135,6 +142,7 @@ export default function Room(props) {
                         <input type="text" className="form-control mb-2 mr-sm-2" name="roomname" ref={ register() } placeholder="ルーム名"/>
                         <button type="submit" className="btn btn-primary mb-2">決定</button>
                     </form>
+                    <div className="overlap" style={ {display: showOverlap ? 'block' : 'none' } }>このルーム名は既に使用されています</div>
                 </div>
                 <div className="room-list" style={ {display: showRoomList ? 'block' : 'none'} }>
                     { roomList }

@@ -39,13 +39,17 @@ class RoomManager {
     }
 
     createRoom(name) {
-        let room = new Room(name);
-        this.roomList.push(room);
+        let room = null;
+        if (this.findRoomByName(name) == null) {
+            room = new Room(name);
+            this.roomList.push(room);
+        }
         return room;
     }
 
     findRoomByName(name) {
-        return this.roomList.filter(room => room.name === name)[0];
+        let array = this.roomList.filter(room => room.name === name);
+        return array.length === 0 ? null : array[0];
     }
 
     findRoomBySocket(socket) {
