@@ -129,7 +129,6 @@ class Game {
         }
         // 更新後
         if (this.stageIndex === status.indexOf('hand_selection')) { // hand_selection
-            this.players.forEach(player => console.log(player));
             this.round += 1
             if(this.round !== 1){
                 this.updateMaster(); // 語り部更新

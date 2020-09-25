@@ -68,7 +68,11 @@ export default function Result(props) {
         }
 
         // socketのインベントハンドラ登録一覧
-        props.socket.on('in_room', () => $('#resultModalWindow').modal('toggle'));
+        props.socket.on('in_room', () => {
+            if ($('#resultModalWindow').is(':visible')) {
+                $('#resultModalWindow').modal('toggle');
+            }
+        });
         props.socket.on('result', (data) => show_result(data));
 
     }, [ props.socket, result ]);
