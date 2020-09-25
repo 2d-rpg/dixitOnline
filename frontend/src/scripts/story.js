@@ -8,7 +8,10 @@ export default function Story(props) {
     useEffect(() => {
         props.socket.on('hand_selection', () => setShowStory(false));
         props.socket.on('others_hand_selection', () => setShowStory(true));
+        props.socket.on('field_selection', () =>  setShowStory(true));
+        props.socket.on('show_answer', () =>  setShowStory(true));
         props.socket.on('result', () => setShowStory(false));
+
     }, [ props.socket ]);
 
     return(

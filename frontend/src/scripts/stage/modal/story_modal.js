@@ -24,6 +24,9 @@ export default function StoryModal(props) {
         });
 
         props.socket.on('others_hand_selection', (data) => props.setStory(data.game.story));
+        props.socket.on('field_selection', (data) => props.setStory(data.game.story));
+        props.socket.on('show_answer', (data) => props.setStory(data.game.story));
+        props.socket.on('result', (data) => props.setStory(data.game.story));
     }, [ props.socket, props.setStory, $('#exampleModalCenter') ]);
 
     /** お題のフォーム送信ボタンを押したときの動作 */

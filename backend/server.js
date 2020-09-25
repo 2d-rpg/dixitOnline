@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
     socket.on('wait', () => wait.do(socket, roomManager));
     // クライアント接続時
     setTimeout(() => {
-        let username = socket.handshake.query['client-id'];
+        let username = decodeURI(socket.handshake.query['client-id']);
         let player = roomManager.findPlayerByName(username);
         let room = roomManager.findRoomByPlayerName(username);
         if (player != null) {
