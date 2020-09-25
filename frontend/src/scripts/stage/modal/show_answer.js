@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons';
 import $ from 'jquery';
-import Card from '../card';
-import '../../css/show_answer.css';
+import Card from '../../card';
+import '../../../css/show_answer.css';
 
 /** ボタンの効果音 */
 const audio = new Audio('../audio/decision29low.wav');

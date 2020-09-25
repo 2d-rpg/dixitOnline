@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
 import $ from 'jquery';
-import '../../css/result.css';
-import Leave from '../leave';
+import '../../../css/result.css';
+import Leave from '../../leave';
 
 /** ランキングの数字 */
 const rank = ["1", "2", "3", "4", "5", "6"];
