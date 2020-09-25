@@ -18,7 +18,7 @@ const story_selection = require('./src/scripts/stage/story_selection');
 const others_hand_selection = require('./src/scripts/stage/others_hand_selection');
 const field_selection = require('./src/scripts/stage/field_selection');
 const restart = require('./src/scripts/stage/restart');
-const leave = require('./src/scripts/stage/leave')
+const leave = require('./src/scripts/stage/leave');
 
 const disconnect = require('./src/scripts/stage/disconnect');
 const socketIO = require('socket.io');
