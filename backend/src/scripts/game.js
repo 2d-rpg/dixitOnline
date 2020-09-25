@@ -164,10 +164,6 @@ class Game {
         } else {
             this.reset();
         }
-        if (this.stageIndex === status.indexOf('result')){
-            this.reset();
-            utils.log("game-reset!!");
-        }
         utils.log('Move to stage [' + this.stage + ']');
     }
 
@@ -180,7 +176,7 @@ class Game {
     }
 
     isFinished() {
-        return this.players.filter(player => player == null).length === this.players.length && this.stageIndex === status.length;
+        return this.players.length >= 3 && this.players.filter(player => player == null).length === this.players.length && this.stageIndex === status.length;
     }
 
     /** 語り部の更新 */

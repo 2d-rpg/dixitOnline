@@ -12,7 +12,7 @@ class RoomCreate {
         io.sockets.emit('update_number_of_player', {num : roomManager.players.length});
         io.sockets.emit('update_roomlist', {roomManager : roomManager});
         socket.emit('show_start');
-        room_entry.do({roomname:room.name, game:room.game}, io, socket, roomManager);
+        room_entry.do({ roomname: room.name, game: room.game }, io, socket, roomManager);
     }
 
 }

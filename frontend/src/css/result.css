@@ -1,7 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1');
+
 .result-wrapper
 {
     position: absolute;
     width: 100%;
+}
+
+.result-content
+{
+    background-color: #353b48;
+    color: antiquewhite;
+    font-weight: 700;
+    /* font-family: "M PLUS Rounded 1c"; */
+}
+
+.modal-header > .close
+{
+    color: antiquewhite;
 }
 
 table#result-table
@@ -16,7 +31,7 @@ table#result-table
 #result-table tr
 {
     height: 10%;
-    background-color: #f4f6f6;
+    background-color: #576574;
     /* margin: 1%; */
 }
 

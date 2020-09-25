@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Leave from '../leave';
 import '../../css/room.css';
+import Matching from '../matching';
 
 
 const audio = new Audio('../audio/decision29low.wav');
@@ -9,7 +10,7 @@ audio.volume = 0.1;
 
 export default function Room(props) {
 
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
 
     const [showRoom, setShowRoom] = useState(false);
 
@@ -27,7 +28,7 @@ export default function Room(props) {
 
     const roomEntrySubmit = (roomname) => {
         audio.play();
-        setShowRoom(false);
+        setShowRoomContent(false);
         props.setShowStatus(true);
         props.socket.emit('room_entry', {roomname : roomname});
         props.setMessage('他のプレイヤーが参加するのを待っています( ´ ▽ ` )');
@@ -39,6 +40,7 @@ export default function Room(props) {
         setShowRoomContent(false);
         props.setShowStatus(true);
         props.socket.emit('room_create', {username : data.username, roomname : data.roomname});
+        reset();
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
         props.setMessage('他のプレイヤーが参加するのを待っています( ´ ▽ ` )');
     }
@@ -102,6 +104,11 @@ export default function Room(props) {
                 setShowStart(true);
             }
         });
+        props.socket.on('update_player_list', (data) => {
+            if (data.game.players.length < 3) {
+                setShowStart(false);
+            }
+        });
         props.socket.on('restart', () => {
             setShowRoomContent(false);
             setShowRoomCreate(false);
@@ -125,7 +132,7 @@ export default function Room(props) {
                     <div className="room-create-title">ルーム名を決めてください</div>
                     <form className="form-inline" id="roomCreateForm" onSubmit={ handleSubmit(roomCreateSubmit) }>
                         <label className="sr-only" htmlFor="inlineFormInputName2">Name</label>
-                        <input type="text" className="form-control mb-2 mr-sm-2" name="roomname" ref={ register } placeholder="ルーム名"/>
+                        <input type="text" className="form-control mb-2 mr-sm-2" name="roomname" ref={ register() } placeholder="ルーム名"/>
                         <button type="submit" className="btn btn-primary mb-2">決定</button>
                     </form>
                 </div>
@@ -148,6 +155,7 @@ export default function Room(props) {
                     このメンバーでゲーム開始
                 </button>
             </div>
+            <Matching socket={ props.socket }/>
             <Leave className="room-leave" socket= { props.socket }/>
         </div>
     );

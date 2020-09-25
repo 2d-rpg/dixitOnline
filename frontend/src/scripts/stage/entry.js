@@ -17,13 +17,17 @@ export default function Entry(props) {
     const [, setCookie] = useCookies(['client-id']);
 
     useEffect(() => {
+        const comeback = (name) => {
+            setShow(false);
+            props.setName(name);
+        };
         props.socket.on('room', () => setShow(false));
-        props.socket.on('in_room', () => setShow(false));
-        props.socket.on('hand_selection', () => setShow(false));
-        props.socket.on('others_hand_selection', () => setShow(false));
-        props.socket.on('field_selection', () => setShow(false));
-        props.socket.on('show_answer', () => setShow(false));
-        props.socket.on('result', () => setShow(false));
+        props.socket.on('in_room', (data) => comeback(data.player.name));
+        props.socket.on('hand_selection', (data) => comeback(data.player.name));
+        props.socket.on('others_hand_selection', (data) => comeback(data.player.name));
+        props.socket.on('field_selection', (data) => comeback(data.player.name));
+        props.socket.on('show_answer', (data) => comeback(data.player.name));
+        props.socket.on('result', (data) => comeback(data.player.name));
         // props.socket.on('restart', () => setShow(true));
     }, [ props.socket ]);
 
