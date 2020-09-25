@@ -27,6 +27,7 @@ const ConfirmFieldSelection = require('./src/scripts/stage/confirm_field_selecti
 const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
+const expire = 6;// 切断後,部屋から追放するまでの猶予時間(秒)
 
 // ゲームオブジェクト作成
 let roomManager = new RoomManager();
@@ -40,7 +41,11 @@ io.on('connection', (socket) => {
         let player = roomManager.findPlayerByName(username);
         let room = roomManager.findRoomByPlayerName(username);
         if (player != null) {
+            player.connect = true;
             if (room != null) {
+                if (room.game == null) {
+                    // 
+                }
                 room.game.comeback(player, socket, roomManager);
                 socket.join(room.name);
             } else {
@@ -77,9 +82,9 @@ io.on('connection', (socket) => {
     socket.on('round_end', () => round_end.do(socket, roomManager));
     // クライアントからrestartがemitされた時
     socket.on('restart', () => restart.do(io, socket, roomManager));
+    // ToDo: deletegameに変更
     // ルームから退出
     socket.on('leave',() => leave.do(io, socket, roomManager));
-    // ToDo: deletegameに変更
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
     // TODO: つまりリロードすると復帰不可
@@ -100,14 +105,24 @@ io.on('connection', (socket) => {
 
 //　削除したらroomにいるなら復帰いないなら削除
 
+const interval = 30;
 setInterval(() => {
     // 全プレイヤーがステージ移行可能ならば移行する
-    roomManager.roomList.map(room => room.game).forEach(game => {
-        if (game.isAllDone() || game.isFinished()) { // 全てのプレイヤーが次のステージにいける状態
-            game.nextStage(io);
+    roomManager.roomList.forEach(room => {
+        if (room.game.isAllDone() || room.game.isFinished()) { // 全てのプレイヤーが次のステージにいける状態
+            room.game.nextStage(io);
         }
+        room.game.players.forEach(player => {
+            if(player.connect) {
+                player.timer = 0;
+            } else {
+                if (player.timer++ > expire * 1000 / interval) {
+                    room.deletePlayer({id: player.socketId});
+                }
+            }
+        });
     });
-}, 1000/30);
+}, interval);
 
 app.use('/', express.static(__dirname + '/build'));
 // io.use((socket, next) => {

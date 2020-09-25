@@ -35,8 +35,6 @@ class Game {
         this.stock = new Stock();
         /** このゲームに参加しているプレイヤー */
         this.players = [];
-        /** 現在のプレイヤー人数 */
-        this.currentNum = 0;
         /** 墓地(discard) */
         this.discard = new Discard();
         /** 場札(field) */
@@ -65,7 +63,6 @@ class Game {
         this.answers = [];
         this.round = 0;
         this.option = false;
-        this.currentNum = 0;
         this.players = [];
     }
 
@@ -74,13 +71,25 @@ class Game {
         if (option) {
             this.option = true;
             this.players.forEach((player) => {
-                files = fs.readdirSync('../frontend/public/images/uploaded/'+player.name+'/');
+                if(!fs.existsSync(utils.path+'/uploaded/'+player.name)){
+                    fs.mkdirSync(utils.path+'/uploaded/'+player.name, { recursive: true }, (err)=>{
+                        if (err) throw err;
+                    });// recursiveは既に存在していてもerrorを吐かない
+                }
+                files = fs.readdirSync(utils.path+'/uploaded/'+player.name+'/');
                 for (var i = 0; i < files.length; i++) { 
                     this.stock.push(new Card('uploaded/'+player.name+'/'+files[i]));
                 }
             });
+            let lack = this.players.length * 6 - this.stock._array.length;
+            files = fs.readdirSync(utils.path+'/default/');
+            for (var i = 0; i < lack; i++) {
+                for (var i = 0; i < files.length; i++) { 
+                    this.stock.push(new Card('default/'+files[i]));
+                }
+            }
         } else {
-            files = fs.readdirSync('../frontend/public/images/default/');
+            files = fs.readdirSync(utils.path+'/default/');
             for (var i = 0; i < files.length; i++) { 
                 this.stock.push(new Card('default/'+files[i]));
             }
@@ -96,12 +105,8 @@ class Game {
     /** プレイヤーの追加 */
     addPlayer(data) {
         let player = data.player;
-        // for (var i = 0; i < 5; i++) { 
-        //     player.draw(this.stock);
-        // }
         this.players.push(player);
-        this.currentNum += 1;
-        return this.players[this.currentNum-1];
+        return this.players[this.players.length-1];
     }
 
     /** 現在のプレイヤー数を確認 */
@@ -128,7 +133,14 @@ class Game {
             }
             this.fieldToDiscard();
             console.log(this.stock._array.length);
-            this.players.forEach(player => player.draw(this.stock));
+            if (this.players.length === 3) {
+                this.players.forEach(player => {
+                    player.draw(this.stock);
+                    player.draw(this.stock);
+                });
+            } else {
+                this.players.forEach(player => player.draw(this.stock));
+            }
             if(this.stock._array.length < this.players.length) {
                 this.discardToStock();
             }
@@ -193,12 +205,20 @@ class Game {
 
     /** socketによるプレイヤー削除 */
     deletePlayer(socket) {
-        this.players.forEach((player, index) => {
-            if (player != null && player.socketId === socket.id) {
-                this.players.splice(index, 1);
-                this.currentNum -= 1;
-            }    
-        });
+        if (this.players.length === 1) {
+            this.players.splice(0, 1);
+        } else {
+            this.players.forEach((player, index) => {
+                if (player != null && player.socketId === socket.id) {
+                    if (player.isMaster) {
+                        this.players.splice(index, 1);
+                        this.players[0].isMaster = true;
+                    } else {
+                        this.players.splice(index, 1);                    
+                    }
+                }    
+            });
+        }
     }
 
     /** 

@@ -10,6 +10,7 @@ class Disconnect {
         let room = roomManager.findRoomBySocket(socket);
         if (room != null) {
             socket.leave(room.name);
+            roomManager.findPlayer(socket).disconnect();
         }
         // game.deletePlayer(socket.id);
         // let game = roomManager.findRoomBySocket(socket).game;

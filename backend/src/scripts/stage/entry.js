@@ -16,8 +16,10 @@ class Entry {
             // game.players.forEach(player => {
             //     io.to(player.socketId).emit('update_player_list',{game : game});
             // });
-            utils.logWithStage('entry', 'Player Name: [' + player.name + '] ([' 
+            setTimeout(() => {
+                utils.logWithStage('entry', 'Player Name: [' + player.name + '] ([' 
                 + player.socketId + ']) joined.');
+            },200);
         } else {
             // プレイできない
             io.to(socket.id).emit('cannot_play');

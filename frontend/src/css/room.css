@@ -96,3 +96,8 @@
     top: 85%;
     width: 100%;
 }
+
+.overlap {
+    color: red;
+    font-weight: 500;
+}
