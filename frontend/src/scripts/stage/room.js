@@ -142,7 +142,7 @@ export default function Room(props) {
                         <input type="text" className="form-control mb-2 mr-sm-2" name="roomname" ref={ register() } placeholder="ルーム名"/>
                         <button type="submit" className="btn btn-primary mb-2">決定</button>
                     </form>
-                    <div className="overlap" style={ {display: showOverlap ? 'block' : 'none' } }>このルーム名は既に使用されています</div>
+                    <div className="overlap" style={ {display: showOverlap ? 'block' : 'none' } }>このルーム名は既に使用されています<br/>（17文字目以上は切り捨てられます)</div>
                 </div>
                 <div className="room-list" style={ {display: showRoomList ? 'block' : 'none'} }>
                     { roomList }

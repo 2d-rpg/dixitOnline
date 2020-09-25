@@ -39,6 +39,10 @@ class RoomManager {
     }
 
     createRoom(name) {
+        if (name.length > 16) {
+            name = name.slice(0,16);
+            name = name + '...';
+        } 
         let room = null;
         if (this.findRoomByName(name) == null) {
             room = new Room(name);
