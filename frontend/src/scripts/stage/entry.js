@@ -24,9 +24,9 @@ export default function Entry(props) {
             props.setName(name);
         };
         const initializeName = (data) => {
+            setUserAlert("");
+            setShow(false);
             if (typeof data.player !== 'undefined') {
-                setUserAlert("");
-                setShow(false);
                 setCookie('client-id', data.player.name, {path: '/'});
                 props.setName(data.player.name);
             }

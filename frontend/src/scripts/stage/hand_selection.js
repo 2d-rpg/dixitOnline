@@ -138,6 +138,21 @@ export default function HandSelection(props) {
                 () => socket.emit('others_hand_selection', {index : index}),
                 800,
             );
+
+            // 直後にカードを押せなくする
+            setHandButtons(
+                data.player.hand._array.map((card, index) => {
+                    var id_btn = 'eachHandButton' + index;
+                    var id_img = 'eachHandImage' + index;
+                    var hand_src = "../images/" + card.filename;
+                    const handButton = (
+                        <p className='eachHandButton' id={ id_btn } type='button'>
+                            <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
+                        </p>
+                    );
+                    return (<Card button={ handButton } kind={ 'Hand' }/>);
+                })
+            );
         };
         /** 手札の更新 */
         const update_hand = (player) => {

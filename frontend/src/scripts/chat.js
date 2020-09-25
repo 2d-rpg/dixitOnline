@@ -36,9 +36,9 @@ export default function Chat(props) {
             chatLogElement.current.scrollTop = chatLogElement.current.scrollHeight;
         });
 
-        props.socket.on('update_player_list',() => setShowChat(true));
-        props.socket.on('round_end',() => setShowChat(false));
-
+        props.socket.on('update_player_list', () => setShowChat(true));
+        props.socket.on('round_end', () => setShowChat(false));
+        props.socket.on('room', () => setShowChat(false));
     }, [ register, props.socket, chatLogElement ]);
 
     return (
