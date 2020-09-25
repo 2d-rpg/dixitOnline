@@ -110,7 +110,9 @@ export default function ShowAnswer(props) {
                 })
             );
             setMessage( data.player.score - data.player.prescore === 0 ? '残念！' : 'やったね！' );
-            $('#answerModal').modal('toggle');
+            if(data.player.state === 'undone'){
+                $('#answerModal').modal('toggle');
+            }
         };
         /** サーバからのemitされたときのイベントハンドラ一覧 */
         props.socket.on('show_answer' ,(data) => open_modal(data));

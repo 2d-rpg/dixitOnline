@@ -66,11 +66,32 @@ export default function Stock(props) {
             }
         };
 
+        const display_stock = (data) => {
+            setShowStock(true);
+            setStock(
+                data.game.stock._array.map((card, index) => {
+                    var id_btn = 'eachStockButton' + index;
+                    var id_img = 'eachStockImage' + index;
+                    var field_src = "../images/back/" + card.tailfilename;
+                    var rotate = Math.random() * 20 - 10;
+                    var shiftX = Math.random() * 10 - 5;
+                    var shiftY = Math.random() * 10 - 5;
+                    const style = { transform: `rotate(${rotate}deg) translate(${shiftX}px, ${shiftY}px)` };
+                    const stockButton = (
+                        <p className='eachStockButton' id={ id_btn } type='button'>
+                            <img className='eachStockImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
+                        </p>
+                    );
+                    return (<Card button={ stockButton } style={style} kind={ 'Stock' }/>);
+                })
+            );
+        }
+
         props.socket.on('hand_selection' ,(data) => stock_update(data));
-        props.socket.on('others_hand_selection' ,(data) => setShowStock(true));
-        props.socket.on('field_selection' ,(data) => setShowStock(true));
-        props.socket.on('show_answer' ,(data) => setShowStock(true));
-        props.socket.on('result' ,(data) => setShowStock(true));
+        props.socket.on('others_hand_selection' ,(data) => display_stock(data));
+        props.socket.on('field_selection' ,(data) => display_stock(data));
+        props.socket.on('show_answer' ,(data) => display_stock(data));
+        props.socket.on('result' ,(data) => display_stock(data));
         props.socket.on('restart',(data) => setShowStock(false));
         props.socket.on('room',() => setShowStock(false));
     }, [ props.socket, setShowStock, setStock ]);
