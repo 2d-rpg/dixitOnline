@@ -79,6 +79,9 @@ span.score-diff-name
     display: inline-block;
     margin: 1%;
     width: 15%;
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
 }
 
 .field-cards-result
@@ -135,7 +138,8 @@ span.score-diff-name
 {
     display: inline-flex;
     flex-direction: row;
-    text-align: center;
+    vertical-align: bottom;
+    /* text-align: center; */
     margin: 1%;
 }
 .eachOwnerNames
@@ -153,13 +157,13 @@ span.score-diff-name
 .eachOwnerName
 {
     /* height: 30%; */
-    line-height: 30%;
-    margin: 5%;
+    line-height: 100%;
+    /* margin: 5%; */
     margin-left: 15%;
     margin-right: 15%;
     border: solid;
-    background-color: #00BFFF;
-    border-color: #00BFFF;
+    /* background-color: #00BFFF;
+    border-color: #00BFFF; */
     border-radius: 10px;
     font-size: 10px;
     font-weight: bold;
@@ -168,23 +172,22 @@ span.score-diff-name
     flex-direction: column;
 }
 
-.eachOwnerName.master
+.eachOwnerName.correct
 {
     background-color: #FF00FF;
     border-color: #FF00FF;
 }
 
-
 .eachName
 {
     /* height: 30%; */
-    line-height: 30%;
-    margin: 5%;
+    line-height: 100%;
+    /* margin: 5%; */
     margin-left: 15%;
     margin-right: 15%;
     border: solid;
-    background-color: blueviolet;
-    border-color: blueviolet;
+    /* background-color: blueviolet; */
+    /* border-color: blueviolet; */
     border-radius: 10px;
     font-size: 10px;
     font-weight: bold;

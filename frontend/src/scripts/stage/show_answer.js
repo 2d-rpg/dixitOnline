@@ -8,6 +8,14 @@ import '../../css/show_answer.css';
 const audio = new Audio('../audio/decision29low.wav');
 audio.volume = 0.1;
 
+const playerColors = [ 
+    { 'background-color': '#2ed573' }, 
+    { 'background-color': '#00BFFF' }, 
+    { 'background-color': '#ffa502' }, 
+    { 'background-color': '#ff3838' }, 
+    { 'background-color': '#ff6348' } 
+];
+
 export default function ShowAnswer(props) {
     /** モーダルのタイトル */
     const [message, setMessage] = useState(null);
@@ -19,6 +27,8 @@ export default function ShowAnswer(props) {
     const [selectedNames, setSelectedNames] = useState(null);
     /** フィールドを選んだプレイヤーの表示内容 */
     const [ownerNames, setOwnerNames] = useState(null);
+    /** フィールドを選んだプレイヤーの表示の最大値 */
+    const [maxHeight, setMaxHeight] = useState(null);
 
 
     useEffect(() => {
@@ -47,7 +57,7 @@ export default function ShowAnswer(props) {
                     var id_score_diff = 'eachScoreDiff' + index;
                     return(
                         <div className='eachScoreDiff' id={ id_score_diff }>
-                            <span className="score-diff-name">{ player.name }</span>
+                            <span className="score-diff-name" style={ playerColors[data.game.players.indexOf(player)] }>{ player.name }</span>
                             <span>{ player.prescore }</span>
                             <FontAwesomeIcon className="role-figure" style={ iconStyle }  icon={ faLongArrowAltRight }/>
                             <span>{ player.score }</span>
@@ -63,11 +73,15 @@ export default function ShowAnswer(props) {
                             player.socketId === card.player
                     ).map((player, indexplayer) => {
                         const id = "eachName" + index + "player" + indexplayer;
-                        return (<div className={player.isMaster ? "eachOwnerName master" : "eachOwnerName"} id={ id }>{ player.name }</div>);
+                        const eachName = <div className={player.isMaster ? "eachOwnerName master" : "eachOwnerName"} style={ playerColors[data.game.players.indexOf(player)] } id={ id }>{ player.name }</div>;
+                        const ret = player.isMaster ? [eachName, <div className="eachOwnerName correct">正解</div>] : eachName;
+                        return (ret);
                     });
                     return (<div className="eachOwnerNames" id={ id_lst }>{ name }</div>);
                 })
             );
+            // 高さの設定
+            setMaxHeight(Math.max(...[3, ...data.game.field.cards.map(card => data.game.players.filter(player => player.socketId === card.player).length)]));
             // 投票結果のフィールドの表示セット
             setFieldCards(
                 data.game.field.cards.map((card, index) => {
@@ -90,7 +104,7 @@ export default function ShowAnswer(props) {
                         data.game.answers.filter(element => element.cardIndex === index).some(element => element.id === player.socketId)
                     ).map((player, indexplayer) => {
                         const id = "eachName" + index + "player" + indexplayer;
-                        return (<div className="eachName" id={ id }>{ player.name }</div>);
+                        return (<div className="eachName" id={ id } style={ playerColors[data.game.players.indexOf(player)] }>{ player.name }</div>);
                     });
                     return (<div className="eachSelectedNames" id={ id_lst }>{ names }</div>);
                 })
@@ -123,7 +137,7 @@ export default function ShowAnswer(props) {
                             <div className="show-answer-selected-cards">
                                 <div className="field-result-wrapper">
                                     <p>投票結果</p>
-                                    <div id="owner-field">{ ownerNames }</div>
+                                    <div id="owner-field" style={ { 'height': `${maxHeight * 10}px` } }>{ ownerNames }</div>
                                     <div className="field-cards-result">{ fieldCards }</div>
                                     <div id="selected-field">{ selectedNames }</div>
                                 </div>

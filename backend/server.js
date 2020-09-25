@@ -43,11 +43,10 @@ io.on('connection', (socket) => {
             if (room != null) {
                 room.game.comeback(player, socket, roomManager);
                 socket.join(room.name);
-                // ToDo : もとのsocket削除
             } else {
                 // entryはしているがroomには入っていない
                 player.socketId = socket.id;
-                socket.emit('room',{roomManager:roomManager});
+                socket.emit('room', { roomManager: roomManager });
             }
         } else {
             // entryもしていない

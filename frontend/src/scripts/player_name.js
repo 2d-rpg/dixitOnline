@@ -4,7 +4,7 @@ export default function PlayerName(props) {
 
     return (
         <div className="player-name">
-            <div>プレイヤー名</div>
+            <div>NAME</div>
             <p>{ props.name }</p>
         </div>);
 }

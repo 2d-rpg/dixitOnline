@@ -167,6 +167,7 @@ export default function HandSelection(props) {
         props.socket.on('result',(data) => update_hand(data.player));
         props.socket.on('restart',() => setShowHand(false));
         props.socket.on('room',() => setShowHand(false));
+        props.socket.on('in_room', () => setShowHand(false));
     }, [ props.socket, props.setMessage, props.setSrc ]);
 
     return (

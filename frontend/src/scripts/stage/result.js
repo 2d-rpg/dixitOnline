@@ -70,7 +70,7 @@ export default function Result(props) {
     return(
         <div className="modal fade" id="resultModalWindow" tabindex="-1" role="dialog" aria-labelledby="resultModalTitle" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" id="resultModalDialog" role="document">
-                <div className="modal-content">
+                <div className="modal-content result-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="resultModalTitle">結果</h5>
                         <button type="button" class="close" onClick={ handleclick } aria-label="Close">
@@ -90,8 +90,8 @@ export default function Result(props) {
                         </table>
                     </div>
                     <div className="modal-footer">
-                        <button id="backButton" onClick={ handleclick } type="button" className="btn btn-warning m-auto">戻る</button>
-                        <Leave socket= { props.socket } handle={ handleclick } className="result-leave"/>
+                        <button id="backButton" onClick={ handleclick } type="button" className="btn btn-warning m-auto">もう一度</button>
+                        <Leave socket= { props.socket } handle={ handleclick } className="result-leave m-auto"/>
                     </div>
                 </div>
             </div>
