@@ -35,8 +35,6 @@ class Game {
         this.stock = new Stock();
         /** このゲームに参加しているプレイヤー */
         this.players = [];
-        /** 現在のプレイヤー人数 */
-        this.currentNum = 0;
         /** 墓地(discard) */
         this.discard = new Discard();
         /** 場札(field) */
@@ -65,7 +63,6 @@ class Game {
         this.answers = [];
         this.round = 0;
         this.option = false;
-        this.currentNum = 0;
         this.players = [];
     }
 
@@ -112,8 +109,7 @@ class Game {
         //     player.draw(this.stock);
         // }
         this.players.push(player);
-        this.currentNum += 1;
-        return this.players[this.currentNum-1];
+        return this.players[this.players.length-1];
     }
 
     /** 現在のプレイヤー数を確認 */
@@ -216,17 +212,20 @@ class Game {
 
     /** socketによるプレイヤー削除 */
     deletePlayer(socket) {
-        this.players.forEach((player, index) => {
-            if (player != null && player.socketId === socket.id) {
-                if (player.isMaster) {
-                    this.players.splice(index, 1);
-                    this.players[0].isMaster = true;
-                } else {
-                    this.players.splice(index, 1);                    
-                }
-                this.currentNum -= 1;
-            }    
-        });
+        if (this.players.length === 1) {
+            this.players.splice(0, 1);
+        } else {
+            this.players.forEach((player, index) => {
+                if (player != null && player.socketId === socket.id) {
+                    if (player.isMaster) {
+                        this.players.splice(index, 1);
+                        this.players[0].isMaster = true;
+                    } else {
+                        this.players.splice(index, 1);                    
+                    }
+                }    
+            });
+        }
     }
 
     /** 

@@ -12,6 +12,7 @@ class Leave {
             if(!player.isMaster){
             }else{
                 // 親の変更
+                console.log(room);
                 room.players[0].isMaster = true;
             }
         } else {

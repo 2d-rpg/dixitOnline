@@ -18,6 +18,7 @@ const story_selection = require('./src/scripts/stage/story_selection');
 const others_hand_selection = require('./src/scripts/stage/others_hand_selection');
 const field_selection = require('./src/scripts/stage/field_selection');
 const restart = require('./src/scripts/stage/restart');
+const leave = require('./src/scripts/stage/leave')
 
 const disconnect = require('./src/scripts/stage/disconnect');
 const socketIO = require('socket.io');
@@ -83,6 +84,8 @@ io.on('connection', (socket) => {
     // クライアントからrestartがemitされた時
     socket.on('restart', () => restart.do(io, socket, roomManager));
     // ToDo: deletegameに変更
+    // ルームから退出
+    socket.on('leave',() => leave.do(io, socket, roomManager));
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
     // TODO: つまりリロードすると復帰不可

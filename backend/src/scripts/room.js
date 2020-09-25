@@ -31,7 +31,6 @@ class Room {
         this.players.forEach((player, index) => {
             if (player != null && player.socketId === socket.id) {
                 this.players.splice(index, 1);
-                this.currentNum -= 1;
             }
         });
     }
