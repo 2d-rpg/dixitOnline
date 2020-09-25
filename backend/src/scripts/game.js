@@ -105,9 +105,6 @@ class Game {
     /** プレイヤーの追加 */
     addPlayer(data) {
         let player = data.player;
-        // for (var i = 0; i < 5; i++) { 
-        //     player.draw(this.stock);
-        // }
         this.players.push(player);
         return this.players[this.players.length-1];
     }

@@ -7,19 +7,18 @@ class Leave {
         let room = roomManager.findRoomBySocket(socket);
         room.deletePlayer(socket);
         socket.leave(room.name);
-        player.reset();
         if (room.players.length > 0) {
-            if(!player.isMaster){
-            }else{
+            if(player.isMaster){
                 // 親の変更
-                console.log(room);
                 room.players[0].isMaster = true;
+                room.players[0].undone();
             }
         } else {
             // ルームの削除
             roomManager.deleteRoom(room.name);
             io.sockets.emit('update_roomlist', {roomManager:roomManager});
         }
+        player.reset();
         io.to(player.socketId).emit('room', {roomManager:roomManager});
         io.to(room.name).emit('update_player_list', {game: room.game});
     }
