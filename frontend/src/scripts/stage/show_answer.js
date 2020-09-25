@@ -115,7 +115,8 @@ export default function ShowAnswer(props) {
             }
         };
         /** サーバからのemitされたときのイベントハンドラ一覧 */
-        props.socket.on('show_answer' ,(data) => open_modal(data));
+        props.socket.on('show_answer', (data) => open_modal(data));
+        props.socket.on('in_room', () => $('#answerModal').modal('toggle'));
 
     }, [ props.socket, message, scoreDiffs ]);
 

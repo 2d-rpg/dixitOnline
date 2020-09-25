@@ -11,6 +11,7 @@ export default function Story(props) {
         props.socket.on('field_selection', () =>  setShowStory(true));
         props.socket.on('show_answer', () =>  setShowStory(true));
         props.socket.on('result', () => setShowStory(false));
+        props.socket.on('in_room',() => setShowStory(false));
 
     }, [ props.socket ]);
 

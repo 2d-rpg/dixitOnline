@@ -114,6 +114,7 @@ export default function FieldSelection(props) {
         props.socket.on('show_answer' ,(data) => update_field_with_front(data.game));
         props.socket.on('result' ,() => field_reset());
         props.socket.on('update_field_with_back', (data) => update_field_with_back(data.game));
+        props.socket.on('in_room',() => setShowfieldWrapper(false));
     }, [ props.socket, props.setMessage, setFieldButtons, setShowButton ]);
 
     const handleclick = () => {

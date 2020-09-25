@@ -12,6 +12,7 @@ export default function ShowScore(props) {
         /** サーバからemitされたときのイベントハンドラ一覧 */
         props.socket.on('show_answer', (data) => show_score(data));
         props.socket.on('restart', () => setScore(0));
+        props.socket.on('in_room',() => setScore(0));
     }, [ props.socket ]);
 
     return(

@@ -12,6 +12,7 @@ export default function Matching(props) {
         });
         props.socket.on('room', () => setShowMatching(false));
         props.socket.on('hand_selection', () => setShowMatching(false));
+        props.socket.on('in_room',() => setShowMatching(true));
     });
 
     return(

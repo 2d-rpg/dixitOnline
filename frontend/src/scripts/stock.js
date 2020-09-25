@@ -94,6 +94,7 @@ export default function Stock(props) {
         props.socket.on('result' ,(data) => display_stock(data));
         props.socket.on('restart',(data) => setShowStock(false));
         props.socket.on('room',() => setShowStock(false));
+        props.socket.on('in_room',() => setShowStock(false));
     }, [ props.socket, setShowStock, setStock ]);
 
     return (

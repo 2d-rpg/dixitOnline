@@ -118,9 +118,29 @@ setInterval(() => {
             } else {
                 if (player.timer++ > expire * 1000 / interval) {
                     room.deletePlayer({id: player.socketId});
+                    if (room.game.players.length < 3) {
+                        room.game.stop = true;
+                    }
                 }
             }
         });
+        if (room.game.stop) {
+            room.game.reset();
+            room.players.forEach(player => room.game.addPlayer({ player : player }));
+            room.players.forEach((player, index) => {
+                player.reset();
+                if (index === 0) {
+                    player.isMaster = true;
+                }
+                var others = new Array();
+                room.game.players.forEach(other => {
+                    if (player != other) {
+                        others.push(other);
+                    }
+                });
+                io.to(player.socketId).emit('in_room',{ game : room.game , player : player , others : others});
+            });
+        }
     });
 }, interval);
 

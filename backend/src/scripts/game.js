@@ -50,6 +50,7 @@ class Game {
         this.answers = [];
         this.round = 0;
         this.option = false;
+        this.stop = false;
     }
 
     reset() {
@@ -64,6 +65,7 @@ class Game {
         this.round = 0;
         this.option = false;
         this.players = [];
+        this.stop = false;
     }
 
     createDeck(option) {
