@@ -1,7 +1,5 @@
 // エントリー完了時
 
-const utils = require('../utils');
-
 class RoomEntry {
     static do(data, io, socket, roomManager) {
         let player = roomManager.findPlayer(socket);
@@ -15,9 +13,8 @@ class RoomEntry {
             } else {
                 player.isMaster = true;
             }
-            // room.players.forEach(player => console.log(player.socketId));
-            io.to(data.roomname).emit('entry_player', {room: room});
-            io.to(data.roomname).emit('update_player_list', {game: room.game});
+            io.to(data.roomname).emit('entry_player', { room: room });
+            io.to(data.roomname).emit('update_player_list', { game: room.game });
         } else {
             // 人数制限によって削除される
             console.log('capacity over');

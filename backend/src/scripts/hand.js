@@ -29,14 +29,6 @@ class Hand {
     selectedCard(){
         return this._array[selectedIndex];
     }
-    // 描画
-    show() {
-        this._array.forEach((value, index) => {
-            var x = 400.0 / 3.0 + index * (Card.WIDTH + 400.0 / (3.0 * 5.0));
-            var y = 600;
-            value.draw(x, y);
-        })
-    }
 }
 
 module.exports = Hand;

@@ -3,14 +3,21 @@ import $ from 'jquery';
 import Card from './card';
 import '../css/stock.css';
 
+/**
+ * 手札の表示
+ * @param {{ socket: SocketIO.Socket }} props 連想配列として，socketをもつ
+ */
 export default function Stock(props) {
-
+    /** 手札の内容 */
     const [stock, setStock] = useState(null);
-
+    /** 手札の表示 */
     const [showStock, setShowStock] = useState(false);
 
     useEffect(() => {
-        /** 山札の表示と山札から手札へのアニメーション */
+        /**
+         * 山札の表示と山札から手札へのアニメーション
+         * @param {{ game: Game }} data 連想配列として，gameをもつ
+         */
         const stock_animate = (data) => {
             setStock(
                 data.game.stock._array.map((card, index) => {
@@ -26,25 +33,27 @@ export default function Stock(props) {
                             <img className='eachStockImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
-                    return (<Card button={ stockButton } style={style} kind={ 'Stock' }/>);
+                    return (<Card button={ stockButton } style={ style } kind={ 'Stock' }/>);
                 })
             );
-            const len = data.game.stock._array.length-1;
-            console.log(len);
+            const len = data.game.stock._array.length - 1;
             document.getElementById(`eachStockButton${len}`).animate([
                 // keyframes
                 { transform: 'translate(0px,0px)'}, 
                 { transform: 'translate(-300px,300px)' , opacity: 0.5 }
             ], { 
                 // timing options
-                duration: 1000,
+                duration: 1000
             });
             setTimeout(() => {
-                const len = data.game.stock._array.length-1;
-                document.getElementById(`eachStockButton${len}`).style.display="none";
+                const len = data.game.stock._array.length - 1;
+                document.getElementById(`eachStockButton${len}`).style.display = 'none';
             }, 1000);
         };
-        /** 墓地から山札へのアニメーション */
+        /**
+         * 墓地から山札へのアニメーション
+         * @param {{ game: Game }} data 連想配列として，gameをもつ
+         */
         const stock_update = (data) => {
             var card_x = $("#discard").offset().left;
             setShowStock(true);
@@ -65,7 +74,10 @@ export default function Stock(props) {
                 stock_animate(data);
             }
         };
-
+        /**
+         * ストックの表示
+         * @param {{ game: Game }} data 連想配列として，gameをもつ
+         */
         const display_stock = (data) => {
             setShowStock(true);
             setStock(
@@ -82,22 +94,24 @@ export default function Stock(props) {
                             <img className='eachStockImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
-                    return (<Card button={ stockButton } style={style} kind={ 'Stock' }/>);
+                    return (<Card button={ stockButton } style={ style } kind={ 'Stock' }/>);
                 })
             );
-        }
+        };
 
-        props.socket.on('hand_selection' ,(data) => stock_update(data));
-        props.socket.on('others_hand_selection' ,(data) => display_stock(data));
-        props.socket.on('field_selection' ,(data) => display_stock(data));
-        props.socket.on('show_answer' ,(data) => display_stock(data));
-        props.socket.on('result' ,(data) => display_stock(data));
-        props.socket.on('restart',(data) => setShowStock(false));
-        props.socket.on('room',() => setShowStock(false));
-        props.socket.on('in_room',() => setShowStock(false));
+        // socketのイベントハンドラ登録一覧
+        props.socket.on('room', () => setShowStock(false));
+        props.socket.on('in_room', () => setShowStock(false));
+        props.socket.on('hand_selection', (data) => stock_update(data));
+        props.socket.on('others_hand_selection', (data) => display_stock(data));
+        props.socket.on('field_selection', (data) => display_stock(data));
+        props.socket.on('show_answer', (data) => display_stock(data));
+        props.socket.on('result' , (data) => display_stock(data));
+        props.socket.on('restart', () => setShowStock(false));
+
     }, [ props.socket, setShowStock, setStock ]);
 
     return (
-        <div id="stock" style={ {display: showStock ? 'inline-flex' : 'none'} }>{ stock }</div>
+        <div id="stock" style={ { display: showStock ? 'inline-flex' : 'none' } }>{ stock }</div>
     );
 }

@@ -6,7 +6,7 @@ class FieldSelection {
     static do(socket, io, index, roomManager) {
         // 答えを集計
         let game = roomManager.findRoomBySocket(socket).game;
-        utils.logWithStage(game.stage, 'socket id: [' + socket.id + ']\'s Player was selected.');
+        utils.logWithStage(game.stage, `socket id: [${ socket.id }]\'s Player was selected.`);
         let id = socket.id;
         let cardIndex = index;
         let dict = {}
@@ -17,9 +17,6 @@ class FieldSelection {
         } else {
             game.answers.push(dict);
         }
-        // game.players.forEach(player => {
-        //     io.to(player.socketId).emit('update_selected_field', { game: game });
-        // });
     }
 }
 

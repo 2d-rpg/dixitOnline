@@ -2,8 +2,6 @@ const Game = require("../game");
 
 class Leave {
 
-    constructor() {}
-
     static do(io, socket, roomManager) {
         let player = roomManager.findPlayer(socket);
         let room = roomManager.findRoomBySocket(socket);

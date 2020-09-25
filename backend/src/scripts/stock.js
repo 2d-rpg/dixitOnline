@@ -1,35 +1,37 @@
 'use strict';
-// 山場のクラス
 
 const utils = require('./utils');
-const Card = require('./card');
 
+/**
+ * 山札のクラス
+ */
 class Stock {
-    constructor(size) {
-        // 初期化(fill部分にnew Card()すると全て同一オブジェクトになるので一旦nullで埋める)
-        // this._array = new Array(size).fill(null);
+
+    /** 山札のコンストラクタ */
+    constructor() {
         this._array = new Array();
-        // ランダムサンプリング
-        // TODO: このままでは復元抽出になってしまうので非復元抽出にするよう要修正
-        // for (var i=0; i < size; i++) { // forEach文だとエラーが出る
-        //     this._array[i] = new Card(utils.randomSample(18));
-        // }
         //最後に選択されたカードのindex
         this.selectedIndex = null;
     }
+
+    /** 山札にカードを一枚追加する */
     push(card) {
         this._array.push(card);
     }
+
+    /** 山札からカードを一枚とる */
     pop() {
         if (this._array.length > 0) {
             let card = this._array.pop();
             return card;
         } 
         else {
-        // 墓地回収
+            // 墓地回収
             return null;
         }
     }
+
+    /** 山札のシャッフル */
     shuffle() {
         this._array = utils.shuffle(this._array);
     }

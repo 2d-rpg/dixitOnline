@@ -5,14 +5,21 @@ import $ from 'jquery';
 import '../../css/result.css';
 import Leave from '../leave';
 
+/** ランキングの数字 */
 const rank = ["1", "2", "3", "4", "5", "6"];
+/** ランキングのsuffix */
 const rank_suffix = ["st", "nd", "rd", "th", "th", "th"];
-
+/** アイコンのスタイル */
 const iconStyle = [ { 'color': 'gold' }, { 'color': 'blue' }, { 'color': 'chocolate' } ];
-
+/** ボタンの効果音 */
 const audio = new Audio('../audio/decision29low.wav');
+/** ボタンの効果音の音量 */
 audio.volume = 0.1;
 
+/**
+ * リザルト画面の表示
+ * @param {{ socket: SocketIO.Socket, setMassage: (message: string) => void }} props 連想配列として，socket, setAMassageをもつ
+ */
 export default function Result(props) {
     /** 結果の内容 */
     const [result, setResult] = useState(null);
@@ -21,11 +28,11 @@ export default function Result(props) {
         /** result画面の表示 */
         const show_result = (data) => {
             // モーダルの表示の中心をbodyではなく.game-coreに変更
-            $('#resultModalWindow').on('shown.bs.modal', function (e) {
+            $('#resultModalWindow').on('shown.bs.modal', () => {
                 $('body').removeClass('modal-open');
                 $('.game-core').addClass('modal-open');
             });
-            $('#resultModalWindow').on('hidden.bs.modal', function (e) {
+            $('#resultModalWindow').on('hidden.bs.modal', () => {
                 audio.play();
                 $('.game-core').removeClass('modal-open');
                 props.socket.emit('restart');
@@ -40,11 +47,11 @@ export default function Result(props) {
                     if( a.score < b.score ) return 1;
                     return 0;
                 }).map((player, index) => {
-                    if(player.score !== pre_score){ //同点は同じ順位にする
+                    if(player.score !== pre_score){ // 同点は同じ順位にする
                         rank_index = index;
                     }
                     pre_score = player.score;
-                    var id_result = 'eachResult' + rank_index;
+                    const id_result = 'eachResult' + rank_index;
                     const icon = rank_index < 3 ? <FontAwesomeIcon style={ iconStyle[rank_index] }  icon={ faMedal }/> : null; 
                     return(
                         <tr className='eachResult' id={ id_result }>
@@ -60,7 +67,10 @@ export default function Result(props) {
             $('#resultModalWindow').modal('toggle');
         }
 
-        props.socket.on('result' ,(data) => show_result(data));
+        // socketのインベントハンドラ登録一覧
+        props.socket.on('in_room', () => $('#resultModalWindow').modal('toggle'));
+        props.socket.on('result', (data) => show_result(data));
+
     }, [ props.socket, result ]);
 
     const handleclick = () => {

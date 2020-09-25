@@ -1,6 +1,6 @@
-/** クライアントがスタート完了時 */
-const utils = require('../utils');
+'use strict';
 
+/** クライアントがスタート完了時 */
 class Start {
 
     static do(data, socket, roomManager) {

@@ -3,14 +3,22 @@ import $ from 'jquery';
 import Card from './card';
 import '../css/discard.css';
 
+/**
+ * 墓地の表示
+ * @param {{ socket: SocketIO.Socket }} props 連想配列として，socketをもつ
+ */
 export default function Discard(props) {
 
-    /** 墓地の表示 */
+    /** 墓地の内容 */
     const [discard, setDiscard] = useState(null);
-
+    /** 墓地の表示 */
     const [showDiscard, setShowDiscard] = useState(false);
 
     useEffect(() => {
+        /**
+         * 墓地の更新
+         * @param {{ game: Game }} data 連想配列として，gameをもつ
+         */
         const update_discard = (data) => {
             setShowDiscard(true);
             const discard_x = $(".game-core-wrapper").offset().left;
@@ -48,6 +56,10 @@ export default function Discard(props) {
                 )
             }, data.game.discard._array.length === 0 ? 2000 : 1000);
         };
+        /**
+         * 墓地の表示
+         * @param {{ game: Game }} data 連想配列として，gameをもつ
+         */
         const show_discard = (data) => {
             setShowDiscard(true);
             setTimeout(() => {
@@ -71,13 +83,15 @@ export default function Discard(props) {
             }, data.game.discard._array.length === 0 ? 2000 : 1000);
         };
         
+        // socketのイベントハンドラ登録一覧
+        props.socket.on('room', () => setShowDiscard(false));
         props.socket.on('hand_selection', (data) => update_discard(data));
         props.socket.on('others_hand_selection', (data) => show_discard(data));
         props.socket.on('field_selection', (data) => show_discard(data));
         props.socket.on('show_answer', (data) => show_discard(data));
         props.socket.on('restart', () => setShowDiscard(false));
-        props.socket.on('room',() => setShowDiscard(false));
+
     }, [ props.socket, setDiscard ]);
 
-    return(<div id="discard" className="discard" style={ {display: showDiscard ? 'block' : 'none'} }>{ discard }</div>)
+    return(<div id="discard" className="discard" style={ { display: showDiscard ? 'block' : 'none' } }>{ discard }</div>)
 }

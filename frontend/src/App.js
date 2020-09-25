@@ -5,11 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import $ from 'jquery';
-
+// コンポーネント
 import PlayerCounter from './scripts/playerCounter';
 import Chat from './scripts/chat';
 import Story from './scripts/story';
-import Init from './scripts/stage/init';
 import Entry from './scripts/stage/entry';
 import Room from './scripts/stage/room';
 import Start from './scripts/stage/start';
@@ -23,29 +22,26 @@ import Upload from './scripts/upload';
 import Status from './scripts/status';
 import PlayerList from './scripts/player_list';
 import Stock from './scripts/stock'
-
-import './App.css';
-import './css/game.css';
 import Help from './scripts/help';
 import Discard from './scripts/discard';
+// スタイルシート
+import './App.css';
+import './css/game.css';
 
 
 // const ENDPOINT = "http://34.83.112.24:3000/";
 const ENDPOINT = "localhost:4001/";
-// const socket = socketIOClient(ENDPOINT);
+
 const socket = io(ENDPOINT, {
-  query: { 
-    'client-id': cookieVal('client-id') },
-    transports: ['websocket'],
-    upgrade: false,
-    timeout: 1800000 // タイムアウト時間を30分に(デフォルトは20秒)
-  });
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
+  query: { 'client-id': cookieVal('client-id') }, // クライアントID(プレイヤー名を保持するためのもの)
+  transports: ['websocket'],
+  upgrade: false,
+  timeout: 1800000 // タイムアウト時間を30分に(デフォルトは20秒)
 });
 
-console.log(socket.io.opts.query);
-console.log(document.cookie);
+// jQuery全体のイベントハンドラ
+$(() => $('[data-toggle="tooltip"]').tooltip());
+// 接続関係のログ(デバッグ用)
 socket.on('connect_timeout', () => console.log('timeout'));
 socket.on('reconnect', (num) => console.log('reconnect: ' + num));
 socket.on('reconnect_attempt', (num) => console.log('reconnect_attempt: ' + num));
@@ -73,7 +69,6 @@ function App() {
       <div className='header'>
         <h1>Dixit Online</h1>
       </div>
-      <Init socket={ socket }/>
       <div className="game-container">
         <div className='game-core-wrapper'>
           <div className='game-core'>
@@ -104,7 +99,11 @@ function App() {
   );
 }
 
-function cookieVal(key){
+/**
+ * cookieの取得
+ * @param {string} key cookieのキー名
+ */
+function cookieVal(key) {
   return ((document.cookie + ';').match(key + '=([^¥S;]*)')||[])[1];
 }
 

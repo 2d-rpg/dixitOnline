@@ -1,10 +1,5 @@
-// story_selection
-
-const utils = require('../utils');
 
 class StorySelection {
-
-    constructor() {}
 
     static do(socket, io, message, masterIndex, roomManager) {
         let game = roomManager.findRoomBySocket(socket).game;

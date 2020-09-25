@@ -1,6 +1,7 @@
 'use strict';
 // import modules
 const Hand = require('./hand');
+const Stock = require('./stock');
 
 // プレイヤークラス
 class Player {
@@ -10,7 +11,6 @@ class Player {
     static count = 0;
     
     constructor(obj){
-        // 初期化
         this.socketId = obj.socketId;
         this.hand = new Hand();
         this.isMaster = false;
@@ -22,7 +22,11 @@ class Player {
         this.timer = 0;
         Player.count += 1;
     }
-    // 山札からドロー
+
+    /**
+     * 山札からドロー
+     * @param {Stock} stock 山札
+     */
     draw(stock){
         let drawCard = stock.pop(); // 山場からpop
         if (drawCard == null) {
