@@ -265,6 +265,8 @@ class Game {
         // socket id更新
         player.socketId = socket.id;
         player.hand._array.forEach(card => card.player = socket.id);
+        this.field.cards.filter(card => card.player === player.name)
+            .forEach(card => card.player = socket.id);
         var others = new Array();
         this.players.forEach(other => {
             if (player != other) {

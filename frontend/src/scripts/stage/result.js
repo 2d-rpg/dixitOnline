@@ -45,7 +45,7 @@ export default function Result(props) {
                     }
                     pre_score = player.score;
                     var id_result = 'eachResult' + rank_index;
-                    const icon = rank_index < 4 ? <FontAwesomeIcon style={ iconStyle[rank_index] }  icon={ faMedal }/> : null; 
+                    const icon = rank_index < 3 ? <FontAwesomeIcon style={ iconStyle[rank_index] }  icon={ faMedal }/> : null; 
                     return(
                         <tr className='eachResult' id={ id_result }>
                             <td className="eachResultIcon">{ icon }</td>
