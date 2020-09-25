@@ -138,11 +138,9 @@ app.get('/', (request, response) => {
 });
 
 
-// ローカルデバッグ用
-// server.listen(4001, () => {
-//   utils.log('Starting server on port 4001');
-// });
-// サーバデプロイ用
-server.listen(3000, () => {
-    utils.log('Starting server on port 3000');
-  });
+server.listen(4001, () => {
+  utils.log('Starting server on port 4001');
+});
+// server.listen(3000, () => {
+//     utils.log('Starting server on port 3000');
+//   });

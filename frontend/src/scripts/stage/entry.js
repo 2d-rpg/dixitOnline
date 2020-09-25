@@ -23,15 +23,13 @@ export default function Entry(props) {
             setShow(false);
             props.setName(name);
         };
-        const initializeName = (data) => {
-            if (typeof data.player !== 'undefined') {
-                setUserAlert("");
-                setShow(false);
-                setCookie('client-id', data.player.name, {path: '/'});
-                props.setName(data.player.name);
-            }
+        const initializeName = (name) => {
+            setUserAlert("");
+            setShow(false);
+            setCookie('client-id', name, {path: '/'});
+            props.setName(name);
         };
-        props.socket.on('room', (data) => initializeName(data));
+        props.socket.on('room', (data) => initializeName(data.player.name));
         props.socket.on('in_room', (data) => comeback(data.player.name));
         props.socket.on('hand_selection', (data) => comeback(data.player.name));
         props.socket.on('others_hand_selection', (data) => comeback(data.player.name));

@@ -91,7 +91,6 @@ export default function Room(props) {
             updateRoomList(data.roomManager);
             setShowRoomContent(true);
             setShowRoom(true);
-            setShowStart(false);
         });
         props.socket.on('in_room', (data) => {
             setShowRoomContent(false);
