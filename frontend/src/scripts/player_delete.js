@@ -24,6 +24,6 @@ export default function PlayerDelete(props) {
     }, [ props.socket ]);
 
     return (
-        <div className="deleteMsg" onAnimationEnd={ () => setDeleteMsg('') } style={ { display: showDelete ? 'block' : 'none' } }>{ deleteMsg }</div>
+        <div className="deleteMsg" onAnimationEnd={ () => setShowDelete(false) } style={ { display: showDelete ? 'block' : 'none' } }>{ deleteMsg }</div>
     );
 }

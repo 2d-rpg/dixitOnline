@@ -19,6 +19,6 @@ export default function Start(props) {
     }, [ props.socket ]);
 
     return (
-        <div className="startMsg" onAnimationEnd={ () => setStartMsg('') } style={ { display: showStart ? 'block' : 'none' } }>{ startMsg }</div>
+        <div className="startMsg" onAnimationEnd={ () => setShowStart(false) } style={ { display: showStart ? 'block' : 'none' } }>{ startMsg }</div>
     );
 }

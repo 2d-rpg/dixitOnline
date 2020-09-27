@@ -15,13 +15,15 @@ export default function Stop(props) {
     useEffect(() => {
         /** socketのイベントハンドラ登録一覧 */
         props.socket.on('in_room', () => {
-            setStopMsg('2人以下になったので，ゲームを最初からやり直します');
-            setShowStop(true);
+            setTimeout(() => {
+                setStopMsg('2人以下になったので，ゲームを最初からやり直します');
+                setShowStop(true);
+            },4000);
         });
 
     }, [ props.socket ]);
 
     return (
-        <div className="stopMsg" onAnimationEnd={ () => setStopMsg('') } style={ { display: showStop ? 'block' : 'none' } }>{ stopMsg }</div>
+        <div className="stopMsg" onAnimationEnd={ () => setShowStop(false) } style={ { display: showStop ? 'block' : 'none' } }>{ stopMsg }</div>
     );
 }
