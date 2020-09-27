@@ -12,7 +12,7 @@ class Connect {
      */
     static do(io, socket, roomManager) {
         const username = decodeURI(socket.handshake.query['client-id']);
-        const player = roomManager.findPlayerByName(username);
+        const player = roomManager.findPlayerByAgent(username, socket);
         const room = roomManager.findRoomByPlayerName(username);
         if (player != null) {
             player.connect = true;

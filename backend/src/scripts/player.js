@@ -20,6 +20,8 @@ class Player {
         this.state = 'undone';
         this.connect = true;
         this.timer = 0;
+        this.agent = obj.socket.request.headers['user-agent'];
+        this.address = obj.socket.handshake.address;
         Player.count += 1;
     }
 

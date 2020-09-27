@@ -53,9 +53,13 @@ class RoomManager {
     /**
      * name(client-id)によるプレイヤー検索
      * @param {string} name プレイヤー名 
+     * @param {SocketIO.Socket} socket socket 
      */
-    findPlayerByName(name) {
-        let array = this.players.filter( player => player.name === name );
+    findPlayerByAgent(name, socket) {
+        const useragent = socket.request.headers['user-agent'];
+        const address = socket.handshake.address;
+        let array = this.players.filter( player => player.name === name 
+            && player.agent === useragent && player.address === address );
         return array.length === 0 ? null : array[0];
     }
 
