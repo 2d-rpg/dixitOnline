@@ -151,8 +151,15 @@ class Game {
             } else {
                 this.players.forEach(player => player.draw(this.stock));
             }
-            if (this.stock._array.length < this.players.length) {
-                this.discardToStock();
+            // 墓地から山札へ
+            if (this.players.length === 3) {
+                if (this.stock._array.length < this.players.length * 2 - 1) {
+                    this.discardToStock();
+                }
+            } else {
+                if (this.stock._array.length < this.players.length) {
+                    this.discardToStock();
+                }
             }
             this.resetAnswers();
         } 
