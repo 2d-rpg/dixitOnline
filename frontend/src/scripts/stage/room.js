@@ -83,13 +83,13 @@ export default function Room(props) {
          * @param {RoomManager} roomManager ルームマネージャー
          */
         const updateRoomList = (roomManager) => {
-            if (roomManager.roomList.length === 0 || roomManager.roomList.filter(room => room.game.stageIndex === 0 || room.game.players.length < 6).length === 0) {
+            if (roomManager.roomList.length === 0 || roomManager.roomList.filter(room => room.game.stageIndex === 0 && room.game.players.length < 6).length === 0) {
                 setRoomList(
                     <div>現在ルームは存在しません m9(^Д^)</div>
                 );
             } else {
                 setRoomList(
-                    roomManager.roomList.filter(room => room.game.stageIndex === 0 || room.game.players.length < 6).map((room, index) => {
+                    roomManager.roomList.filter(room => room.game.stageIndex === 0 && room.game.players.length < 6).map((room, index) => {
                         return(
                             <div className="room-list-content" key={ index }>
                                 <div className="room-name">{ room.name }</div>
