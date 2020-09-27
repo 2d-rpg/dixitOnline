@@ -13,8 +13,15 @@ export default function Start(props) {
     const [startMsg, setStartMsg] = useState('ゲームスタート！');
 
     useEffect(() => {
+        const game_start = (data) => {
+            console.log(data.game);
+            if(data.game.round === 1){
+                setShowStart(true);
+            }
+        };
+
         /** socketのイベントハンドラ登録一覧 */
-        props.socket.on('hand_selection', () => setShowStart(true));
+        props.socket.on('hand_selection', (data) => game_start(data));
 
     }, [ props.socket ]);
 
