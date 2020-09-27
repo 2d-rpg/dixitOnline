@@ -101,4 +101,4 @@ app.get('/', (request, response) => {
 // サーバデプロイ用
 server.listen(3000, () => {
     utils.log('Starting server on port 3000');
-  });
+});
