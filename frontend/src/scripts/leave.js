@@ -22,7 +22,7 @@ export default function Leave(props) {
         props.socket.on('result', () => setShowLeave(true));
         props.socket.on('restart', () => setShowLeave(true));
 
-    }, [ props.socket, setShowLeave ]);
+    }, [ props.socket ]);
 
     const handleleave = () => {
         console.log("leave");

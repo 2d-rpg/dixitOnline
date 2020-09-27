@@ -24,7 +24,7 @@ class Entry {
                 utils.logWithStage('entry', `Player Name: [${ player.name }] ([${ player.socketId }]) joined.`);
             }, 200);
         } else {
-            io.sockets.emit('username_duplication');
+            socket.emit('username_duplication');
         }
     }
 

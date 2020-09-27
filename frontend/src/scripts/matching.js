@@ -21,12 +21,12 @@ export default function Matching(props) {
         props.socket.on('in_room', () => setShowMatching(true));
         props.socket.on('hand_selection', () => setShowMatching(false));
 
-    }, [ props.socket, setShowMatching ]);
+    }, [ props.socket ]);
 
     return (
-        <div class="text-center matching" style={ { display: showMatching ? 'block' : 'none' } }>
-            <button class="btn btn-primary" type="button" disabled>
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <div className="text-center matching" style={ { display: showMatching ? 'block' : 'none' } }>
+            <button className="btn btn-primary" type="button" disabled>
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 マッチング中...
             </button>
         </div>

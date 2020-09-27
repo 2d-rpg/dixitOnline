@@ -47,7 +47,7 @@ export default function Discard(props) {
                         var shiftY = Math.random() * 10 - 5;
                         const style = { transform: `rotate(${rotate}deg) translate(${shiftX}px, ${shiftY}px)` };
                         const discardButton = (
-                            <p className='eachDiscardButton' id={ id_btn } type='button'>
+                            <p className='eachDiscardButton' id={ id_btn } type='button' key={ index }>
                                 <img className='eachDiscardImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                             </p>
                         );
@@ -73,7 +73,7 @@ export default function Discard(props) {
                         var shiftY = Math.random() * 10 - 5;
                         const style = { transform: `rotate(${rotate}deg) translate(${shiftX}px, ${shiftY}px)` };
                         const discardButton = (
-                            <p className='eachDiscardButton' id={ id_btn } type='button'>
+                            <p className='eachDiscardButton' id={ id_btn } type='button' key={ index }>
                                 <img className='eachDiscardImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                             </p>
                         );
@@ -91,7 +91,7 @@ export default function Discard(props) {
         props.socket.on('show_answer', (data) => show_discard(data));
         props.socket.on('restart', () => setShowDiscard(false));
 
-    }, [ props.socket, setDiscard ]);
+    }, [ props.socket ]);
 
     return(<div id="discard" className="discard" style={ { display: showDiscard ? 'block' : 'none' } }>{ discard }</div>)
 }

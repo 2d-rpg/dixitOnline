@@ -29,7 +29,7 @@ export default function Stock(props) {
                     var shiftY = Math.random() * 10 - 5;
                     const style = { transform: `rotate(${rotate}deg) translate(${shiftX}px, ${shiftY}px)` };
                     const stockButton = (
-                        <p className='eachStockButton' id={ id_btn } type='button'>
+                        <p className='eachStockButton' id={ id_btn } type='button' key={ index }>
                             <img className='eachStockImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
@@ -37,6 +37,7 @@ export default function Stock(props) {
                 })
             );
             const len = data.game.stock._array.length - 1;
+            document.getElementById(`eachStockButton${len}`).style.display = 'block';
             document.getElementById(`eachStockButton${len}`).animate([
                 // keyframes
                 { transform: 'translate(0px,0px)'}, 
@@ -46,7 +47,6 @@ export default function Stock(props) {
                 duration: 1000
             });
             setTimeout(() => {
-                const len = data.game.stock._array.length - 1;
                 document.getElementById(`eachStockButton${len}`).style.display = 'none';
             }, 1000);
         };
@@ -79,7 +79,6 @@ export default function Stock(props) {
          * @param {{ game: Game }} data 連想配列として，gameをもつ
          */
         const display_stock = (data) => {
-            setShowStock(true);
             setStock(
                 data.game.stock._array.map((card, index) => {
                     var id_btn = 'eachStockButton' + index;
@@ -90,13 +89,14 @@ export default function Stock(props) {
                     var shiftY = Math.random() * 10 - 5;
                     const style = { transform: `rotate(${rotate}deg) translate(${shiftX}px, ${shiftY}px)` };
                     const stockButton = (
-                        <p className='eachStockButton' id={ id_btn } type='button'>
+                        <p className='eachStockButton' id={ id_btn } type='button' key={ index }>
                             <img className='eachStockImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
                     return (<Card button={ stockButton } style={ style } kind={ 'Stock' }/>);
                 })
             );
+            setShowStock(true);
         };
 
         // socketのイベントハンドラ登録一覧
@@ -109,7 +109,7 @@ export default function Stock(props) {
         props.socket.on('result' , (data) => display_stock(data));
         props.socket.on('restart', () => setShowStock(false));
 
-    }, [ props.socket, setShowStock, setStock ]);
+    }, [ props.socket ]);
 
     return (
         <div id="stock" style={ { display: showStock ? 'inline-flex' : 'none' } }>{ stock }</div>

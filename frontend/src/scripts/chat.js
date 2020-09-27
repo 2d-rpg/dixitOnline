@@ -46,7 +46,7 @@ export default function Chat(props) {
         props.socket.on('room', () => setShowChat(false));
         props.socket.on('update_player_list', () => setShowChat(true));
 
-    }, [ register, props.socket, chatLogElement ]);
+    }, [ props.socket ]);
 
     return (
         <div className='chat-form-wrapper' style={ {display: showChat ? 'block' : 'none'} }>
@@ -90,7 +90,7 @@ export default function Chat(props) {
                         <div className="message-wrapper">
                         <input type="text" className="form-control chat-input" id="message" name="msg" ref={ register() } placeholder="メッセージ"/>
                         <div className="input-msg-group-append">
-                            <span onClick={ handleSubmit(onSubmit) } form="chatForm" class="input-msg-group-text">
+                            <span onClick={ handleSubmit(onSubmit) } form="chatForm" className="input-msg-group-text">
                                 <FontAwesomeIcon className="send-icon" icon={ faPaperPlane }/>
                             </span>
                         </div>

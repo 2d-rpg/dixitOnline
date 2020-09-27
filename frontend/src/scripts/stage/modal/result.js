@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
 import $ from 'jquery';
@@ -24,8 +24,10 @@ export default function Result(props) {
     /** 結果の内容 */
     const [result, setResult] = useState(null);
 
+    const modalRef = useRef($('#resultModalWindow'));
+
     useEffect(() => {
-        /** result画面の表示 */
+        // モーダルの表示の中心をbodyではなく.game-coreに変更
         $('#resultModalWindow').on('shown.bs.modal', () => {
             $('body').removeClass('modal-open');
             $('.game-core').addClass('modal-open');
@@ -33,10 +35,12 @@ export default function Result(props) {
         $('#resultModalWindow').on('hidden.bs.modal', () => {
             audio.play();
             $('.game-core').removeClass('modal-open');
+            console.log('リザルトモーダル閉じました');
             props.socket.emit('restart');
         });
+
+        /** result画面の表示 */
         const show_result = (data) => {
-            // モーダルの表示の中心をbodyではなく.game-coreに変更
             props.setMessage('結果発表ですわぁ(⌒,_ゝ⌒)');
             let rank_index = -1;
             let pre_score = -1;
@@ -53,7 +57,7 @@ export default function Result(props) {
                     const id_result = 'eachResult' + rank_index;
                     const icon = rank_index < 3 ? <FontAwesomeIcon style={ iconStyle[rank_index] }  icon={ faMedal }/> : null; 
                     return(
-                        <tr className='eachResult' id={ id_result }>
+                        <tr className='eachResult' id={ id_result } key={ index }>
                             <td className="eachResultIcon">{ icon }</td>
                             <td className="eachResultRank">{ rank[rank_index] }</td>
                             <td className="eachResultRank">{ rank_suffix[rank_index] }</td>
@@ -81,12 +85,12 @@ export default function Result(props) {
     }
 
     return(
-        <div className="modal fade" id="resultModalWindow" tabindex="-1" role="dialog" aria-labelledby="resultModalTitle" aria-hidden="true">
+        <div className="modal fade" id="resultModalWindow" tabIndex="-1" role="dialog" aria-labelledby="resultModalTitle" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" id="resultModalDialog" role="document">
                 <div className="modal-content result-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="resultModalTitle">結果</h5>
-                        <button type="button" class="close" onClick={ handleclick } aria-label="Close">
+                        <button type="button" className="close" onClick={ handleclick } aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -94,7 +98,7 @@ export default function Result(props) {
                         <table id="result-table">
                             <tbody id="result">
                                 <tr className='eachResult'>
-                                    <td colspan="3">順位</td>
+                                    <td colSpan="3">順位</td>
                                     <td>プレイヤー名</td>
                                     <td>スコア</td>
                                 </tr>
