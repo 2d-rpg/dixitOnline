@@ -3,18 +3,24 @@ import PlayerName from './player_name';
 import ShowScore from './stage/show_score';
 import '../css/status.css';
 
+/**
+ * ステータス(プレイヤー名とスコア)の表示
+ * @param {{ socket: SocketIO.Socket, setShowStatus: (showStatus: boolean) => void }} props 連想配列として，socketとsetShowStatusをもつ
+ */
 export default function Status(props) {
 
     useEffect(() => {
-        props.socket.on('restart',() => props.setShowStatus(true));
-        props.socket.on('in_room',() => props.setShowStatus(true));
-        props.socket.on('overlap',() => props.setShowStatus(true));
-        props.socket.on('hand_selection',() => props.setShowStatus(true));
-        props.socket.on('others_hand_selection',() => props.setShowStatus(true));
-        props.socket.on('field_selection',() => props.setShowStatus(true));
-        props.socket.on('show_answer',() => props.setShowStatus(true));
-        props.socket.on('result',() => props.setShowStatus(true));
-        props.socket.on('room',() => props.setShowStatus(false));
+        // socketのイベントハンドラ登録一覧
+        props.socket.on('room', () => props.setShowStatus(false));
+        props.socket.on('in_room', () => props.setShowStatus(true));
+        props.socket.on('overlap', () => props.setShowStatus(true));
+        props.socket.on('hand_selection', () => props.setShowStatus(true));
+        props.socket.on('others_hand_selection', () => props.setShowStatus(true));
+        props.socket.on('field_selection', () => props.setShowStatus(true));
+        props.socket.on('show_answer', () => props.setShowStatus(true));
+        props.socket.on('result', () => props.setShowStatus(true));
+        props.socket.on('restart', () => props.setShowStatus(true));
+
     }, [ props.socket, props.setShowStatus ]);
 
     return (
@@ -33,5 +39,6 @@ export default function Status(props) {
                     </div>
                 </div>
             </div>
-        </div>);
+        </div>
+    );
 }

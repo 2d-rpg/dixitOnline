@@ -1,26 +1,35 @@
 'use strict';
-// カードクラス
 
 // 静的プロパティ
-const statusList = ['stack','hand','field','discard'];
-// ゲーム画面の範囲
-const FIELD_WIDTH = 1000, FIELD_HEIGHT = 800;
+/** カードの場所 */
+const statusList = ['stack', 'hand', 'field', 'discard'];
 
+/** カードクラス */
 class Card {
-    // カードの大きさ
+    /** カードの幅 */
     static CARD_WIDTH = 100;
+    /** カードの高さ */
     static CARD_HEIGHT = 150;
 
+    /**
+     * カードのコンストラクタ
+     * @param {string} filename ファイル名
+     */
     constructor(filename) {
-        // デバッグ用
-        this.status = statusList[0]; // どこにあるか
+        /** どこにあるか */
+        this.status = statusList[0];
+        /** カードの場所のインデックス */
         this.statusIndex = 0;
-        // image file name
+        /** 表面の画像ファイル名 */
         this.filename = filename;
+        /** 裏面の画像ファイル名 */
         this.tailfilename = "card_back.png";
-        this.head = false; // 表かどうか
-        this.player = null; // カードの持ち主が誰か
+        /** 表かどうか */
+        this.head = false; // 
+        /** カードの持ち主が誰か(socketID) */
+        this.player = null;
     }
+
     /** ステータス移行 */
     nextStatus() {
         this.statusIndex += 1;

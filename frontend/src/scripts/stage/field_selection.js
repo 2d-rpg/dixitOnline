@@ -4,9 +4,15 @@ import React, { useEffect, useState } from 'react';
 import '../../css/field_selection.css';
 import Card from '../card';
 
+/** ボタンの効果音 */
 const audio = new Audio('../audio/decision29low.wav');
+/** ボタンの効果音の音量 */
 audio.volume = 0.1;
 
+/**
+ * フィールドの表示，更新
+ * @param {{ socket: SocketIO.Socket, setMessage: (message: string) => void }} props 連想配列として，player, setMassageをもつ
+ */
 export default function FieldSelection(props) {
 
     /** フィールドを表示するか否か */
@@ -15,26 +21,29 @@ export default function FieldSelection(props) {
     const [showButton, setShowButton] = useState(false);
     /** フィールドの表示内容 */
     const [field_buttons, setFieldButtons] = useState(null);
-
+    /** フィールドのラッパーの表示内容 */
     const [showfieldWrapper, setShowfieldWrapper] = useState(false);
 
     useEffect(() => {
         /** 初期化 */
-        const initialize = (data) => {
+        const initialize = () => {
             setTimeout(() => {
                 setShowField(false);
             }, 1000);
             setShowfieldWrapper(true);
         };
-        /** フィールドの表示 */
+        /**
+         * フィールドの表示
+         * @param {{ game: Game, player: Player }} data 連想配列として，game, playerをもつ
+         */
         const field_selection = (data) => {
             setShowfieldWrapper(true);
             setFieldButtons(
                 data.game.field.cards.map((card, index) => {
-                    var id_btn = 'eachFieldButton' + index;
-                    var id_img = 'eachFieldImage' + index;
-                    var field_src = "../images/" + card.filename;
-                    const fieldRadio = <input className="eachFieldRadio" name="field-cb" id={"cb" +  id_btn } type="radio" value={id_btn}></input>;
+                    const id_btn = `eachFieldButton${ index }`;
+                    const id_img = `eachFieldImage${ index }`;
+                    const field_src = `../images/${ card.filename }`;
+                    const fieldRadio = <input className="eachFieldRadio" name="field-cb" id={ `cb${ id_btn }` } type="radio" value={id_btn}></input>;
                     const fieldButton = card.player === props.socket.id ? (
                         <p className='eachFieldButton' id={ id_btn } type='button'>
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
@@ -56,10 +65,14 @@ export default function FieldSelection(props) {
         };
         const selected = (data, index, id_btn) => {
             others_field_select(props.socket, data, index);
-            // TODO: getElementByIdを使っている
-            document.getElementById("cb" +  id_btn).checked = !document.getElementById("cb" +  id_btn).checked;
+            document.getElementById(`cb${ id_btn }`).checked = !document.getElementById(`cb${ id_btn }`).checked;
         };
-        /** 語り部以外のプレイヤーがフィールド上のカードを選んだときの動作 */
+        /**
+         * 語り部以外のプレイヤーがフィールド上のカードを選んだときの動作
+         * @param {SocketIO.Socket} socket socket
+         * @param {{ player: Player }} data 連想配列として，playerをもつ
+         * @param {number} index 
+         */
         const others_field_select = (socket, data, index) => {
             if (!data.player.isMaster) { // 語り部ではない
                 props.setMessage('あなたは子です(ﾟ∀ﾟ)他の子の選択を待ちましょう( ´Д`)y━･~~');
@@ -71,16 +84,19 @@ export default function FieldSelection(props) {
         const field_reset = () => {
             setShowField(false);
             setShowfieldWrapper(false);
-        }
-        /** フィールドの更新(裏面の状態) */
+        };
+        /**
+         * フィールド上のカードを裏向きの状態で更新
+         * @param {Game} game ゲーム
+         */
         const update_field_with_back = (game) => {
             setShowField(true);
             setShowfieldWrapper(true);
             setFieldButtons(
                 game.field.cards.map((card, index) => {
-                    var id_btn = 'eachFieldButton' + index;
-                    var id_img = 'eachFieldImage' + index;
-                    var field_src = "../images/back/" + card.tailfilename;
+                    const id_btn = `eachFieldButton${ index }`;
+                    const id_img = `eachFieldImage${ index }`;
+                    const field_src = `../images/back/${ card.tailfilename }`;
                     const fieldButton = (
                         <p className='eachFieldButton' id={ id_btn } type='button'>
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
@@ -90,14 +106,18 @@ export default function FieldSelection(props) {
                 })
             );
         };
+        /**
+         * フィールド上のカードを表向きの状態で更新
+         * @param {Game} game ゲーム
+         */
         const update_field_with_front = (game) => {
             setShowField(true);
             setShowfieldWrapper(true);
             setFieldButtons(
                 game.field.cards.map((card, index) => {
-                    var id_btn = 'eachFieldButton' + index;
-                    var id_img = 'eachFieldImage' + index;
-                    var field_src = "../images/" + card.filename;
+                    const id_btn = `eachFieldButton${ index }`;
+                    const id_img = `eachFieldImage${ index }`;
+                    const field_src = `../images/${ card.filename }`;
                     const fieldButton = (
                         <p className='eachFieldButton' id={ id_btn } type='button'>
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
@@ -106,14 +126,17 @@ export default function FieldSelection(props) {
                     return (<Card button={ fieldButton } kind={ 'Field' }/>);
                 })
             );
-        }
-        /** サーバーからのemitを受け取るイベントハンドラ一覧 */
-        props.socket.on('hand_selection' ,(data) => initialize(data));
-        props.socket.on('others_hand_selection' ,(data) => update_field_with_back(data.game));
-        props.socket.on('field_selection' ,(data) => field_selection(data));
-        props.socket.on('show_answer' ,(data) => update_field_with_front(data.game));
-        props.socket.on('result' ,() => field_reset());
+        };
+
+        /** サーバーからのemitを受け取るイベントハンドラ登録一覧 */
+        props.socket.on('in_room', () => setShowfieldWrapper(false));
+        props.socket.on('hand_selection', () => initialize());
+        props.socket.on('others_hand_selection', (data) => update_field_with_back(data.game));
+        props.socket.on('field_selection', (data) => field_selection(data));
         props.socket.on('update_field_with_back', (data) => update_field_with_back(data.game));
+        props.socket.on('show_answer', (data) => update_field_with_front(data.game));
+        props.socket.on('result', () => field_reset());
+
     }, [ props.socket, props.setMessage, setFieldButtons, setShowButton ]);
 
     const handleclick = () => {
@@ -123,9 +146,9 @@ export default function FieldSelection(props) {
     }
 
     return (
-        <div className='field-wrapper' style={ {display: showfieldWrapper ? 'block' : 'none'} }>
-            <div id="field" style={ {display: showfield ? 'inline-flex' : 'none'} }>{ field_buttons }</div>
-            <button onClick={ handleclick } type="button" className="btn btn-warning fieldSelectButton" style={ {display: showButton ? 'block' : 'none'} }>これに決定</button>
+        <div className='field-wrapper' style={ { display: showfieldWrapper ? 'block' : 'none' } }>
+            <div id="field" style={ { display: showfield ? 'inline-flex' : 'none' } }>{ field_buttons }</div>
+            <button onClick={ handleclick } type="button" className="btn btn-warning fieldSelectButton" style={ { display: showButton ? 'block' : 'none' } }>これに決定</button>
         </div>
     );
 }

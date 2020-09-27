@@ -1,14 +1,24 @@
+'use strict';
 
 const utils = require('../utils');
 
+/**
+ * フィールド選択時の操作
+ */
 class FieldSelection {
 
-    static do(socket, io, index, roomManager) {
-        // 答えを集計
+    /**
+     * フィールド選択時の操作
+     * @param {SocketIO.Socket} socket socket 
+     * @param {number} index このsocketのプレイヤーがフィールドで選んだカードのフィールド上のインデックス
+     * @param {RoomManager} roomManager ルームマネージャー
+     */
+    static do(socket, index, roomManager) {
         let game = roomManager.findRoomBySocket(socket).game;
-        utils.logWithStage(game.stage, 'socket id: [' + socket.id + ']\'s Player was selected.');
-        let id = socket.id;
-        let cardIndex = index;
+        utils.logWithStage(game.stage, `socket id: [${ socket.id }]\'s Player was selected.`);
+        // 答えを集計
+        const id = socket.id;
+        const cardIndex = index;
         let dict = {}
         dict['id'] = id;
         dict['cardIndex'] = cardIndex;
@@ -17,9 +27,6 @@ class FieldSelection {
         } else {
             game.answers.push(dict);
         }
-        // game.players.forEach(player => {
-        //     io.to(player.socketId).emit('update_selected_field', { game: game });
-        // });
     }
 }
 

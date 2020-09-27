@@ -1,15 +1,15 @@
-/**
- * wait
- */
+'use strict';
 
-const utils = require('../utils');
-
+/** ただdoneするだけの操作 */
 class Wait {
 
-    constructor() {}
-
+    /**
+     * ただdoneするだけの操作
+     * @param {SocketIO.Socket} socket socket
+     * @param {RoomManager} roomManager ルームマネージャー
+     */
     static do(socket, roomManager) {
-        let player = roomManager.findPlayer(socket);
+        const player = roomManager.findPlayer(socket);
         player.done();
     }
 }

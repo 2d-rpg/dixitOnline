@@ -5,11 +5,16 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
+const socketIO = require('socket.io');
+const app = express();
+const server = http.Server(app);
+const io = socketIO(server);
+
 const utils = require('./src/scripts/utils');
-const RoomManager = require('./src/scripts/room_manager');
 // ステージごとのファイル読み込み
+const RoomManager = require('./src/scripts/room_manager');
 const wait = require('./src/scripts/stage/wait');
-const init = require('./src/scripts/stage/init');
+const connect = require('./src/scripts/stage/connect');
 const entry = require('./src/scripts/stage/entry');
 const room_create = require('./src/scripts/stage/room_create');
 const room_entry = require('./src/scripts/stage/room_entry');
@@ -17,17 +22,14 @@ const start = require('./src/scripts/stage/start');
 const story_selection = require('./src/scripts/stage/story_selection');
 const others_hand_selection = require('./src/scripts/stage/others_hand_selection');
 const field_selection = require('./src/scripts/stage/field_selection');
+const ConfirmFieldSelection = require('./src/scripts/stage/confirm_field_selection');
+const ConfirmAnswer = require('./src/scripts/stage/confirm_answer');
 const restart = require('./src/scripts/stage/restart');
 const leave = require('./src/scripts/stage/leave');
-
 const disconnect = require('./src/scripts/stage/disconnect');
-const socketIO = require('socket.io');
-const ConfirmAnswer = require('./src/scripts/stage/confirm_answer');
-const ConfirmFieldSelection = require('./src/scripts/stage/confirm_field_selection');
-const app = express();
-const server = http.Server(app);
-const io = socketIO(server);
-const expire = 6;// 切断後,部屋から追放するまでの猶予時間(秒)
+
+const expire = 6; // 切断後，部屋から追放するまでの猶予時間(秒)
+const interval = 30; // setIntervalの間隔(ms)
 
 // ゲームオブジェクト作成
 let roomManager = new RoomManager();
@@ -36,98 +38,50 @@ io.on('connection', (socket) => {
     // 行動する必要がない時
     socket.on('wait', () => wait.do(socket, roomManager));
     // クライアント接続時
-    setTimeout(() => {
-        let username = socket.handshake.query['client-id'];
-        let player = roomManager.findPlayerByName(username);
-        let room = roomManager.findRoomByPlayerName(username);
-        if (player != null) {
-            player.connect = true;
-            if (room != null) {
-                if (room.game == null) {
-                    // 
-                }
-                room.game.comeback(player, socket, roomManager);
-                socket.join(room.name);
-            } else {
-                // entryはしているがroomには入っていない
-                player.socketId = socket.id;
-                socket.emit('room', { roomManager: roomManager });
-            }
-        } else {
-            // entryもしていない
-        }
-        io.sockets.emit('update_number_of_player', { num: roomManager.players.length });
-        // init.do(io, socket, roomManager);
-    },100);
-
-    // socket.on('init', (config) => init.do(config, io, socket, roomManager));
+    setTimeout(() => connect.do(io, socket, roomManager), 100);
     // クライアントからentryがemitされた時
     socket.on('entry', (data) =>  entry.do(data, io, socket, roomManager));
-
+    // クライアントからroom_createがemitされた時
     socket.on('room_create', (data) => room_create.do(data, io, socket, roomManager));
+    // クライアントからroom_entryがemitされた時
     socket.on('room_entry', (data) => room_entry.do(data, io, socket, roomManager));
     // クライアントからstartがemitされた時
     socket.on('start', (data) => start.do(data, socket, roomManager));
     // クライアントからstory_selectionがemitされた時
     socket.on('story_selection', (data) => story_selection.do(socket, io, data.message,data.masterIndex, roomManager));
-    // クライアントからstory_selectionがemitされた時
+    // クライアントからothers_hand_selectionがemitされた時
     socket.on('others_hand_selection', (data) => others_hand_selection.do(socket, io, data.index, roomManager));
     // クライアントからfield_selecitonがemitされた時
-    socket.on('field_selection', (data) => field_selection.do(socket, io, data.index, roomManager));
-    // クライアントからfield_selecitonがemitされた時
+    socket.on('field_selection', (data) => field_selection.do(socket, data.index, roomManager));
+    // クライアントからconfirm_field_selectionがemitされた時
     socket.on('confirm_field_selection', () => ConfirmFieldSelection.do(socket, roomManager));
-    // クライアントからfield_selecitonがemitされた時
+    // クライアントからconfirm_answerがemitされた時
     socket.on('confirm_answer', () => ConfirmAnswer.do(socket, roomManager));
-    // クライアントからround_endがemitされた時
-    socket.on('round_end', () => round_end.do(socket, roomManager));
     // クライアントからrestartがemitされた時
     socket.on('restart', () => restart.do(io, socket, roomManager));
-    // ToDo: deletegameに変更
-    // ルームから退出
-    socket.on('leave',() => leave.do(io, socket, roomManager));
+    // TODO: deletegameに変更
+    // クライアントからleaveがemitされた時
+    socket.on('leave', () => leave.do(io, socket, roomManager));
 
     // 通信終了時(ブラウザを閉じる/リロード/ページ移動)
-    // TODO: つまりリロードすると復帰不可
-    socket.on('disconnect', (reason) => disconnect.do(io, socket, roomManager, reason));
-    // メッセージ用
-    socket.on('chat_send_from_client', function(data) {
-        let name = 'ゲスト';
-        const player = roomManager.findPlayer(socket)
-        if (player != null) {
-            name = player.name;
-        }
-        let roomname = roomManager.findRoomBySocket(socket).name;
-        io.to(roomname).emit('chat_send_from_server', { name: name, value : data.value, socketId: socket.id });
-    });
+    socket.on('disconnect', () => disconnect.do(socket, roomManager));
+    // チャットのアップデート
+    socket.on('chat_send_from_client', (data) => utils.updateChat(io, socket, roomManager, data));
     // 画像のアップロード
     socket.on('upload', (data) => utils.uploadFile(data.filename, data.image, roomManager.findPlayer(socket).name));
 });
 
-//　削除したらroomにいるなら復帰いないなら削除
-
-const interval = 30;
 setInterval(() => {
     // 全プレイヤーがステージ移行可能ならば移行する
     roomManager.roomList.forEach(room => {
         if (room.game.isAllDone() || room.game.isFinished()) { // 全てのプレイヤーが次のステージにいける状態
             room.game.nextStage(io);
         }
-        room.game.players.forEach(player => {
-            if(player.connect) {
-                player.timer = 0;
-            } else {
-                if (player.timer++ > expire * 1000 / interval) {
-                    room.deletePlayer({id: player.socketId});
-                }
-            }
-        });
+        room.checkConnection(io, expire, interval);
     });
 }, interval);
 
 app.use('/', express.static(__dirname + '/build'));
-// io.use((socket, next) => {
-    // console.log(socket.request);
-// });
 
 // HTTPサーバを生成する
 // サーバー生成時にfunction以下のリクエストリスナーが登録されるため
@@ -138,11 +92,11 @@ app.get('/', (request, response) => {
 });
 
 
-// ローカルデバッグ用
-// server.listen(4001, () => {
-//   utils.log('Starting server on port 4001');
-// });
+//ローカルデバッグ用
+server.listen(4001, () => {
+  utils.log('Starting server on port 4001');
+});
 // サーバデプロイ用
-server.listen(3000, () => {
-    utils.log('Starting server on port 3000');
-  });
+// server.listen(3000, () => {
+//     utils.log('Starting server on port 3000');
+//   });

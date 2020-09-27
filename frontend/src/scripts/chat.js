@@ -8,6 +8,10 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
+/**
+ * チャットの表示
+ * @param {{ socket: SocketIO.Socket }} props 連想配列として，socketをもつ
+ */
 export default function Chat(props) {
     /** メッセージフォーム */
     const { register, handleSubmit, reset } = useForm();
@@ -17,10 +21,14 @@ export default function Chat(props) {
     const chatLogElement = useRef();
     /** チャットフォームの参照 */
     const chatFormElement = useRef();
-
+    /** チャットの表示 */
     const [showChat, setShowChat] = useState(false);
 
-    /** メッセージを送信したときの動作 */
+    /**
+     * メッセージを送信したときの動作
+     * @param {{ msg: string }} data 連想配列として，msgをもつ
+     * @param {Event} event イベント
+     */
     const onSubmit = (data, event) => {
         if (data.msg === '') return;
         props.socket.emit('chat_send_from_client', {value : data.msg});
@@ -29,15 +37,14 @@ export default function Chat(props) {
     }
 
     useEffect(() => {
-        /** サーバからのチャット更新 */
-        props.socket.on('chat_send_from_server', (data) => {
+        // socketのイベントハンドラ登録一覧
+        props.socket.on('chat_send_from_server', (data) => { // サーバからのチャット更新
             const time = new Date();
             appendMsg((prev) => [...prev, { name: data.name, msg: data.value, time: format(time), self: props.socket.id === data.socketId }]);
             chatLogElement.current.scrollTop = chatLogElement.current.scrollHeight;
         });
-
-        props.socket.on('update_player_list',() => setShowChat(true));
-        props.socket.on('round_end',() => setShowChat(false));
+        props.socket.on('room', () => setShowChat(false));
+        props.socket.on('update_player_list', () => setShowChat(true));
 
     }, [ register, props.socket, chatLogElement ]);
 
@@ -95,7 +102,11 @@ export default function Chat(props) {
     );
 }
 
-/** チャット入力時の日時をフォーマット */
+/**
+ * チャット入力時の日時をフォーマット
+ * @param {Date} time 入力日時
+ * @return HH:MM:{AM, PM} | MM DD
+ */
 function format(time) {
     const month = monthNames[time.getMonth()];
     const date = time.getDate();
