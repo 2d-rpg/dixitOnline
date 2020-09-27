@@ -27,7 +27,7 @@ export default function PlayerList(props) {
                     return 0;
                 }).map((player, index) => {
                     const ret = (player.socketId === props.socket.id) ? ( //自分かどうか
-                            <tr className="self-status">
+                            <tr className="self-status" key={ index }>
                                 <td className="status-icon">
                                     <div className="status-rank">{ index + 1 }</div>
                                     <FontAwesomeIcon className={ player.isMaster?"icon-master":"icon-other"} icon={ player.isMaster ? faChessRook : faChessPawn }/>
@@ -36,7 +36,7 @@ export default function PlayerList(props) {
                                 <td><div className="status-score">{ player.score }</div></td>
                             </tr>
                     ) : (
-                            <tr className="other-status">
+                            <tr className="other-status" key={ index }>
                                 <td className="status-icon">
                                     <div className="status-rank">{ index + 1 }</div>
                                     <FontAwesomeIcon className={ player.isMaster?"icon-master":"icon-other"} icon={ player.isMaster ? faChessRook : faChessPawn }/>

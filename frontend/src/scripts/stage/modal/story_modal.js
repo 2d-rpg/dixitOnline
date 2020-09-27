@@ -29,6 +29,7 @@ export default function StoryModal(props) {
         });
         $('#exampleModalCenter').on('hidden.bs.modal', () => {
             setShowErrMsg(false);
+            console.log('お題のモーダル閉じました');
             $('.game-core').removeClass('modal-open');
         });
 
@@ -38,7 +39,7 @@ export default function StoryModal(props) {
         props.socket.on('show_answer', (data) => props.setStory(data.game.story));
         props.socket.on('result', (data) => props.setStory(data.game.story));
 
-    }, [ props.socket, props.setStory, $('#exampleModalCenter') ]);
+    }, [ props.socket ]);
 
     /**
      * お題のフォーム送信ボタンを押したときの動作
@@ -80,7 +81,7 @@ export default function StoryModal(props) {
     };
 
     return(
-        <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content">
                     <div className="modal-header">

@@ -49,6 +49,7 @@ export default function ShowAnswer(props) {
         });
         $('#answerModal').on('hidden.bs.modal', () => {
             audio.play();
+            console.log('答えのモーダル閉じました');
             $('.game-core').removeClass('modal-open');
             props.socket.emit('confirm_answer');
         });
@@ -67,7 +68,7 @@ export default function ShowAnswer(props) {
                 }).map((player, index) => {
                     var id_score_diff = 'eachScoreDiff' + index;
                     return(
-                        <div className='eachScoreDiff' id={ id_score_diff }>
+                        <div className='eachScoreDiff' id={ id_score_diff } key={ index }>
                             <span className="score-diff-name" style={ playerColors[data.game.players.indexOf(player)] }>{ player.name }</span>
                             <span>{ player.prescore }</span>
                             <FontAwesomeIcon className="role-figure" style={ iconStyle }  icon={ faLongArrowAltRight }/>
@@ -85,7 +86,7 @@ export default function ShowAnswer(props) {
                     ).map((player, indexplayer) => {
                         const id = "eachName" + index + "player" + indexplayer;
                         const eachName = <div className={player.isMaster ? "eachOwnerName master" : "eachOwnerName"} style={ playerColors[data.game.players.indexOf(player)] } id={ id }>{ player.name }</div>;
-                        const ret = player.isMaster ? [eachName, <div className="eachOwnerName correct">正解</div>] : eachName;
+                        const ret = player.isMaster ? [eachName, <div className="eachOwnerName correct" key={ index }>正解</div>] : eachName;
                         return (ret);
                     });
                     return (<div className="eachOwnerNames" id={ id_lst }>{ name }</div>);
@@ -107,7 +108,7 @@ export default function ShowAnswer(props) {
                     var id_img = 'eachFieldImage' + index;
                     var field_src = "../images/" + card.filename;
                     const fieldButton = (
-                        <p className='eachSelectedFieldButton' id={ id_btn }>
+                        <p className='eachSelectedFieldButton' id={ id_btn } key={ index }>
                             <img className='eachSelectedFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
@@ -122,9 +123,9 @@ export default function ShowAnswer(props) {
                         data.game.answers.filter(element => element.cardIndex === index).some(element => element.id === player.socketId)
                     ).map((player, indexplayer) => {
                         const id = "eachName" + index + "player" + indexplayer;
-                        return (<div className="eachName" id={ id } style={ playerColors[data.game.players.indexOf(player)] }>{ player.name }</div>);
+                        return (<div className="eachName" id={ id } key={ indexplayer } style={ playerColors[data.game.players.indexOf(player)] }>{ player.name }</div>);
                     });
-                    return (<div className="eachSelectedNames" id={ id_lst }>{ names }</div>);
+                    return (<div className="eachSelectedNames" id={ id_lst } key={ index }>{ names }</div>);
                 })
             );
             setMessage( data.player.score - data.player.prescore === 0 ? '残念！' : 'やったね！' );
@@ -141,7 +142,7 @@ export default function ShowAnswer(props) {
             }
         });
 
-    }, [ props.socket, message, scoreDiffs ]);
+    }, [ props.socket ]);
 
     /** モーダルを閉じるボタンをクリックしたときのハンドラ */
     const handleclick = () => {
@@ -149,12 +150,12 @@ export default function ShowAnswer(props) {
     };
 
     return (
-        <div className="modal fade" id="answerModal" tabindex="-1" role="dialog" aria-labelledby="answerModalTitle" aria-hidden="true">
+        <div className="modal fade" id="answerModal" tabIndex="-1" role="dialog" aria-labelledby="answerModalTitle" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="answerModalTitle">今回の結果は．．．</h5>
-                        <button type="button" class="close" onClick={ handleclick } aria-label="Close">
+                        <button type="button" className="close" onClick={ handleclick } aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>

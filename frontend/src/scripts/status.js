@@ -21,7 +21,7 @@ export default function Status(props) {
         props.socket.on('result', () => props.setShowStatus(true));
         props.socket.on('restart', () => props.setShowStatus(true));
 
-    }, [ props.socket, props.setShowStatus ]);
+    }, [ props.socket ]);
 
     return (
         <div className="player-status" style={ {display: props.showStatus ? 'block' : 'none'} }>
