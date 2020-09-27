@@ -12,7 +12,11 @@ export default function Matching(props) {
 
     useEffect(() => {
         // socketのイベントハンドラ登録一覧
-        props.socket.on('update_player_list', () => setShowMatching(true));
+        props.socket.on('update_player_list', (data) => {
+            if (data.game.stage === 'in_room') {
+                setShowMatching(true);
+            }
+        });
         props.socket.on('room', () => setShowMatching(false));
         props.socket.on('in_room', () => setShowMatching(true));
         props.socket.on('hand_selection', () => setShowMatching(false));
