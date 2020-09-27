@@ -15,7 +15,6 @@ class Restart {
     static do(io, socket, roomManager) {
         let room = roomManager.findRoomBySocket(socket);
         let player = roomManager.findPlayer(socket);
-        console.log('0' + player.name); // 0
         if (room !== null && room.game.stageIndex !== 0 
             && !room.nextGame.players.some((each_player) => each_player.socketId === player.socketId)) {
             player.reset();
