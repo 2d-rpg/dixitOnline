@@ -26,8 +26,6 @@ class Game {
     static STAGE_NUM = 4;
     /** カード枚数 */
     static CARD_NUM = 20;
-    /** プレイヤー人数 */
-    static PLAYER_NUM = 3;
 
     /** ゲームのコンストラクタ */
     constructor() {
