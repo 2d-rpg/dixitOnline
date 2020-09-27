@@ -26,18 +26,17 @@ export default function Result(props) {
 
     useEffect(() => {
         /** result画面の表示 */
+        $('#resultModalWindow').on('shown.bs.modal', () => {
+            $('body').removeClass('modal-open');
+            $('.game-core').addClass('modal-open');
+        });
+        $('#resultModalWindow').on('hidden.bs.modal', () => {
+            audio.play();
+            $('.game-core').removeClass('modal-open');
+            props.socket.emit('restart');
+        });
         const show_result = (data) => {
             // モーダルの表示の中心をbodyではなく.game-coreに変更
-            $('#resultModalWindow').on('shown.bs.modal', () => {
-                $('body').removeClass('modal-open');
-                $('.game-core').addClass('modal-open');
-            });
-            $('#resultModalWindow').on('hidden.bs.modal', () => {
-                audio.play();
-                $('.game-core').removeClass('modal-open');
-                props.socket.emit('restart');
-            });
-
             props.setMessage('結果発表ですわぁ(⌒,_ゝ⌒)');
             let rank_index = -1;
             let pre_score = -1;
@@ -75,7 +74,7 @@ export default function Result(props) {
         });
         props.socket.on('result', (data) => show_result(data));
 
-    }, [ props.socket, result ]);
+    }, [ props.socket ]);
 
     const handleclick = () => {
         $('#resultModalWindow').modal('toggle');

@@ -13,7 +13,6 @@ class Room {
     constructor(name) {
         this.name = name;
         this.game = new Game();
-        // this.chat = new Chat();
         this.players = [];
         this.nextGame = new Game();
         this.playerDeleted = { isDeleted: false, name: null };
