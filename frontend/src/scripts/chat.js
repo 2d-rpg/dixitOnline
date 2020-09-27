@@ -45,6 +45,12 @@ export default function Chat(props) {
         });
         props.socket.on('room', () => setShowChat(false));
         props.socket.on('update_player_list', () => setShowChat(true));
+        props.socket.on('in_room', () => setShowChat(true));
+        props.socket.on('hand_selection', () => setShowChat(true));
+        props.socket.on('others_hand_selection', () => setShowChat(true));
+        props.socket.on('field_selection', () => setShowChat(true));
+        props.socket.on('show_answer', () => setShowChat(true));
+        props.socket.on('result', () => setShowChat(true));
 
     }, [ props.socket ]);
 
