@@ -143,14 +143,12 @@ class Game {
                 this.updateMaster(); // 語り部更新
             }
             this.fieldToDiscard();
-            if (this.players.length === 3) {
-                this.players.forEach(player => {
+            this.players.forEach(player => {
+                if (this.players.length === 3 && player.hand._array.length === 5) {
                     player.draw(this.stock);
-                    player.draw(this.stock);
-                });
-            } else {
-                this.players.forEach(player => player.draw(this.stock));
-            }
+                }
+                player.draw(this.stock);
+            });
             // 墓地から山札へ
             if (this.players.length === 3) {
                 if (this.stock._array.length < this.players.length * 2 - 1) {
