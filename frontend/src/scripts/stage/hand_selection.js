@@ -209,6 +209,7 @@ export default function HandSelection(props) {
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
         props.socket.on('update_hand', (data) => update_hand(data.player));
         props.socket.on('hand_selection', (data) => draw_card(data));
+        props.socket.on('confirm_story_selection', (data) => update_hand(data.player));
         props.socket.on('others_hand_selection', (data) => others_hand_selection(data));
         props.socket.on('field_selection', (data) => update_hand(data.player));
         props.socket.on('show_answer', (data) => update_hand(data.player));

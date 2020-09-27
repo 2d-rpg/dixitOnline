@@ -21,7 +21,7 @@ const status = [
 class Game {
 
     /** ゲーム終了基準点(MAX_SCORE) */
-    static MAX_SCORE = 2;
+    static MAX_SCORE = 30;
     /** １ラウンドごとのフェイズの数(STAGE_NUM) */
     static STAGE_NUM = 4;
     /** カード枚数 */
@@ -162,7 +162,6 @@ class Game {
         if (this.stageIndex === status.indexOf('show_answer')) { // show_answer
             this.calcScore();
         }
-        this.stageIndex = this.stageIndex % status.length; // restart用
         this.stage = status[this.stageIndex];
         if (this.stageIndex !== status.indexOf('in_room')) {
             this.players.forEach(player => { // 全プレイヤーの状態リセット
