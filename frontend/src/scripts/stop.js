@@ -14,11 +14,15 @@ export default function Stop(props) {
 
     useEffect(() => {
         /** socketのイベントハンドラ登録一覧 */
-        props.socket.on('in_room', () => {
-            setTimeout(() => {
-                setStopMsg('2人以下になったので，ゲームを最初からやり直します');
-                setShowStop(true);
-            },4000);
+        props.socket.on('in_room', (data) => {
+            if (typeof data.stopped !== 'undefined') {
+                if (data.stopped) {
+                    setTimeout(() => {
+                        setStopMsg('2人以下になったので，ゲームを最初からやり直します');
+                        setShowStop(true);
+                    }, 4000);
+                }
+            }
         });
 
     }, [ props.socket ]);
