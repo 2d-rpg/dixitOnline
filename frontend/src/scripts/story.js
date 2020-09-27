@@ -3,7 +3,7 @@ import '../css/story.css';
 
 /**
  * お題の表示
- * @param {{ socket: SocketIO.Socket }} props 連想配列として，socketをもつ
+ * @param {{ socket: SocketIOClient.Socket }} props 連想配列として，socketをもつ
  */
 export default function Story(props) {
     /** お題の表示 */

@@ -24,6 +24,8 @@ import PlayerList from './scripts/player_list';
 import Stock from './scripts/stock'
 import Help from './scripts/help';
 import Discard from './scripts/discard';
+import PlayerDelete from './scripts/player_delete';
+import Stop from './scripts/stop';
 // スタイルシート
 import './App.css';
 import './css/game.css';
@@ -88,6 +90,8 @@ function App() {
             <ShowRole socket={ socket } setMessage={ setMessage } />
             <Discard socket={ socket }/>
             <Stock socket={ socket }/>
+            <PlayerDelete socket={ socket }/>
+            <Stop socket={ socket }/>
           </div>
         </div>
         <div className="game-chat">

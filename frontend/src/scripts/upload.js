@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import '../css/upload.css';
 /**
  * 画像ファイルのアップロード
- * @param {{ socket: SocketIO.Socket }} props 連想配列として，socketをもつ
+ * @param {{ socket: SocketIOClient.Socket }} props 連想配列として，socketをもつ
  */
 export default function Upload(props) {
     /** エントリーフォーム */

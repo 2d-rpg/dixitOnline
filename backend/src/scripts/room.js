@@ -16,6 +16,7 @@ class Room {
         // this.chat = new Chat();
         this.players = [];
         this.nextGame = new Game();
+        this.playerDeleted = { isDeleted: false, name: null };
     }
 
     /**
@@ -45,6 +46,7 @@ class Room {
         this.players.forEach((player, index) => {
             if (player != null && player.socketId === socket.id) {
                 this.players.splice(index, 1);
+                this.playerDeleted = { isDeleted: true, name: player.name };
             }
         });
     }
@@ -61,7 +63,7 @@ class Room {
                 player.timer = 0;
             } else {
                 if (player.timer++ > expire * 1000 / interval) {
-                    this.deletePlayer({id: player.socketId});
+                    this.deletePlayer({ id: player.socketId });
                     player.reset();
                     if (this.game.players.length < 3) {
                         this.game.stop = true;
@@ -69,6 +71,10 @@ class Room {
                 }
             }
         });
+        if (this.playerDeleted.isDeleted) {
+            io.to(this.name).emit('update_player_list', { game: this.game, deletedPlayer: this.playerDeleted.name });
+            this.playerDeleted = { isDeleted: false, name: null }; // リセット
+        }
         if (this.game.stop) { // ゲームを強制終了し，マッチング画面に戻る
             this.game.reset();
             this.players.forEach(player => this.game.addPlayer({ player : player }));
@@ -85,7 +91,7 @@ class Room {
                         others.push(other);
                     }
                 });
-                io.to(player.socketId).emit('in_room', { game : this.game, player : player, others : others });
+                io.to(player.socketId).emit('in_room', { game : this.game, player : player, others : others, stopped : true });
             });
         }
     }
