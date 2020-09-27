@@ -45,7 +45,7 @@ export default function Upload(props) {
             setShow(true);
         });
 
-    }, [ props.socket, setShow ]);
+    }, [ props.socket ]);
 
     /** 
      * エントリーフォーム入力時の動作

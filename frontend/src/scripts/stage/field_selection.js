@@ -45,7 +45,7 @@ export default function FieldSelection(props) {
                     const field_src = `../images/${ card.filename }`;
                     const fieldRadio = <input className="eachFieldRadio" name="field-cb" id={ `cb${ id_btn }` } type="radio" value={id_btn}></input>;
                     const fieldButton = card.player === props.socket.id ? (
-                        <p className='eachFieldButton' id={ id_btn } type='button'>
+                        <p className='eachFieldButton' id={ id_btn } type='button' key={ index }>
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     ) : (
@@ -98,7 +98,7 @@ export default function FieldSelection(props) {
                     const id_img = `eachFieldImage${ index }`;
                     const field_src = `../images/back/${ card.tailfilename }`;
                     const fieldButton = (
-                        <p className='eachFieldButton' id={ id_btn } type='button'>
+                        <p className='eachFieldButton' id={ id_btn } type='button' key={ index }>
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
@@ -119,7 +119,7 @@ export default function FieldSelection(props) {
                     const id_img = `eachFieldImage${ index }`;
                     const field_src = `../images/${ card.filename }`;
                     const fieldButton = (
-                        <p className='eachFieldButton' id={ id_btn } type='button'>
+                        <p className='eachFieldButton' id={ id_btn } type='button' key={ index }>
                             <img className='eachFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
@@ -137,7 +137,7 @@ export default function FieldSelection(props) {
         props.socket.on('show_answer', (data) => update_field_with_front(data.game));
         props.socket.on('result', () => field_reset());
 
-    }, [ props.socket, props.setMessage, setFieldButtons, setShowButton ]);
+    }, [ props.socket ]);
 
     const handleclick = () => {
         audio.play();
