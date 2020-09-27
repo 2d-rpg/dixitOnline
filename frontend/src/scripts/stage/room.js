@@ -4,78 +4,94 @@ import Leave from '../leave';
 import '../../css/room.css';
 import Matching from '../matching';
 
-
+/** ボタンの効果音 */
 const audio = new Audio('../audio/decision29low.wav');
+/** ボタンの効果音の音量 */
 audio.volume = 0.1;
 
+/**
+ * ルームの選択，リスト，作成フォーム，スタートボタンの表示
+ * @param {{ socket: SocketIO.Socket, setMassage: (message: string) => void, setShowStatus: (showStatus: boolean) => void }} props 連想配列として，socket, setAMassage, setShowStatusをもつ
+ */
 export default function Room(props) {
-
+    /** ルーム名のフォーム */
     const { register, handleSubmit, reset } = useForm();
-
+    /** ルーム全体の表示 */
     const [showRoom, setShowRoom] = useState(false);
-
+    /** ルームの選択画面表示 */
     const [showRoomContent, setShowRoomContent] = useState(true);
-
+    /** ルームリストの内容 */
     const [roomList, setRoomList] = useState(null);
-
+    /** ルーム作成画面表示 */
     const [showRoomCreate, setShowRoomCreate] = useState(false);
-
+    /** ルームリストの表示 */
     const [showRoomList, setShowRoomList] = useState(true);
-
+    /** スタートボタンの表示 */
     const [showStart, setShowStart] = useState(false);
-
-    const [option,setOption] = useState(false);
-
+    /** デッキのオプション */
+    const [option, setOption] = useState(false);
+    /** ルーム名の被り */
     const [showOverlap, setShowOverlap] = useState(false);
 
+    /**
+     * ルームに入室したときのハンドラ
+     * @param {string} roomname ルーム名
+     */
     const roomEntrySubmit = (roomname) => {
         audio.play();
         setShowRoomContent(false);
         props.setShowStatus(true);
-        props.socket.emit('room_entry', {roomname : roomname});
+        props.socket.emit('room_entry', { roomname : roomname });
         props.setMessage('他のプレイヤーが参加するのを待っています( ´ ▽ ` )');
     }
-
+    /**
+     * ルーム作成フォームの登録ハンドラ
+     * @param {{ username: string, roomname: string }} data 連想配列として，username, roomnameをもつ
+     * @param {Event} event イベント
+     */
     const roomCreateSubmit = (data, event) => {
-        // サーバーに'entry'を送信
         audio.play();
         setShowRoomContent(false);
         props.setShowStatus(true);
-        props.socket.emit('room_create', {username : data.username, roomname : data.roomname});
+        props.socket.emit('room_create', { username : data.username, roomname : data.roomname });
         reset();
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
         props.setMessage('他のプレイヤーが参加するのを待っています( ´ ▽ ` )');
-    }
-
+    };
+    /** ルーム作成ボタンをクリックしたときのハンドラ */
     const clickRoomCreate = () => {
         audio.play();
         setShowRoomList(false);
         setShowRoomCreate(true);
-    }
-
+    };
+    /** ルームリスト表示をクリックしたときのハンドラ */
     const clickRoomList = () => {
         audio.play();
         setShowRoomCreate(false);
         setShowRoomList(true);
-    }
-
+    };
+    /** スタートボタンを押したときのハンドラ */
     const clickStart = () => {
         audio.play();
-        props.socket.emit('start', {option: option});
+        props.socket.emit('start', { option : option });
         setShowStart(false);
-    }
+    };
 
     useEffect(() => {
+        /**
+         * ルームリストの更新
+         * @param {RoomManager} roomManager ルームマネージャー
+         */
         const updateRoomList = (roomManager) => {
-            if (roomManager.roomList.length === 0 || roomManager.roomList.filter(room => room.game.stageIndex === 0).length === 0) {
+            if (roomManager.roomList.length === 0 || roomManager.roomList.filter(room => room.game.stageIndex === 0 || room.game.players.length < 6).length === 0) {
                 setRoomList(
                     <div>現在ルームは存在しません m9(^Д^)</div>
                 );
             } else {
                 setRoomList(
-                    roomManager.roomList.filter(room => room.game.stageIndex === 0).map((room) => {
+                    roomManager.roomList.filter(room => room.game.stageIndex === 0 || room.game.players.length < 6).map((room, index) => {
                         return(
-                            <div className="room-list-content">
+                            <div className="room-list-content" key={ index }>
                                 <div className="room-name">{ room.name }</div>
                                 <div className="room-decision-button">
                                     <button className="btn btn-primary mb-2" onClick={ () => roomEntrySubmit(room.name)}>入室</button>
@@ -85,8 +101,9 @@ export default function Room(props) {
                     })
                 );
             }
-        }
+        };
 
+        // socketのインベントハンドラ登録一覧
         props.socket.on('room', (data) => {
             updateRoomList(data.roomManager);
             setShowRoomContent(true);
@@ -123,11 +140,12 @@ export default function Room(props) {
             setShowRoomContent(true);
             props.setShowStatus(false);
         });
-    }, [ props.socket, setShowRoom, setRoomList ]);
 
-    return(
-        <div className="room" style={ {display: showRoom ? 'block' : 'none'} }>
-            <div className="room-content" style={ {display: showRoomContent ? 'block' : 'none'} }>
+    }, [ props.socket ]);
+
+    return (
+        <div className="room" style={ { display: showRoom ? 'block' : 'none' } }>
+            <div className="room-content" style={ { display: showRoomContent ? 'block' : 'none' } }>
                 <div className="room-button">
                     <button onClick={ clickRoomCreate } id="create-room-button" className="btn btn-primary mb-2">
                         ルームを新規作成
@@ -143,20 +161,20 @@ export default function Room(props) {
                         <input type="text" className="form-control mb-2 mr-sm-2" name="roomname" ref={ register() } placeholder="ルーム名"/>
                         <button type="submit" className="btn btn-primary mb-2">決定</button>
                     </form>
-                    <div className="overlap" style={ {display: showOverlap ? 'block' : 'none' } }>このルーム名は既に使用されています<br/>（17文字目以上は切り捨てられます)</div>
+                    <div className="overlap" style={ { display: showOverlap ? 'block' : 'none' } }>このルーム名は既に使用されています<br/>（17文字目以上は切り捨てられます)</div>
                 </div>
-                <div className="room-list" style={ {display: showRoomList ? 'block' : 'none'} }>
+                <div className="room-list" style={ { display: showRoomList ? 'block' : 'none' } }>
                     { roomList }
                 </div>
             </div> 
-            <div className="game-start" style={ {display: showStart ? 'block' : 'none'} }>
+            <div className="game-start" style={ { display: showStart ? 'block' : 'none' } }>
                 <div className="deck-select">
-                    <input type="radio" id="default" name="deck" value="default" checked={!option}/>
-                    <label className="deck-select-content" onClick={() => setOption(false)} for='default'>
+                    <input type="radio" id="default" name="deck" value="default" checked={ !option }/>
+                    <label className="deck-select-content" onClick={() => setOption(false)} htmlFor='default'>
                         デフォルトデッキ
                     </label>
-                    <input type="radio" id="option" name="deck" value="option" checked={option}/>
-                    <label className="deck-select-content" onClick={() => setOption(true)} for='option'>
+                    <input type="radio" id="option" name="deck" value="option" checked={ option }/>
+                    <label className="deck-select-content" onClick={ () => setOption(true) } htmlFor='option'>
                         みんなの寄せ集め<br/>（みんなが投稿した　<br/>　画像でデッキを作成）
                     </label>
                 </div>
@@ -165,7 +183,7 @@ export default function Room(props) {
                 </button>
             </div>
             <Matching socket={ props.socket }/>
-            <Leave className="room-leave" socket= { props.socket }/>
+            <Leave className="room-leave" socket={ props.socket }/>
         </div>
     );
 }

@@ -2,20 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons';
 import $ from 'jquery';
-import Card from '../card';
-import '../../css/show_answer.css';
+import Card from '../../card';
+import '../../../css/show_answer.css';
 
+/** ボタンの効果音 */
 const audio = new Audio('../audio/decision29low.wav');
+/** ボタンの効果音の音量 */
 audio.volume = 0.1;
-
+/** プレイヤーの色 */
 const playerColors = [ 
     { 'background-color': '#2ed573' }, 
     { 'background-color': '#00BFFF' }, 
     { 'background-color': '#ffa502' }, 
     { 'background-color': '#ff3838' }, 
-    { 'background-color': '#ff6348' } 
+    { 'background-color': '#ff6348' },
+    { 'background-color': '#a55eea' }
 ];
 
+/**
+ * 投票結果とスコア変化(show_answer)のモーダルの表示
+ * @param {{ socket: SocketIO.Socket }} props 連想配列として，socketをもつ
+ */
 export default function ShowAnswer(props) {
     /** モーダルのタイトル */
     const [message, setMessage] = useState(null);
@@ -32,20 +39,25 @@ export default function ShowAnswer(props) {
 
 
     useEffect(() => {
+        /** アイコンのスタイル */
         const iconStyle =  { 'margin-right': 20,'margin-left': 20 };
 
         // モーダルの表示の中心をbodyではなく.game-coreに変更
-        $('#answerModal').on('shown.bs.modal', function (e) {
+        $('#answerModal').on('shown.bs.modal', () => {
             $('body').removeClass('modal-open');
             $('.game-core').addClass('modal-open');
         });
-        $('#answerModal').on('hidden.bs.modal', function (e) {
+        $('#answerModal').on('hidden.bs.modal', () => {
             audio.play();
+            console.log('答えのモーダル閉じました');
             $('.game-core').removeClass('modal-open');
             props.socket.emit('confirm_answer');
         });
 
-        /** モーダルの表示 */
+        /**
+         * モーダルの表示
+         * @param {{ game: Game, player: Player }} data 連想配列として，game, playerをもつ
+         */
         const open_modal = (data) => {
             // スコア変化の表示セット
             setScoreDiffs(
@@ -56,7 +68,7 @@ export default function ShowAnswer(props) {
                 }).map((player, index) => {
                     var id_score_diff = 'eachScoreDiff' + index;
                     return(
-                        <div className='eachScoreDiff' id={ id_score_diff }>
+                        <div className='eachScoreDiff' id={ id_score_diff } key={ index }>
                             <span className="score-diff-name" style={ playerColors[data.game.players.indexOf(player)] }>{ player.name }</span>
                             <span>{ player.prescore }</span>
                             <FontAwesomeIcon className="role-figure" style={ iconStyle }  icon={ faLongArrowAltRight }/>
@@ -74,14 +86,21 @@ export default function ShowAnswer(props) {
                     ).map((player, indexplayer) => {
                         const id = "eachName" + index + "player" + indexplayer;
                         const eachName = <div className={player.isMaster ? "eachOwnerName master" : "eachOwnerName"} style={ playerColors[data.game.players.indexOf(player)] } id={ id }>{ player.name }</div>;
-                        const ret = player.isMaster ? [eachName, <div className="eachOwnerName correct">正解</div>] : eachName;
+                        const ret = player.isMaster ? [eachName, <div className="eachOwnerName correct" key={ index }>正解</div>] : eachName;
                         return (ret);
                     });
                     return (<div className="eachOwnerNames" id={ id_lst }>{ name }</div>);
                 })
             );
             // 高さの設定
-            setMaxHeight(Math.max(...[3, ...data.game.field.cards.map(card => data.game.players.filter(player => player.socketId === card.player).length)]));
+            setMaxHeight(
+                Math.max(
+                    ...[3, 
+                        ...data.game.field.cards.map(
+                            card => data.game.players.filter(player => player.socketId === card.player).length)
+                        ]
+                )
+            );
             // 投票結果のフィールドの表示セット
             setFieldCards(
                 data.game.field.cards.map((card, index) => {
@@ -89,7 +108,7 @@ export default function ShowAnswer(props) {
                     var id_img = 'eachFieldImage' + index;
                     var field_src = "../images/" + card.filename;
                     const fieldButton = (
-                        <p className='eachSelectedFieldButton' id={ id_btn }>
+                        <p className='eachSelectedFieldButton' id={ id_btn } key={ index }>
                             <img className='eachSelectedFieldImage' id={ id_img } src={ field_src } alt={ card.filename }></img>
                         </p>
                     );
@@ -104,30 +123,39 @@ export default function ShowAnswer(props) {
                         data.game.answers.filter(element => element.cardIndex === index).some(element => element.id === player.socketId)
                     ).map((player, indexplayer) => {
                         const id = "eachName" + index + "player" + indexplayer;
-                        return (<div className="eachName" id={ id } style={ playerColors[data.game.players.indexOf(player)] }>{ player.name }</div>);
+                        return (<div className="eachName" id={ id } key={ indexplayer } style={ playerColors[data.game.players.indexOf(player)] }>{ player.name }</div>);
                     });
-                    return (<div className="eachSelectedNames" id={ id_lst }>{ names }</div>);
+                    return (<div className="eachSelectedNames" id={ id_lst } key={ index }>{ names }</div>);
                 })
             );
             setMessage( data.player.score - data.player.prescore === 0 ? '残念！' : 'やったね！' );
-            $('#answerModal').modal('toggle');
+            if(data.player.state === 'undone'){
+                $('#answerModal').modal('toggle');
+            }
         };
+
         /** サーバからのemitされたときのイベントハンドラ一覧 */
-        props.socket.on('show_answer' ,(data) => open_modal(data));
+        props.socket.on('show_answer', (data) => open_modal(data));
+        props.socket.on('in_room', () => {
+            if ($('#answerModal').is(':visible')) {
+                $('#answerModal').modal('toggle');
+            }
+        });
 
-    }, [ props.socket, message, scoreDiffs ]);
+    }, [ props.socket ]);
 
+    /** モーダルを閉じるボタンをクリックしたときのハンドラ */
     const handleclick = () => {
         $('#answerModal').modal('toggle');
-    }
+    };
 
-    return(
-        <div className="modal fade" id="answerModal" tabindex="-1" role="dialog" aria-labelledby="answerModalTitle" aria-hidden="true">
+    return (
+        <div className="modal fade" id="answerModal" tabIndex="-1" role="dialog" aria-labelledby="answerModalTitle" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="answerModalTitle">今回の結果は．．．</h5>
-                        <button type="button" class="close" onClick={ handleclick } aria-label="Close">
+                        <button type="button" className="close" onClick={ handleclick } aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -137,7 +165,7 @@ export default function ShowAnswer(props) {
                             <div className="show-answer-selected-cards">
                                 <div className="field-result-wrapper">
                                     <p>投票結果</p>
-                                    <div id="owner-field" style={ { 'height': `${maxHeight * 10}px` } }>{ ownerNames }</div>
+                                    <div id="owner-field" style={ { 'height': `${ maxHeight * 10 }px` } }>{ ownerNames }</div>
                                     <div className="field-cards-result">{ fieldCards }</div>
                                     <div id="selected-field">{ selectedNames }</div>
                                 </div>

@@ -1,3 +1,5 @@
+'use strict';
+
 const Player = require("./player");
 const Stock = require('./stock');
 const Discard = require('./discard');
@@ -6,12 +8,9 @@ const Card = require('./card');
 const utils = require('./utils');
 const fs = require('fs');
 
-// private static property
-// 外からのアクセス不可
-// プレイヤーの状態
-// ここに遷移状態を追加
+/** プレイヤーの状態 */
 const status = [
-    'in_room',                // 0
+    'in_room',               // 0
     'hand_selection',        // 1
     'others_hand_selection', // 2
     'field_selection',       // 3
@@ -27,9 +26,8 @@ class Game {
     static STAGE_NUM = 4;
     /** カード枚数 */
     static CARD_NUM = 20;
-    /** プレイヤー人数 */
-    static PLAYER_NUM = 3;
 
+    /** ゲームのコンストラクタ */
     constructor() {
         /** 山札(stock) */
         this.stock = new Stock();
@@ -41,6 +39,7 @@ class Game {
         this.field = new Field();
         /** フェイズ(stage) */
         this.stage = status[0];
+        /** フェイズ(stage)のインデックス */
         this.stageIndex = 0;
         /** 語り部(最初に入ってきた人から) */
         this.master = 0;
@@ -48,10 +47,15 @@ class Game {
         this.story = "";
         /** 投票の結果 */
         this.answers = [];
+        /** 何ラウンド目か */
         this.round = 0;
+        /** デッキのオプション(デフォルトデッキ(false), みんなの寄せ集めデッキ(true)) */
         this.option = false;
+        /** 強制終了フラグ */
+        this.stop = false;
     }
 
+    /** ゲームのリセット */
     reset() {
         this.stock = new Stock();
         this.discard = new Discard();
@@ -64,34 +68,40 @@ class Game {
         this.round = 0;
         this.option = false;
         this.players = [];
+        this.stop = false;
     }
 
+    /**
+     * デッキの作成
+     * オプションがtrueならみんなの寄せ集めデッキ，そうでなければデフォルトデッキ
+     * @param {boolean} option 寄せ集め(true)かデフォルト(false)デッキか
+     */
     createDeck(option) {
         let files;
         if (option) {
             this.option = true;
             this.players.forEach((player) => {
-                if(!fs.existsSync(utils.path+'/uploaded/'+player.name)){
-                    fs.mkdirSync(utils.path+'/uploaded/'+player.name, { recursive: true }, (err)=>{
+                if(!fs.existsSync(`${ utils.path }/uploaded/${ player.name }`)){
+                    fs.mkdirSync(`${ utils.path }/uploaded/${ player.name }`, { recursive: true }, (err) => {
                         if (err) throw err;
-                    });// recursiveは既に存在していてもerrorを吐かない
+                    }); // recursiveは既に存在していてもerrorを吐かない
                 }
-                files = fs.readdirSync(utils.path+'/uploaded/'+player.name+'/');
+                files = fs.readdirSync(`${ utils.path }/uploaded/${ player.name }/`);
                 for (var i = 0; i < files.length; i++) { 
-                    this.stock.push(new Card('uploaded/'+player.name+'/'+files[i]));
+                    this.stock.push(new Card(`uploaded/${ player.name }/${ files[i] }`));
                 }
             });
             let lack = this.players.length * 6 - this.stock._array.length;
-            files = fs.readdirSync(utils.path+'/default/');
+            files = fs.readdirSync(`${ utils.path }/default/`);
             for (var i = 0; i < lack; i++) {
                 for (var i = 0; i < files.length; i++) { 
-                    this.stock.push(new Card('default/'+files[i]));
+                    this.stock.push(new Card(`default/${ files[i] }`));
                 }
             }
         } else {
-            files = fs.readdirSync(utils.path+'/default/');
+            files = fs.readdirSync(`${ utils.path }/default/`);
             for (var i = 0; i < files.length; i++) { 
-                this.stock.push(new Card('default/'+files[i]));
+                this.stock.push(new Card(`default/${ files[i] }`));
             }
         }
         this.stock.shuffle();
@@ -102,19 +112,20 @@ class Game {
         });
     }
 
-    /** プレイヤーの追加 */
+    /**
+     * playerをもつ連想配列を用いたプレイヤーの追加
+     * @param {{ player: Player }} data 連想配列として，playerをもつ
+     */
     addPlayer(data) {
         let player = data.player;
         this.players.push(player);
         return this.players[this.players.length-1];
     }
 
-    /** 現在のプレイヤー数を確認 */
-    // getLength() {
-    //     return this.players.filter(player => player != null).length;
-    // }
-
-    /** 次のステージへ移行 */
+    /**
+     * 次のステージへ移行
+     * @param {SocketIO.Server} io サーバのsocketIO
+     */
     nextStage(io) {
         // ステージ移行
         if (this.stageIndex != Game.STAGE_NUM) {
@@ -128,11 +139,10 @@ class Game {
         // 更新後
         if (this.stageIndex === status.indexOf('hand_selection')) { // hand_selection
             this.round += 1
-            if(this.round !== 1){
+            if (this.round !== 1) {
                 this.updateMaster(); // 語り部更新
             }
             this.fieldToDiscard();
-            console.log(this.stock._array.length);
             if (this.players.length === 3) {
                 this.players.forEach(player => {
                     player.draw(this.stock);
@@ -141,7 +151,7 @@ class Game {
             } else {
                 this.players.forEach(player => player.draw(this.stock));
             }
-            if(this.stock._array.length < this.players.length) {
+            if (this.stock._array.length < this.players.length) {
                 this.discardToStock();
             }
             this.resetAnswers();
@@ -164,7 +174,7 @@ class Game {
         } else {
             this.reset();
         }
-        utils.log('Move to stage [' + this.stage + ']');
+        utils.log(`Move to stage [${ this.stage }]`);
     }
 
     /** 全員done状態かどうか */
@@ -175,6 +185,7 @@ class Game {
             .filter(player => player.isDone()).length === this.players.length;
     }
 
+    /** ゲームが正常終了しているかどうか */
     isFinished() {
         return this.players.length >= 3 && this.players.filter(player => player == null).length === this.players.length && this.stageIndex === status.length;
     }
@@ -187,12 +198,18 @@ class Game {
         });
     }
 
-    /** 語り部によるお題の設定 */
+    /**
+     * 語り部によるお題の設定
+     * @param {string} message 
+     */
     setStory(message){
         this.story = message;
     }
 
-    /** socket idによるプレイヤー検索 */
+    /**
+     * socket idによるプレイヤー検索
+     * @param {string} id 
+     */
     findPlayer(id) {
         let target = null;
         this.players.filter(player => player != null).forEach(player => {
@@ -203,7 +220,10 @@ class Game {
         return target;
     }
 
-    /** socketによるプレイヤー削除 */
+    /**
+     * socketによるプレイヤー削除
+     * @param {SocketIO.Socket} socket 
+     */
     deletePlayer(socket) {
         if (this.players.length === 1) {
             this.players.splice(0, 1);
@@ -260,19 +280,26 @@ class Game {
         this.answers.length = 0;
     }
 
-    /** ゲームへの復帰 */
+    /**
+     * ゲームへの復帰
+     * @param {Player} player 復帰したプレイヤー
+     * @param {SocketIO.Socket} socket socket
+     * @param {RoomManager} roomManager ルームマネージャー
+     */
     comeback(player, socket, roomManager) {
         // socket id更新
         player.socketId = socket.id;
         player.hand._array.forEach(card => card.player = socket.id);
+        this.field.cards.filter(card => card.player === player.name)
+            .forEach(card => card.player = socket.id);
         var others = new Array();
         this.players.forEach(other => {
             if (player != other) {
                 others.push(other);
             }
         });
-        socket.emit(this.stage, {others : others, player : player, game : this, roomManager : roomManager});
-        console.log("復帰" + this.stage);
+        socket.emit(this.stage, { others : others, player : player, game : this, roomManager : roomManager });
+        utils.log(`復帰 ${ this.stage }`);
     }
 
     /** スコア計算 */
@@ -280,7 +307,7 @@ class Game {
         const answerIndex = this.field.masterCardIndex;
         this.players.forEach(player => {
             player.prescore = player.score;
-            console.log('[debug] BEFORE ' + player.name + ': ' + player.score);
+            utils.log(`BEFORE ${ player.name }: ${ player.score }`);
             if(this.answers.every(value => value.cardIndex === answerIndex)) {// 全員正解の場合
                 if(!player.isMaster) {// 子
                     player.score += 2;
@@ -304,7 +331,7 @@ class Game {
                     player.score += count; //
                 }
             }
-            console.log('[debug] AFTER ' + player.name + ': ' + player.score);
+            utils.log(`AFTER ${ player.name }: ${ player.score }`);
         });
     }
 }

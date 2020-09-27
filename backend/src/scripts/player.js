@@ -1,6 +1,7 @@
 'use strict';
 // import modules
 const Hand = require('./hand');
+const Stock = require('./stock');
 
 // プレイヤークラス
 class Player {
@@ -10,7 +11,6 @@ class Player {
     static count = 0;
     
     constructor(obj){
-        // 初期化
         this.socketId = obj.socketId;
         this.hand = new Hand();
         this.isMaster = false;
@@ -20,9 +20,15 @@ class Player {
         this.state = 'undone';
         this.connect = true;
         this.timer = 0;
+        this.agent = obj.socket.request.headers['user-agent'];
+        this.address = obj.socket.handshake.address;
         Player.count += 1;
     }
-    // 山札からドロー
+
+    /**
+     * 山札からドロー
+     * @param {Stock} stock 山札
+     */
     draw(stock){
         let drawCard = stock.pop(); // 山場からpop
         if (drawCard == null) {
@@ -36,7 +42,6 @@ class Player {
     }
     // 手札からカードを選択
     selectFromHand(index){
-        console.log(index);
         this.hand.select(index);
     }
 

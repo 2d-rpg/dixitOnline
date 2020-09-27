@@ -4,8 +4,17 @@ import Card from '../../card';
 import $ from 'jquery';
 import '../../../css/story_modal.css';
 
+/** 空白のみの正規表現 */
 const REGEX = /( |　)+/g;
+/** ボタンの効果音 */
+const audio = new Audio("../audio/draw.mp3");
+/** ボタンの効果音の音量 */
+audio.volume = 0.3;
 
+/**
+ * お題の入力フォームモーダル
+ * @param {{ socket: SocketIO.Socket, setStory: (sotry: string) => void, masterIndex: number }} props 連想配列として，socket, setStory, masterIndexをもつ
+ */
 export default function StoryModal(props) {
     /** お題フォーム */
     const { register, handleSubmit, reset } = useForm();
@@ -14,19 +23,29 @@ export default function StoryModal(props) {
 
     useEffect(() => {
         // モーダルの表示の中心をbodyではなく.game-coreに変更
-        $('#exampleModalCenter').on('shown.bs.modal', function (e) {
+        $('#exampleModalCenter').on('shown.bs.modal', () => {
             $('body').removeClass('modal-open');
             $('.game-core').addClass('modal-open');
         });
-        $('#exampleModalCenter').on('hidden.bs.modal', function (e) {
+        $('#exampleModalCenter').on('hidden.bs.modal', () => {
             setShowErrMsg(false);
+            console.log('お題のモーダル閉じました');
             $('.game-core').removeClass('modal-open');
         });
 
+        /** サーバーからのemitを受け取るイベントハンドラ登録一覧 */
         props.socket.on('others_hand_selection', (data) => props.setStory(data.game.story));
-    }, [ props.socket, props.setStory, $('#exampleModalCenter') ]);
+        props.socket.on('field_selection', (data) => props.setStory(data.game.story));
+        props.socket.on('show_answer', (data) => props.setStory(data.game.story));
+        props.socket.on('result', (data) => props.setStory(data.game.story));
 
-    /** お題のフォーム送信ボタンを押したときの動作 */
+    }, [ props.socket ]);
+
+    /**
+     * お題のフォーム送信ボタンを押したときの動作
+     * @param {{ story: string }} data 連想配列として，sotryをもつ
+     * @param {Event} event イベント
+     */
     const onSubmit = (data, event) => {
         // 空白のみの入力は無効
         if (data.story.match(REGEX) != null) {
@@ -38,31 +57,23 @@ export default function StoryModal(props) {
         $('#exampleModalCenter').modal('toggle');
         props.setStory(data.story);
 
-        var card_x = $("#eachHandButton" + props.masterIndex).offset().left;
-        var field_x = ($("#eachHandButton" + 2).offset().left + $("#eachHandButton" + 3).offset().left) / 2;
-        //var card_y = $("#eachHandButton" + props.masterIndex).offset().top;
-        //var field_y = $(".eachFieldContainer").offset().top;
-        var move_y = - $(".game-core-wrapper").height() / 3;
+        const card_x = $(`#eachHandButton${ props.masterIndex }`).offset().left;
+        const field_x = ($(`#eachHandButton${ 2 }`).offset().left + $(`#eachHandButton${ 3 }`).offset().left) / 2;
+        const move_y = - $(".game-core-wrapper").height() / 3;
 
         $(".toField").removeClass("toField");
-        $("#eachHandButton" + props.masterIndex).addClass("toField");
+        $(`#eachHandButton${ props.masterIndex }`).addClass("toField");
         document.getElementsByClassName("toField")[0].animate([
             // keyframes
             { transform: 'translateY(0px)'}, 
-            { transform: 'translateX(' + (field_x - card_x).toString() + 'px) translateY(' + (move_y).toString() + 'px)', opacity: 0 },
+            { transform: `translate(${ field_x - card_x }px, ${ move_y }px)`, opacity: 0 },
         ], { 
             // timing options
-            duration: 800,
+            duration: 800
         });
-
-        const audio = new Audio("../audio/draw.mp3");
-        audio.volume = 0.3;
         audio.play() // 再生
-
-
-        // サーバーに'story_selection'を送信
         setTimeout(
-            () => props.socket.emit('story_selection', { message : data.story, masterIndex : props.masterIndex }),
+            () => props.socket.emit('story_selection', { message : data.story, masterIndex : props.masterIndex }), // サーバーに'story_selection'を送信
             800
         )
         event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
@@ -70,7 +81,7 @@ export default function StoryModal(props) {
     };
 
     return(
-        <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
