@@ -93,5 +93,5 @@ exports.uploadFile = (filename, image, playername) => {
     }
 };
 
-// exports.path = './build/images';
-exports.path = '../frontend/public/images'
+exports.path = './build/images';
+// exports.path = '../frontend/public/images'

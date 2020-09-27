@@ -29,6 +29,7 @@ export default function StoryModal(props) {
         });
         $('#exampleModalCenter').on('hidden.bs.modal', () => {
             setShowErrMsg(false);
+            console.log('お題のモーダル閉じました');
             $('.game-core').removeClass('modal-open');
         });
 
@@ -37,8 +38,9 @@ export default function StoryModal(props) {
         props.socket.on('field_selection', (data) => props.setStory(data.game.story));
         props.socket.on('show_answer', (data) => props.setStory(data.game.story));
         props.socket.on('result', (data) => props.setStory(data.game.story));
+        props.socket.on('confirm_story_selection', (data) => animate(data))
 
-    }, [ props.socket, props.setStory, $('#exampleModalCenter') ]);
+    }, [ props.socket ]);
 
     /**
      * お題のフォーム送信ボタンを押したときの動作
@@ -54,14 +56,18 @@ export default function StoryModal(props) {
         }
         setShowErrMsg(false);
         $('#exampleModalCenter').modal('toggle');
-        props.setStory(data.story);
+        props.socket.emit('confirm_story_selection', { story : data.story, masterIndex : props.masterIndex });
+        event.preventDefault();
+        reset();
+    };
 
-        const card_x = $(`#eachHandButton${ props.masterIndex }`).offset().left;
+    const animate = (data) => {
+        props.setStory(data.story);
+        const card_x = $(`#eachHandButton${ data.masterIndex }`).offset().left;
         const field_x = ($(`#eachHandButton${ 2 }`).offset().left + $(`#eachHandButton${ 3 }`).offset().left) / 2;
         const move_y = - $(".game-core-wrapper").height() / 3;
-
         $(".toField").removeClass("toField");
-        $(`#eachHandButton${ props.masterIndex }`).addClass("toField");
+        $(`#eachHandButton${ data.masterIndex }`).addClass("toField");
         document.getElementsByClassName("toField")[0].animate([
             // keyframes
             { transform: 'translateY(0px)'}, 
@@ -72,15 +78,13 @@ export default function StoryModal(props) {
         });
         audio.play() // 再生
         setTimeout(
-            () => props.socket.emit('story_selection', { message : data.story, masterIndex : props.masterIndex }), // サーバーに'story_selection'を送信
+            () => props.socket.emit('story_selection', { story : data.story, masterIndex : data.masterIndex }), // サーバーに'story_selection'を送信
             800
         )
-        event.preventDefault(); // フォームによる/?への接続を止める(socketIDを一意に保つため)
-        reset();
-    };
+    }
 
     return(
-        <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content">
                     <div className="modal-header">

@@ -9,13 +9,13 @@ class StorySelection {
      * お題を選択したときの操作
      * @param {SocketIO.Socket} socket socket
      * @param {SocketIO.Server} io サーバ上のsocketIO 
-     * @param {string} message お題の内容
+     * @param {string} story お題の内容
      * @param {number} masterIndex 語り部がフィールド上に出したカードの手札上のインデックス
      * @param {RoomManager} roomManager ルームマネージャー
      */
-    static do(socket, io, message, masterIndex, roomManager) {
+    static do(socket, io, story, masterIndex, roomManager) {
         let game = roomManager.findRoomBySocket(socket).game;
-        game.setStory(message); // お題のセット
+        game.setStory(story); // お題のセット
         let player = game.findPlayer(socket.id);
         player.selectFromHand(masterIndex);
         // 手札の更新
@@ -26,9 +26,23 @@ class StorySelection {
         game.players.forEach(player => io.to(player.socketId).emit('update_field_with_back', { game: game }));
 
         game.players.forEach(eachPlayer => { // 全員doneにする
-	        eachPlayer.done();
+            eachPlayer.done();
         });
-	}
+    }
+    /**
+     * お題を選択したときの操作
+     * @param {SocketIO.Socket} socket socket
+     * @param {string} story お題の内容
+     * @param {number} masterIndex 語り部がフィールド上に出したカードの手札上のインデックス
+     * @param {RoomManager} roomManager ルームマネージャー
+     */
+    static confirm(socket, story, masterIndex, roomManager) {
+        let game = roomManager.findRoomBySocket(socket).game;
+        let player = roomManager.findPlayer(socket);
+        if (!game.field.cards.some(card => card.player === socket.id)) {
+            socket.emit('confirm_story_selection', { story : story, masterIndex : masterIndex, player: player });
+        }
+    }
 }
 
 module.exports = StorySelection;

@@ -33,11 +33,11 @@ export default function HandSelection(props) {
                     const id_img = `eachHandImage${ index }`;
                     const hand_src = `../images/${ card.filename }`;
                     const handButton = data.player.isMaster ? (
-                        <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index) } data-toggle="modal" data-target="#exampleModalCenter">
+                        <p className='eachHandButton' id={ id_btn } type='button' key={ index } onClick={ () => master_select(data, index) } data-toggle="modal" data-target="#exampleModalCenter">
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p> 
                     ) : (
-                        <p className='eachHandButton' id={ id_btn } type='button'>
+                        <p className='eachHandButton' id={ id_btn } type='button' key={ index }>
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p>
                     );
@@ -63,11 +63,11 @@ export default function HandSelection(props) {
                     const id_img = `eachHandImage${ index }`;
                     const hand_src = `../images/${ card.filename }`;
                     const handButton = data.player.isMaster ? (
-                        <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => master_select(data, index) } data-toggle="modal" data-target="#exampleModalCenter">
+                        <p className='eachHandButton' id={ id_btn } type='button' key={ index } onClick={ () => master_select(data, index) } data-toggle="modal" data-target="#exampleModalCenter">
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p> 
                     ) : (
-                        <p className='eachHandButton' id={ id_btn } type='button'>
+                        <p className='eachHandButton' id={ id_btn } type='button' key={ index }>
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p>
                     );
@@ -103,7 +103,7 @@ export default function HandSelection(props) {
             props.setMessage('あなたは親です(ﾟ∀ﾟ)カードのお題を入力してください⊂((・x・))⊃');
             const selectedSrc = `../images/${ data.player.hand._array[index].filename }`;
             props.setSrc(
-                <p className="selectedButton" id="selected-hand-card-wrapper">
+                <p className="selectedButton" id="selected-hand-card-wrapper" key={ index }>
                     <img className="selectedImage" src={ selectedSrc } alt="あなたが選んだカード"/> 
                 </p>
             );
@@ -126,7 +126,7 @@ export default function HandSelection(props) {
                         const id_img = `eachHandImage${ index }`;
                         const hand_src = `../images/${ card.filename }`;
                         const handButton = (
-                            <p className='eachHandButton' id={ id_btn } type='button' onClick={ () => others_select(props.socket, data, index) }>
+                            <p className='eachHandButton' id={ id_btn } type='button' key={ index } onClick={ () => others_select(props.socket, data, index) }>
                                 <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                             </p>
                         );
@@ -176,7 +176,7 @@ export default function HandSelection(props) {
                     const id_img = `eachHandImage${ index }`;
                     const hand_src = `../images/${ card.filename }`;
                     const handButton = (
-                        <p className='eachHandButton' id={ id_btn } type='button'>
+                        <p className='eachHandButton' id={ id_btn } type='button' key={ index }>
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p>
                     );
@@ -196,7 +196,7 @@ export default function HandSelection(props) {
                     const id_img = `eachHandImage${ index }`;
                     const hand_src = `../images/${ card.filename }`;
                     const handButton = (
-                        <p className='eachHandButton' id={ id_btn } type='button'>
+                        <p className='eachHandButton' id={ id_btn } type='button' key={ index }>
                             <img className='eachHandImage' id={ id_img } src={ hand_src } alt={ card.filename }></img>
                         </p>
                     );
@@ -209,6 +209,7 @@ export default function HandSelection(props) {
         /** サーバーからのemitを受け取るイベントハンドラ一覧 */
         props.socket.on('update_hand', (data) => update_hand(data.player));
         props.socket.on('hand_selection', (data) => draw_card(data));
+        props.socket.on('confirm_story_selection', (data) => update_hand(data.player));
         props.socket.on('others_hand_selection', (data) => others_hand_selection(data));
         props.socket.on('field_selection', (data) => update_hand(data.player));
         props.socket.on('show_answer', (data) => update_hand(data.player));
@@ -217,7 +218,7 @@ export default function HandSelection(props) {
         props.socket.on('room', () => setShowHand(false));
         props.socket.on('in_room', () => setShowHand(false));
 
-    }, [ props.socket, props.setMessage, props.setSrc ]);
+    }, [ props.socket ]);
 
     return (
         <div className="hand-wrapper" style={ { display: showhand ? 'block' : 'none' } }>

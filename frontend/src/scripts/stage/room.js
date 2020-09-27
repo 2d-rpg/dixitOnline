@@ -83,15 +83,15 @@ export default function Room(props) {
          * @param {RoomManager} roomManager ルームマネージャー
          */
         const updateRoomList = (roomManager) => {
-            if (roomManager.roomList.length === 0 || roomManager.roomList.filter(room => room.game.stageIndex === 0 || room.game.players.length < 6).length === 0) {
+            if (roomManager.roomList.length === 0 || roomManager.roomList.filter(room => room.game.stageIndex === 0 && room.game.players.length < 6).length === 0) {
                 setRoomList(
                     <div>現在ルームは存在しません m9(^Д^)</div>
                 );
             } else {
                 setRoomList(
-                    roomManager.roomList.filter(room => room.game.stageIndex === 0 || room.game.players.length < 6).map((room) => {
+                    roomManager.roomList.filter(room => room.game.stageIndex === 0 && room.game.players.length < 6).map((room, index) => {
                         return(
-                            <div className="room-list-content">
+                            <div className="room-list-content" key={ index }>
                                 <div className="room-name">{ room.name }</div>
                                 <div className="room-decision-button">
                                     <button className="btn btn-primary mb-2" onClick={ () => roomEntrySubmit(room.name)}>入室</button>
@@ -141,7 +141,7 @@ export default function Room(props) {
             props.setShowStatus(false);
         });
 
-    }, [ props.socket, setShowRoom, setRoomList ]);
+    }, [ props.socket ]);
 
     return (
         <div className="room" style={ { display: showRoom ? 'block' : 'none' } }>
@@ -170,11 +170,11 @@ export default function Room(props) {
             <div className="game-start" style={ { display: showStart ? 'block' : 'none' } }>
                 <div className="deck-select">
                     <input type="radio" id="default" name="deck" value="default" checked={ !option }/>
-                    <label className="deck-select-content" onClick={() => setOption(false)} for='default'>
+                    <label className="deck-select-content" onClick={() => setOption(false)} htmlFor='default'>
                         デフォルトデッキ
                     </label>
                     <input type="radio" id="option" name="deck" value="option" checked={ option }/>
-                    <label className="deck-select-content" onClick={ () => setOption(true) } for='option'>
+                    <label className="deck-select-content" onClick={ () => setOption(true) } htmlFor='option'>
                         みんなの寄せ集め<br/>（みんなが投稿した　<br/>　画像でデッキを作成）
                     </label>
                 </div>
